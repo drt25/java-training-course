@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.1 Introduction · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+</head>
+<body
+  data-lesson="1.1"
+  data-title="Introduction"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Language and platform|Class and object|Write once, run everywhere|Download and setup|JDK / JRE / JVM|Hello World">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Day 1</p>
+        <h2 class="slide-title reveal">What we will learn today</h2>
+        <div class="grid-3">
+          <article class="card">
+            <p class="mini">01</p>
+            <h3>What Java is</h3>
+            <p>Java is a language — you write <code>.java</code> files. It is also a platform — a JVM runs the same program on Windows, Mac, or Ubuntu.</p>
+          </article>
+          <article class="card">
+            <p class="mini">02</p>
+            <h3>What is a class and an object</h3>
+            <p>A class is a blueprint. An object is one real thing built from that blueprint — like one bank account.</p>
+          </article>
+          <article class="card">
+            <p class="mini">03</p>
+            <h3>Download, setup, Hello World</h3>
+            <p>Install the JDK. Set JAVA_HOME. Save a file, compile it, then run it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Language and platform</p>
+        <h2 class="slide-title reveal">Java is two things</h2>
+        <p class="slide-lead reveal">You write the language. The platform runs that same program on many computers.</p>
+        <div class="hero-row reveal">
+          <div class="java-mark">
+            <img src="../assets/java-seeklogo.png" alt="Java">
+          </div>
+          <div class="grid-2">
+            <article class="card">
+              <h3>Language</h3>
+              <p>Java is <strong>object oriented</strong>. You model the world as <strong>classes</strong> and <strong>objects</strong>.</p>
+              <p style="margin-top:0.5rem">You write <code>.java</code> files. Words like <code>class</code>, <code>public</code>, and <code>if</code>.</p>
+            </article>
+            <article class="card">
+              <h3>Platform</h3>
+              <p><strong>Write once, run everywhere.</strong> Write on Windows. Run the same file on Mac, Ubuntu, or Linux if a <strong>JVM</strong> is there.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Class and object</p>
+        <h2 class="slide-title reveal">The class is the blueprint. The object is one real account.</h2>
+        <p class="slide-lead reveal">A bank does not invent a new design for every customer. It uses one Account blueprint, then makes many real accounts.</p>
+        <div class="compare">
+          <article class="card">
+            <p class="mini">Class</p>
+            <h3>Account</h3>
+            <p>The blueprint. It says what an account has: name, account number, balance. It is not a person yet.</p>
+          </article>
+          <article class="card">
+            <p class="mini">Object</p>
+            <h3>Ram's account</h3>
+            <p>One real account. Name Ram. Balance Rs. 15,000. Same blueprint. Many objects — many customers.</p>
+          </article>
+        </div>
+        <div class="code-window reveal" style="margin-top:1.1rem">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>Account ram = new Account("Ram", 15000);
+// new builds one object from the blueprint — name and amount</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Write once, run everywhere</p>
+        <h2 class="slide-title reveal">Write on Windows. Run on any computer with a JVM.</h2>
+        <p class="slide-lead reveal">Your program is not a Windows-only file. Java makes bytecode. Each OS has a JVM that can run it.</p>
+        <div class="compare">
+          <article class="card">
+            <h3 class="tag-bad">Tied to one OS · C</h3>
+            <p>Compile on Windows → <code>.exe</code>. Ubuntu cannot run it. You must compile again.</p>
+          </article>
+          <article class="card">
+            <h3 class="tag-good">Not tied to one OS · Java</h3>
+            <p>Write → <code>javac</code> → <code>.class</code>. Windows, Mac, Ubuntu, and Linux can all run that same file.</p>
+          </article>
+        </div>
+        <div class="wora-travel reveal" data-cycle="1100">
+          <div class="os-card cycle-item">
+            <p class="mini">You write</p>
+            <h3>Windows</h3>
+            <p><code>Hello.java</code></p>
+          </div>
+          <div class="os-card cycle-item wora-file">
+            <p class="mini">One file</p>
+            <h3>.class</h3>
+            <p>bytecode</p>
+          </div>
+          <div class="os-card cycle-item">
+            <p class="mini">Has a JVM</p>
+            <h3>Mac</h3>
+            <p>runs it</p>
+          </div>
+          <div class="os-card cycle-item">
+            <p class="mini">Has a JVM</p>
+            <h3>Ubuntu</h3>
+            <p>runs it</p>
+          </div>
+          <div class="os-card cycle-item">
+            <p class="mini">Has a JVM</p>
+            <h3>Linux</h3>
+            <p>runs it</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why Java</p>
+        <h2 class="slide-title reveal">Why teams still pick Java</h2>
+        <p class="slide-lead reveal">Four simple reasons you will hear at work.</p>
+        <div class="bank-grid four">
+          <article class="bank-card g1">
+            <div class="icon">1</div>
+            <h3>Security updates</h3>
+            <p>New Java versions close security holes. Teams stay on LTS so those fixes keep arriving.</p>
+          </article>
+          <article class="bank-card g2">
+            <div class="icon">2</div>
+            <h3>Code that lasts</h3>
+            <p>A bank system can live 10+ years. Old Java code still runs on new LTS versions.</p>
+          </article>
+          <article class="bank-card g3">
+            <div class="icon">3</div>
+            <h3>New tech</h3>
+            <p>Java keeps adding tools, like virtual threads. This course later covers AI APIs and Spring.</p>
+          </article>
+          <article class="bank-card g4">
+            <div class="icon">4</div>
+            <h3>Jobs and money apps</h3>
+            <p>Many Nepal and global jobs ask for Java + Spring. Money must be exact — we will use <code>BigDecimal</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">History and versions</p>
+        <h2 class="slide-title reveal">Oak in 1991. Java in 1995. LTS at work.</h2>
+        <p class="slide-lead reveal">James Gosling and the Green Team at Sun Microsystems built it in 1991 for smart devices. They named it Oak. In 1995 they renamed it Java. Oracle looks after it now. Companies pick <strong>LTS</strong> — long support.</p>
+        <div class="ver-strip reveal">
+          <span>1.0</span><span>1.1</span><span>1.2</span><span>1.3</span><span>1.4</span>
+          <span>5</span><span>6</span><span>7</span>
+          <span class="lts">8</span>
+          <span>9</span><span>10</span>
+          <span class="lts">11</span>
+          <span>12</span><span>13</span><span>14</span><span>15</span><span>16</span>
+          <span class="lts">17</span>
+          <span>18</span><span>19</span><span>20</span>
+          <span class="lts">21</span>
+          <span>22</span><span>23</span><span>24</span>
+          <span class="lts">25</span>
+        </div>
+        <div class="timeline" data-cycle="1400">
+          <div class="tl-item cycle-item lts">
+            <div class="dot-mark"></div>
+            <h3>8 · 2014</h3>
+            <p>Lambdas and Streams. Still in older bank code.</p>
+          </div>
+          <div class="tl-item cycle-item lts">
+            <div class="dot-mark"></div>
+            <h3>11 · 2018</h3>
+            <p>Modern HTTP. First “new Java” many teams moved to.</p>
+          </div>
+          <div class="tl-item cycle-item lts">
+            <div class="dot-mark"></div>
+            <h3>17 · 2021</h3>
+            <p>Records and text blocks. Very common LTS.</p>
+          </div>
+          <div class="tl-item cycle-item lts">
+            <div class="dot-mark"></div>
+            <h3>21 · 2023</h3>
+            <p>Virtual threads. Many small requests at once.</p>
+          </div>
+          <div class="tl-item cycle-item lts">
+            <div class="dot-mark"></div>
+            <h3>25 · 2025</h3>
+            <p>Current LTS. Fine for this class.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Java download and setup</p>
+        <h2 class="slide-title reveal">Install the JDK. Then set JAVA_HOME.</h2>
+        <p class="slide-lead reveal"><code>JAVA_HOME</code> is the JDK folder — not the <code>bin</code> folder. Path must include <code>bin</code> so the terminal can find the tools.</p>
+        <div class="setup-cols">
+          <div class="steps">
+            <div class="setup-step"><span class="step-n">1</span> Download Temurin or Oracle JDK 17 / 21 / 25 (Windows x64).</div>
+            <div class="setup-step"><span class="step-n">2</span> Run the installer.</div>
+            <div class="setup-step"><span class="step-n">3</span> Copy the JDK folder path. Do not copy <code>bin</code>.</div>
+            <div class="setup-step"><span class="step-n">4</span> System Properties → Environment Variables → New <code>JAVA_HOME</code>.</div>
+            <div class="setup-step"><span class="step-n">5</span> Edit Path → add <code>%JAVA_HOME%\bin</code> → close every terminal.</div>
+            <div class="setup-step"><span class="step-n">6</span> Check: <code>java -version</code> and <code>javac -version</code>.</div>
+          </div>
+          <div>
+            <article class="card">
+              <h3>Ubuntu lab</h3>
+              <p>Same idea. One command installs the JDK.</p>
+              <span class="cmd">sudo apt install openjdk-21-jdk</span>
+            </article>
+            <div class="code-window" style="margin-top:0.9rem">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>java -version
+javac -version
+
+REM Windows: echo %JAVA_HOME%
+REM Ubuntu:  echo $JAVA_HOME</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">JDK · JRE · JVM</p>
+        <h2 class="slide-title reveal">What we install. What runs the code.</h2>
+        <p class="slide-lead reveal">We install the JDK. Inside it is the JRE. Inside that is the JVM — the engine that runs bytecode.</p>
+        <div class="nested-box jdk reveal">
+          <div class="nest-head">
+            <strong>JDK</strong>
+            <span>What we install. Has the compiler <code>javac</code> and other tools.</span>
+          </div>
+          <div class="nested-box jre">
+            <div class="nest-head">
+              <strong>JRE</strong>
+              <span>What runs a finished program. Libraries plus the engine.</span>
+            </div>
+            <div class="nested-box jvm">
+              <div class="nest-head">
+                <strong>JVM</strong>
+                <span>The engine. Loads <code>.class</code>, checks it, then runs it.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-3" style="margin-top:1.1rem">
+          <article class="card"><p class="mini">You</p><h3>Write</h3><p>Type the source in an editor.</p></article>
+          <article class="card"><p class="mini">JDK</p><h3>javac</h3><p>Compiles. Makes bytecode. The OS does not do this.</p></article>
+          <article class="card"><p class="mini">JRE / JVM</p><h3>java</h3><p>Starts the JVM. Runs <code>main</code>.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Environment and Hello World</p>
+        <h2 class="slide-title reveal">Save the file. Compile. Then run.</h2>
+        <p class="slide-lead reveal"><code>JAVA_HOME</code> is the JDK folder. Path must include <code>bin</code> so the terminal can find the tools.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, Broadway!");
+    }
+}</pre>
+          </div>
+          <div class="steps">
+            <div class="setup-step"><span class="step-n">1</span> Save as <code>HelloWorld.java</code> — same name as the class.</div>
+            <div class="setup-step"><span class="step-n">2</span> <code>javac HelloWorld.java</code> — this makes <code>HelloWorld.class</code>.</div>
+            <div class="setup-step"><span class="step-n">3</span> <code>java HelloWorld</code> — do not type <code>.class</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">If it fails</p>
+        <h2 class="slide-title reveal">If it fails, check these three things</h2>
+        <p class="slide-lead reveal">Most first-day errors are Path, the file name, or the folder. Not Java itself.</p>
+        <div class="err-list">
+          <div class="err-item"><strong>'javac' is not recognized</strong><span>Add JDK <code>bin</code> to Path. Open a new terminal.</span></div>
+          <div class="err-item"><strong>class HelloWorld is public</strong><span>The file must be named <code>HelloWorld.java</code>. Big and small letters matter.</span></div>
+          <div class="err-item"><strong>Could not find main class</strong><span>Run <code>java HelloWorld</code> from the folder that has the <code>.class</code> file.</span></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>

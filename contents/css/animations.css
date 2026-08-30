@@ -1,0 +1,112 @@
+.slide.animating .reveal {
+  animation: fadeUp 0.55s ease both;
+}
+
+.slide.animating .reveal:nth-child(1) { animation-delay: 0.05s; }
+.slide.animating .reveal:nth-child(2) { animation-delay: 0.12s; }
+.slide.animating .reveal:nth-child(3) { animation-delay: 0.2s; }
+.slide.animating .reveal:nth-child(4) { animation-delay: 0.28s; }
+.slide.animating .reveal:nth-child(5) { animation-delay: 0.36s; }
+.slide.animating .reveal:nth-child(6) { animation-delay: 0.44s; }
+.slide.animating .reveal:nth-child(7) { animation-delay: 0.5s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.slide.animating .card,
+.slide.animating .os-card,
+.slide.animating .bank-card,
+.slide.animating .setup-step,
+.slide.animating .err-item,
+.slide.animating .tl-item,
+.slide.animating .flow-step {
+  animation: cardIn 0.55s ease both;
+}
+
+.slide.animating .card:nth-child(1),
+.slide.animating .os-card:nth-child(1),
+.slide.animating .bank-card:nth-child(1),
+.slide.animating .setup-step:nth-child(1),
+.slide.animating .err-item:nth-child(1),
+.slide.animating .tl-item:nth-child(1),
+.slide.animating .flow-step:nth-child(1) { animation-delay: 0.1s; }
+
+.slide.animating .card:nth-child(2),
+.slide.animating .os-card:nth-child(2),
+.slide.animating .bank-card:nth-child(2),
+.slide.animating .setup-step:nth-child(2),
+.slide.animating .err-item:nth-child(2),
+.slide.animating .tl-item:nth-child(2),
+.slide.animating .flow-step:nth-child(2) { animation-delay: 0.2s; }
+
+.slide.animating .card:nth-child(3),
+.slide.animating .os-card:nth-child(3),
+.slide.animating .bank-card:nth-child(3),
+.slide.animating .setup-step:nth-child(3),
+.slide.animating .err-item:nth-child(3),
+.slide.animating .tl-item:nth-child(3),
+.slide.animating .flow-step:nth-child(3) { animation-delay: 0.3s; }
+
+.slide.animating .card:nth-child(4),
+.slide.animating .os-card:nth-child(4),
+.slide.animating .bank-card:nth-child(4),
+.slide.animating .setup-step:nth-child(4),
+.slide.animating .tl-item:nth-child(4),
+.slide.animating .flow-step:nth-child(4) { animation-delay: 0.38s; }
+
+.slide.animating .tl-item:nth-child(5),
+.slide.animating .flow-step:nth-child(5),
+.slide.animating .setup-step:nth-child(5) { animation-delay: 0.46s; }
+
+.slide.animating .setup-step:nth-child(6) { animation-delay: 0.52s; }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+.wora-file.is-on {
+  border-color: var(--orange);
+  box-shadow: 0 10px 28px rgba(245, 166, 35, 0.22);
+}
+
+.flow-step.is-on,
+.os-card.is-on,
+.tl-item.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.14);
+  transform: translateY(-2px);
+}
+
+.tl-item.is-on .dot-mark {
+  transform: translateX(-50%) scale(1.15);
+  box-shadow: 0 0 0 5px #ffd48a;
+}
+
+.slide.animating .jdk { animation: nest 700ms ease both; }
+.slide.animating .jre { animation: nest 700ms 160ms ease both; }
+.slide.animating .jvm { animation: nest 700ms 320ms ease both; }
+
+@keyframes nest {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.slide.animating .timeline::before {
+  animation: growX 1.1s ease both;
+}
+
+@keyframes growX {
+  from { transform: scaleX(0); transform-origin: left; }
+}
+
+@media print {
+  .slide.animating .reveal,
+  .slide.animating .card,
+  .slide.animating .jdk,
+  .slide.animating .timeline::before {
+    animation: none !important;
+  }
+}

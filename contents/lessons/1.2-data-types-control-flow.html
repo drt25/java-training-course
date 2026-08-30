@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.2 Data Type and Control Flow · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+</head>
+<body
+  data-lesson="1.2"
+  data-title="Data Type and Control Flow"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Data types|Wrappers|Conditions|Loops|switch|enum|Conversion">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">Data types and control flow</h2>
+        <div class="outline-chips reveal">
+          <span>Data types</span>
+          <span>Type wrappers</span>
+          <span>Big numbers</span>
+          <span>Statements and blocks</span>
+          <span>Conditional statements</span>
+          <span>Loops and switches</span>
+          <span>break, continue, return</span>
+          <span>Enum types</span>
+          <span>Type conversion</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Data types</p>
+        <h2 class="slide-title reveal">Eight primitives</h2>
+        <table class="info-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Size</th>
+              <th>Range / values</th>
+              <th>Example</th>
+              <th>Common use</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>byte</code></td><td>8-bit</td><td><strong>-128 to 127</strong></td><td><code>byte age = 25;</code></td><td>Very small integers</td></tr>
+            <tr><td><code>short</code></td><td>16-bit</td><td><strong>-32,768 to 32,767</strong></td><td><code>short year = 2026;</code></td><td>Small integers</td></tr>
+            <tr><td><code>int</code></td><td>32-bit</td><td><strong>-2,147,483,648 to 2,147,483,647</strong></td><td><code>int salary = 50000;</code></td><td>General-purpose integers</td></tr>
+            <tr><td><code>long</code></td><td>64-bit</td><td><strong>±9.2 × 10¹⁸</strong> (use <code>L</code>)</td><td><code>long population = 10000000000L;</code></td><td>Very large integers</td></tr>
+            <tr><td><code>float</code></td><td>32-bit</td><td>Approx. <strong>±3.4 × 10³⁸</strong></td><td><code>float price = 10.5f;</code></td><td>Decimals, lower precision</td></tr>
+            <tr><td><code>double</code></td><td>64-bit</td><td>Approx. <strong>±1.7 × 10³⁰⁸</strong></td><td><code>double score = 50000.50;</code></td><td>Decimals, higher precision — not money</td></tr>
+            <tr><td><code>char</code></td><td>16-bit</td><td><strong>0 to 65,535</strong></td><td><code>char grade = 'A';</code></td><td>One Unicode character</td></tr>
+            <tr><td><code>boolean</code></td><td>JVM-dependent*</td><td><strong>true or false</strong></td><td><code>boolean active = true;</code></td><td>Yes / no</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note">*boolean size is not a fixed 1 bit in the JVM. A primitive cannot be <code>null</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Data types</p>
+        <h2 class="slide-title reveal">Class-based types</h2>
+        <p class="slide-lead reveal">These are objects. The variable holds a reference, not the raw bits of an <code>int</code>.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>String</h3>
+            <p>Text. Name, phone, error message.</p>
+            <span class="cmd">String name = "Ram";</span>
+          </article>
+          <article class="bank-card g2">
+            <h3>Array</h3>
+            <p>Fixed list of the same type.</p>
+            <span class="cmd">int[] marks = {80, 70, 90};</span>
+          </article>
+          <article class="bank-card g3">
+            <h3>Your class</h3>
+            <p>A type you design. Many objects from one class.</p>
+            <span class="cmd">Account a = new Account();</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Big numbers</p>
+        <h2 class="slide-title reveal">BigInteger and BigDecimal</h2>
+        <div class="approx-pair">
+          <div class="approx-card bad">
+            <p class="mini">Why not double for money</p>
+            <div class="val">0.1 + 0.2 → 0.30000000000000004</div>
+            <p style="margin-top:0.5rem">Close, not exact. Banks cannot use this.</p>
+          </div>
+          <div class="approx-card good">
+            <p class="mini">BigDecimal — exact decimal</p>
+            <div class="val">new BigDecimal("1500.50")</div>
+            <p style="margin-top:0.5rem">Build from a <code>String</code>, not from a <code>double</code>.</p>
+          </div>
+        </div>
+        <p class="note reveal" style="margin-top:0.9rem"><strong>BigInteger</strong> — whole numbers bigger than <code>long</code>: <code>new BigInteger("10000000000")</code>. Population, IDs, crypto-size counts.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Wrappers</p>
+        <h2 class="slide-title reveal">Each primitive has a wrapper class</h2>
+        <div class="cf-split">
+          <table class="info-table">
+            <thead><tr><th>Primitive</th><th>Wrapper</th><th>Default if you only declare a field</th></tr></thead>
+            <tbody>
+              <tr><td><code>byte</code></td><td><code>Byte</code></td><td><code>0</code></td></tr>
+              <tr><td><code>short</code></td><td><code>Short</code></td><td><code>0</code></td></tr>
+              <tr><td><code>int</code></td><td><code>Integer</code></td><td><code>0</code></td></tr>
+              <tr><td><code>long</code></td><td><code>Long</code></td><td><code>0L</code></td></tr>
+              <tr><td><code>float</code></td><td><code>Float</code></td><td><code>0.0f</code></td></tr>
+              <tr><td><code>double</code></td><td><code>Double</code></td><td><code>0.0d</code></td></tr>
+              <tr><td><code>char</code></td><td><code>Character</code></td><td><code>'\u0000'</code></td></tr>
+              <tr><td><code>boolean</code></td><td><code>Boolean</code></td><td><code>false</code></td></tr>
+            </tbody>
+          </table>
+          <div class="def-box">A primitive <strong>cannot be null</strong>. A wrapper can be <code>null</code> — “no value yet.” A local variable has no default; you must set it before you use it.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Wrappers</p>
+        <h2 class="slide-title reveal">Why wrappers. When to use which.</h2>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Collections need objects</h3>
+            <p><code>ArrayList</code> stores objects, not <code>int</code>. Use <code>ArrayList&lt;Integer&gt;</code>.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Benefits</h3>
+            <p><code>null</code> for missing. Parse methods. Works with generics.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>When</h3>
+            <p>Primitive: local speed, never empty. Wrapper: lists, “no value”, form text.</p>
+          </article>
+        </div>
+        <div class="code-window reveal" style="margin-top:0.85rem">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>Integer n = 5;      // autoboxing: int → Integer
+int x = n;          // unboxing: Integer → int
+// Integer empty = null; int y = empty;  → crash</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Statements and blocks</p>
+        <h2 class="slide-title reveal">Statement and block</h2>
+        <div class="cf-split">
+          <div>
+            <div class="def-box">A <strong>statement</strong> is one step. It ends with <code>;</code>. Use it for one action.</div>
+            <div class="def-box">A <strong>block</strong> is <code>{ }</code>. Use it to group steps. A name made inside dies at <code>}</code>.</div>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>int pinTries = 0;     // statement
+{
+    int temp = 1;     // only inside this block
+}
+// temp cannot be used here</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Conditional statements</p>
+        <h2 class="slide-title reveal">if, else if, else</h2>
+        <p class="slide-lead reveal"><code>if</code> — first test. <code>else if</code> — next test. <code>else</code> — leftover.</p>
+        <div class="code-window reveal">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>if (balance >= amount) {
+    System.out.println("Sent");
+} else if (frozen) {
+    System.out.println("Wallet locked");
+} else {
+    System.out.println("Not enough balance");
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Logical operators</p>
+        <h2 class="slide-title reveal">&amp;&amp; &nbsp; || &nbsp; !</h2>
+        <div class="bank-grid">
+          <article class="bank-card g1"><h3>&amp;&amp; both</h3><p>Send only if not frozen <strong>and</strong> balance is enough. <code>!frozen &amp;&amp; balanceOk</code></p></article>
+          <article class="bank-card g2"><h3>|| either</h3><p>Open the door if staff <strong>or</strong> manager. <code>isStaff || isManager</code></p></article>
+          <article class="bank-card g3"><h3>! not</h3><p>Flip true/false. <code>!frozen</code> means the wallet is free.</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:0.9rem">ATM login needs card <strong>and</strong> PIN. Do not write <code>cardOk || pinOk</code> — that lets one of them fail.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Loops</p>
+        <h2 class="slide-title reveal">for, while, do-while</h2>
+        <div class="loop-row">
+          <div class="machine">
+            <p class="hint">for · known count</p>
+            <h3>i = 0 to 4</h3>
+            <div class="step-row" data-cycle="700">
+              <div class="loop-step cycle-item">0</div>
+              <div class="loop-step cycle-item">1</div>
+              <div class="loop-step cycle-item">2</div>
+              <div class="loop-step cycle-item">3</div>
+              <div class="loop-step cycle-item">4</div>
+            </div>
+          </div>
+          <div class="machine">
+            <p class="hint">while · check first</p>
+            <h3>Unknown how many</h3>
+            <div data-cycle="900">
+              <div class="gate cycle-item">paper left?</div>
+              <div class="flow-arrow-mini">↓</div>
+              <div class="body-box cycle-item">print</div>
+            </div>
+          </div>
+          <div class="machine">
+            <p class="hint">do-while · at least once</p>
+            <h3>Run, then ask</h3>
+            <div data-cycle="900">
+              <div class="body-box cycle-item">show menu</div>
+              <div class="flow-arrow-mini">↓</div>
+              <div class="gate cycle-item">again?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Loops</p>
+        <h2 class="slide-title reveal">When to use which</h2>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <p class="mini">for</p>
+            <h3>You know the count</h3>
+            <p><code>for (int i = 1; i &lt;= 5; i++) System.out.println(i);</code></p>
+          </article>
+          <article class="bank-card g2">
+            <p class="mini">while</p>
+            <h3>Keep going while true</h3>
+            <p>ATM: while paper is left, print the next receipt.</p>
+          </article>
+          <article class="bank-card g3">
+            <p class="mini">do-while</p>
+            <h3>Must run once</h3>
+            <p>Show the menu first, then ask “again?”</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">switch</p>
+        <h2 class="slide-title reveal">Many fixed choices</h2>
+        <div class="cf-split">
+          <div>
+            <div class="def-box">Use <strong>switch</strong> when one value has many constant doors (1, 2, 3). Clearer than a long <code>else if</code> chain. One jump. Less nesting.</div>
+            <div class="def-box"><strong>default</strong> runs when no case matches — the leftover door.</div>
+          </div>
+          <div>
+            <div class="choice-pill">choice → 2</div>
+            <div class="door-row" data-cycle="1000">
+              <div class="door cycle-item">1<small>case</small></div>
+              <div class="door cycle-item">2<small>case</small></div>
+              <div class="door cycle-item">3<small>case</small></div>
+              <div class="door cycle-item">?<small>default</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">switch</p>
+        <h2 class="slide-title reveal">break, and the modern form</h2>
+        <div class="duo-code">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>// without break — fall through
+switch (choice) {
+    case 1:
+        System.out.println("Deposit");
+    case 2:
+        System.out.println("Withdraw");
+}
+// choice 1 prints both lines</pre>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>// modern — no fall through
+switch (choice) {
+    case 1 -> System.out.println("Deposit");
+    case 2 -> System.out.println("Withdraw");
+    default -> System.out.println("Invalid");
+}</pre>
+          </div>
+        </div>
+        <p class="note reveal" style="margin-top:0.7rem">Old style: put <code>break;</code> after each case, or the next case also runs. Arrow <code>-&gt;</code> does not fall through.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">break, continue, return</p>
+        <h2 class="slide-title reveal">Stop. Skip. Leave the method.</h2>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>break — stop the loop</h3>
+            <p><code>if (i == 5) break;</code> in a 1..10 loop prints 1 2 3 4.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>continue — skip this round</h3>
+            <p><code>if (i == 3) continue;</code> in 1..5 prints 1 2 4 5. Loop does not stop.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>return — exit the method</h3>
+            <p><code>if (age &lt; 18) return;</code> leaves <code>checkAge</code> at once.</p>
+          </article>
+        </div>
+        <div class="duo-code" style="margin-top:0.75rem">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>for (int i = 1; i &lt;= 10; i++) {
+    if (i == 5) break;
+    System.out.println(i);
+}</pre>
+            <div class="out-box">1  2  3  4</div>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>for (int i = 1; i &lt;= 5; i++) {
+    if (i == 3) continue;
+    System.out.println(i);
+}</pre>
+            <div class="out-box">1  2  4  5</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">enum</p>
+        <h2 class="slide-title reveal">A closed list of names</h2>
+        <div class="cf-split">
+          <div>
+            <div class="def-box">An <strong>enum</strong> is a fixed set. The compiler rejects a typo like <code>"depoist"</code>.</div>
+            <div class="def-box"><strong>Names:</strong> <code>UPPER_SNAKE</code> — <code>DEPOSIT</code>, <code>PENDING</code>.</div>
+            <div class="def-box"><strong>Use</strong> for choices that rarely change (status, txn type, role). <strong>Do not</strong> use for names that grow every day (customer names).</div>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>enum TxnType { DEPOSIT, WITHDRAW, TRANSFER }
+
+TxnType t = TxnType.DEPOSIT;
+// also: PENDING, PAID, FAILED</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Type conversion</p>
+        <h2 class="slide-title reveal">Widening, narrowing, and text</h2>
+        <div class="compare" style="margin-bottom:0.75rem">
+          <article class="bank-card g1">
+            <h3>Widening</h3>
+            <p>Bigger box. Automatic. Mix <code>int</code> into <code>long</code>.</p>
+            <span class="cmd">long n = 25;</span>
+          </article>
+          <article class="bank-card g3">
+            <h3>Narrowing</h3>
+            <p>Smaller box. You cast. Bits can vanish.</p>
+            <span class="cmd">int x = (int) 3.9;  // 3</span>
+          </article>
+        </div>
+        <div class="code-window">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>int n = Integer.parseInt("25");
+long value = Long.parseLong("100000");
+double price = Double.parseDouble("99.99");
+boolean active = Boolean.parseBoolean("true");</pre>
+        </div>
+        <p class="foot-note">Form input is always text. Parse it. Lab: tiny wallet — types, if, switch, loop until Exit.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>

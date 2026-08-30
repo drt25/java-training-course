@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.3 String · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/string-array.css">
+  <link rel="stylesheet" href="../css/string-deep.css">
+</head>
+<body
+  data-lesson="1.3"
+  data-title="String"
+  data-module="Lesson 1 · Core Java"
+  data-topics="String class|Methods|Immutable|String pool|StringBuilder|StringBuffer">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">String · methods · cannot change · Builder · Buffer</h2>
+        <p class="slide-lead reveal">Array and your own methods wait in 1.3b. Today: why Java has three text classes.</p>
+        <div class="outline-chips reveal">
+          <span>String</span>
+          <span>Methods</span>
+          <span>Cannot change</span>
+          <span>String pool</span>
+          <span>StringBuilder</span>
+          <span>StringBuffer</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">String</p>
+        <h2 class="slide-title reveal">What is a String?</h2>
+        <p class="slide-lead reveal">A String is a <strong>class</strong>, not a primitive like <code>int</code>. It is an object that holds a sequence of characters.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Text in quotes</h3>
+            <p><code>String name = "Ram";</code> — name, phone, message.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>"12345" is still text</h3>
+            <p>It looks like a number. Inside quotes you cannot add it as an <code>int</code>.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>The variable is an arrow</h3>
+            <p><code>name</code> points at the object. Methods live on the object: <code>name.length()</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">String</p>
+        <h2 class="slide-title reveal">Read a String</h2>
+        <div class="cf-split">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>String name = "Ram";
+
+name.length();     // 3
+name.charAt(0);    // 'R'
+name.charAt(2);    // 'm'</pre>
+            <div class="out-box">length=3
+charAt(0)=R
+charAt(2)=m</div>
+          </div>
+          <div>
+            <div class="char-row" data-cycle="700">
+              <div class="char-box cycle-item">R<small style="display:block;font-size:0.65rem;font-weight:700;color:#64748b">0</small></div>
+              <div class="char-box cycle-item">a<small style="display:block;font-size:0.65rem;font-weight:700;color:#64748b">1</small></div>
+              <div class="char-box cycle-item">m<small style="display:block;font-size:0.65rem;font-weight:700;color:#64748b">2</small></div>
+            </div>
+            <div class="def-box" style="margin-top:0.85rem">Index starts at <strong>0</strong>. Last index is <code>length() - 1</code>. <code>charAt(3)</code> on <code>"Ram"</code> crashes.</div>
+            <p class="foot-note">Lab: <code>coding/1.3-string/StringBasics.java</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Methods</p>
+        <h2 class="slide-title reveal">Find and compare</h2>
+        <div class="duo-code">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>"Ram".equals("ram");              // false
+"Ram".equalsIgnoreCase("ram");    // true
+"eSewa wallet".contains("wallet");
+"9812345678".startsWith("98");
+"Hello Java".endsWith("Java");
+"Hello Java".indexOf("Java");     // 6</pre>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>"Hello Java".substring(6);        // "Java"
+"Ram,Sita,Hari".split(",");</pre>
+            <div class="out-box">equals=false
+equalsIgnoreCase=true
+split=Ram  Sita  Hari</div>
+          </div>
+        </div>
+        <p class="note reveal" style="margin-top:0.75rem">For letters, use <code>equals</code>. <code>==</code> waits until the pool slide.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Methods</p>
+        <h2 class="slide-title reveal">Clean and change — you get a new String</h2>
+        <p class="slide-lead reveal">These look like edits. They still return a <strong>new</strong> String. Store it, or nothing looks changed.</p>
+        <div class="duo-code">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>String name = "Ram".concat(" Kumar");
+String clean = "  ram  ".trim();
+String phone = "98-1234-5678".replace("-", "");
+String shout = "hello".toUpperCase();</pre>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>"".isEmpty();        // true
+"   ".isBlank();     // true · Java 11</pre>
+            <div class="out-box">concat=Ram Kumar
+trim=[ram]
+replace=9812345678
+upper=HELLO</div>
+          </div>
+        </div>
+        <p class="foot-note">Wrong: <code>text.toUpperCase();</code> — result thrown away. Right: <code>text = text.toUpperCase();</code> Lab: <code>StringMethods.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Methods · when</p>
+        <h2 class="slide-title reveal">Which method?</h2>
+        <div class="job-row">
+          <article class="job-card">
+            <span class="choose-tag">Letters</span>
+            <h3>equals</h3>
+            <p>Same text? Use <code>equals</code>. Names: <code>equalsIgnoreCase</code>. Not <code>==</code>.</p>
+          </article>
+          <article class="job-card">
+            <span class="choose-tag">Spaces</span>
+            <h3>trim</h3>
+            <p>Form extra spaces. <code>"  ram  "</code> → <code>"ram"</code>.</p>
+          </article>
+          <article class="job-card">
+            <span class="choose-tag">Swap</span>
+            <h3>replace</h3>
+            <p>Exact text. Phone dashes → digits. <code>replaceAll</code> is for a pattern.</p>
+          </article>
+          <article class="job-card">
+            <span class="choose-tag">List</span>
+            <h3>split</h3>
+            <p>Break CSV: <code>"Ram,Sita,Hari"</code>. <code>substring</code> takes a slice.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Cannot change</p>
+        <h2 class="slide-title reveal">String cannot change</h2>
+        <p class="slide-lead reveal"><strong>Immutable</strong> means the letters inside the object are locked. <code>concat</code> builds another String.</p>
+        <div class="duo-code">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>String name = "Ram";
+name.concat(" Kumar");
+System.out.println(name);</pre>
+            <div class="out-box">Ram</div>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>name = name.concat(" Kumar");
+System.out.println(name);
+
+String text = "hello";
+text = text.toUpperCase();
+System.out.println(text);</pre>
+            <div class="out-box">Ram Kumar
+HELLO</div>
+          </div>
+        </div>
+        <p class="foot-note">Lab: <code>ImmutabilityDemo.java</code> — first print is still Ram because we threw the new String away.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Cannot change</p>
+        <h2 class="slide-title reveal">The box stays. The arrow moves.</h2>
+        <div class="immut-pair">
+          <div class="ref-col">
+            <p class="mini">Old object — still "Ram"</p>
+            <div class="obj-box old">"Ram"</div>
+            <p style="margin:0.5rem 0 0;font-size:0.82rem;color:#64748b">Nothing writes inside this box.</p>
+          </div>
+          <div class="ref-col">
+            <p class="mini">name now points here</p>
+            <span class="ref-var">name</span>
+            <span class="ref-arrow">↓</span>
+            <div class="obj-box fresh">"Ram Kumar"</div>
+          </div>
+        </div>
+        <div class="def-box" style="margin-top:0.85rem"><code>name = "Hari"</code> does the same kind of thing: the String did not change. Only the <strong>arrow</strong> moved to a different object.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Cannot change</p>
+        <h2 class="slide-title reveal">Two names, one box</h2>
+        <div class="ref-scene">
+          <div class="ref-col">
+            <p class="mini">At first · String b = a</p>
+            <div style="display:flex;gap:0.5rem;margin-bottom:0.35rem">
+              <span class="ref-var">a</span>
+              <span class="ref-var">b</span>
+            </div>
+            <span class="ref-arrow">↓</span>
+            <div class="obj-box">"Java"</div>
+            <p style="margin:0.45rem 0 0;font-size:0.8rem;color:#64748b">Both arrows point at the same object.</p>
+          </div>
+          <div class="ref-col">
+            <p class="mini">After a = "Python"</p>
+            <span class="ref-var">a</span>
+            <span class="ref-arrow">↓</span>
+            <div class="obj-box fresh">"Python"</div>
+            <span class="ref-var" style="margin-top:0.55rem">b</span>
+            <span class="ref-arrow">↓</span>
+            <div class="obj-box old">"Java"</div>
+          </div>
+        </div>
+        <p class="note reveal" style="margin-top:0.75rem"><code>"Java"</code> did not become Python. <code>a</code> only got a new arrow. <code>b</code> still sees Java.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Pool</p>
+        <h2 class="slide-title reveal">The String pool</h2>
+        <p class="slide-lead reveal">Two literals with the same letters can share <strong>one</strong> object. That is safe only because nobody can change those letters.</p>
+        <div class="pool-card reveal">
+          <p class="mini">String pool</p>
+          <div class="pool-vars">
+            <span class="ref-var">a</span>
+            <span class="ref-var">b</span>
+          </div>
+          <span class="ref-arrow">↓ &nbsp;&nbsp; ↓</span>
+          <div class="obj-box">"Java"</div>
+        </div>
+        <div class="def-box" style="margin-top:0.85rem">Use <code>"Java"</code> for normal text. <code>new String("Java")</code> forces a second object — we use it only to see the pool, not in app code. Sharing is safe because the contents cannot change.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Pool · when</p>
+        <h2 class="slide-title reveal">== vs equals</h2>
+        <p class="slide-lead reveal"><code>==</code> asks “same object?” <code>equals</code> asks “same letters?” For names and PIN text, always <code>equals</code>.</p>
+        <div class="cf-split">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>String a = "Java";
+String b = "Java";
+String c = new String("Java");
+
+a == b;           // true  — same pooled object
+a == c;           // false — new made a second object
+a.equals(c);      // true  — same letters</pre>
+            <div class="out-box">a == b: true
+a == c: false
+a.equals(c): true</div>
+          </div>
+          <div class="def-box"><code>==</code> is a pool lesson, not a login check. Lab: <code>coding/1.3-string/StringPoolDemo.java</code></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why Builder exists</p>
+        <h2 class="slide-title reveal">Too many + is slow</h2>
+        <div class="code-window reveal" style="margin-bottom:0.75rem">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>String result = "";
+for (int i = 1; i &lt;= 10000; i++) {
+    result = result + i;
+}</pre>
+        </div>
+        <div class="chain-row" data-cycle="650">
+          <div class="chain-item cycle-item">""</div>
+          <div class="chain-item cycle-item">"1"</div>
+          <div class="chain-item cycle-item">"12"</div>
+          <div class="chain-item cycle-item">"123"</div>
+          <div class="chain-item cycle-item">"1234"</div>
+          <div class="chain-item cycle-item">…</div>
+        </div>
+        <p class="note reveal" style="margin-top:0.85rem">Each <code>+</code> builds a new String. A few joins are fine. A long loop means many objects. That is why we use <strong>StringBuilder</strong>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">StringBuilder</p>
+        <h2 class="slide-title reveal">StringBuilder can change</h2>
+        <div class="compare" style="margin-bottom:0.75rem">
+          <article class="book-card">
+            <p class="mini">String = printed book</p>
+            <h3>Hello</h3>
+            <p>You cannot change the printed word. “Hello Java” needs another printing.</p>
+          </article>
+          <article class="book-card" style="background:linear-gradient(165deg,#e4fbff,#fff);border-color:#7de7ff">
+            <p class="mini">StringBuilder = whiteboard</p>
+            <h3>Hello → Hello Java</h3>
+            <p>You add on the same board. The object itself can change.</p>
+          </article>
+        </div>
+        <div class="code-window">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>StringBuilder builder = new StringBuilder("Hello");
+System.out.println(System.identityHashCode(builder));  // demo only — not a String method
+builder.append(" Java");
+System.out.println(System.identityHashCode(builder));  // same number — same object
+System.out.println(builder);                           // Hello Java</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">StringBuilder</p>
+        <h2 class="slide-title reveal">Builder methods</h2>
+        <table class="info-table">
+          <thead>
+            <tr><th>Method</th><th>What it does</th><th>Sketch</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>append</code></td><td>Add at the end</td><td><code>"Hello"</code> → <code>"Hello World"</code></td></tr>
+            <tr><td><code>insert</code></td><td>Put text at an index</td><td><code>insert(5, " Java")</code></td></tr>
+            <tr><td><code>delete</code></td><td>Remove a slice</td><td><code>delete(5, 10)</code></td></tr>
+            <tr><td><code>deleteCharAt</code></td><td>Remove one index</td><td><code>deleteCharAt(0)</code></td></tr>
+            <tr><td><code>replace</code></td><td>Swap a slice</td><td><code>replace(0, 5, "Hi")</code></td></tr>
+            <tr><td><code>reverse</code></td><td>Flip the buffer</td><td><code>"321"</code> → <code>"123"</code></td></tr>
+            <tr><td><code>toString</code></td><td>Builder → String</td><td>When you need a real String</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">StringBuilder</p>
+        <h2 class="slide-title reveal">Build a report</h2>
+        <div class="duo-code">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>StringBuilder report = new StringBuilder();
+report.append("Employee Report\n");
+report.append("----------------\n");
+report.append("Name: Ram\n");
+report.append("Age: 25\n");
+System.out.println(report);</pre>
+          </div>
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>// weaker — new String each line
+String report = "";
+report += "Employee Report\n";
+report += "Name: Ram\n";</pre>
+            <div class="out-box">Employee Report
+----------------
+Name: Ram
+Age: 25</div>
+          </div>
+        </div>
+        <p class="foot-note">Same idea for an eSewa receipt. Lab: <code>BuilderBufferDemo.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">StringBuffer</p>
+        <h2 class="slide-title reveal">StringBuffer is for two writers</h2>
+        <p class="slide-lead reveal">Same <code>append</code> as Builder. The extra rule: if two threads write the same buffer, Buffer makes them wait.</p>
+        <div class="cf-split">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>StringBuffer buffer = new StringBuffer("Hello");
+buffer.append(" Java");
+System.out.println(buffer);</pre>
+            <div class="out-box">Hello Java</div>
+          </div>
+          <div>
+            <div class="hash-pair">
+              <div class="thread-card clash"><h3>Builder</h3><p>Two threads can write at once. You must lock it yourself.</p></div>
+              <div class="thread-card safe"><h3>Buffer</h3><p>Synchronized methods. One writer waits if needed.</p></div>
+            </div>
+            <div class="def-box" style="margin-top:0.7rem">Today’s labs: use <strong>StringBuilder</strong>. Real threads come in 1.8.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">When to choose</p>
+        <h2 class="slide-title reveal">Which one?</h2>
+        <table class="info-table" style="margin-bottom:0.7rem">
+          <thead>
+            <tr>
+              <th></th>
+              <th>String</th>
+              <th>StringBuilder</th>
+              <th>StringBuffer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Can the letters change?</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Safe to share the object</td><td>Yes — cannot change</td><td>No</td><td>Yes — waits</td></tr>
+            <tr><td>Long loop of edits</td><td>Slow</td><td>Fastest</td><td>A bit slower</td></tr>
+            <tr><td>Use when</td><td>Normal text</td><td>Build text, one thread</td><td>Shared writers</td></tr>
+          </tbody>
+        </table>
+        <div class="tree-wrap">
+          <div class="tree-root">TEXT</div>
+          <div class="tree-split">
+            <div class="tree-leaf">
+              <h3>Don’t modify</h3>
+              <p><strong>String</strong> — name, message, a few joins.</p>
+            </div>
+            <div class="tree-leaf">
+              <h3>Modify often</h3>
+              <div class="tree-sub">
+                <div class="job-card"><h3>One thread</h3><p>StringBuilder</p></div>
+                <div class="job-card"><h3>Several threads</h3><p>StringBuffer</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Run these from coding/1.3-string/</h2>
+        <div class="cf-split">
+          <div class="lab-list">
+            <div class="lab-item"><span class="step-n">1</span><span><strong>StringBasics</strong> — length, charAt.</span></div>
+            <div class="lab-item"><span class="step-n">2</span><span><strong>StringMethods</strong> — equals, trim, split, replace. Assign the return.</span></div>
+            <div class="lab-item"><span class="step-n">3</span><span><strong>ImmutabilityDemo</strong> — concat without assign; a/b; + makes a new id.</span></div>
+            <div class="lab-item"><span class="step-n">4</span><span><strong>StringPoolDemo</strong> — two literals == ; new String is not ==.</span></div>
+            <div class="lab-item"><span class="step-n">5</span><span><strong>BuilderBufferDemo</strong> — report append; id stays; Buffer same API.</span></div>
+          </div>
+          <div>
+            <div class="code-window">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>cd coding/1.3-string
+javac ImmutabilityDemo.java
+java ImmutabilityDemo</pre>
+            </div>
+            <div class="def-box" style="margin-top:0.75rem">Don’t modify → <strong>String</strong>. Modify often, one thread → <strong>StringBuilder</strong>. Shared writers → <strong>StringBuffer</strong>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>
