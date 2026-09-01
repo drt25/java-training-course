@@ -64,11 +64,14 @@ window.COURSE = {
         {
           id: "1.3b",
           title: "Array and Methods",
+          href: "lessons/1.3b-array-methods.html",
+          ready: true,
           topics: [
+            "Methods and types",
             "Array",
             "Arrays class",
             "Array with methods",
-            "Method types",
+            "Naming conventions",
           ],
         },
         { id: "1.4", title: "Object Oriented Programming", topics: ["Class & Object", "Constructor", "Static", "this"] },

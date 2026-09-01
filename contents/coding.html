@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coding labs · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/lesson.css">
+  <style>
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(0, 173, 238, 0.16), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(245, 166, 35, 0.14), transparent 26%),
+        #f4f8ff;
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 22px 40px;
+      background: linear-gradient(90deg, #004aad, #0056b3);
+      color: #fff;
+      flex-wrap: wrap;
+    }
+    .top img { height: 48px; }
+    .site-nav { display: flex; gap: 8px; }
+    .site-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+    .site-nav a.active,
+    .site-nav a:hover {
+      background: #00adee;
+      border-color: #00adee;
+    }
+    .lab-shell {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 24px 90px;
+    }
+    .lab-sidebar {
+      background: #fff;
+      border: 1px solid #d5e2f5;
+      border-radius: 18px;
+      padding: 16px 14px 18px;
+      box-shadow: 0 14px 36px rgba(6, 36, 92, 0.08);
+      max-height: calc(100vh - 170px);
+      overflow: auto;
+      position: sticky;
+      top: 16px;
+    }
+    .lab-sidebar h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      color: #06245c;
+    }
+    .lab-group { margin-top: 16px; }
+    .lab-group h2 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      color: #004aad;
+      letter-spacing: 0.04em;
+    }
+    .lab-file {
+      display: block;
+      text-decoration: none;
+      color: #0f172a;
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      margin-bottom: 4px;
+    }
+    .lab-file:hover { background: #eef6ff; }
+    .lab-file.active {
+      outline: 2px solid #00adee;
+      background: #e8f8ff;
+    }
+    .lab-pane h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      color: #06245c;
+    }
+    .lab-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      align-items: center;
+      margin: 0 0 14px;
+      color: #3d4f6f;
+      font-size: 14px;
+    }
+    .lab-meta a { color: #004aad; font-weight: 700; }
+    .code-window pre {
+      white-space: pre;
+      overflow: auto;
+      max-height: calc(100vh - 320px);
+    }
+    .run-box {
+      margin-top: 14px;
+      background: #fff;
+      border: 1px solid #d5e2f5;
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: #3d4f6f;
+      font-size: 14px;
+    }
+    .run-box code {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      background: #e8f2ff;
+      color: #0a3d8f;
+      font-size: 13px;
+    }
+    .foot {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      display: flex; justify-content: space-between; gap: 16px;
+      padding: 12px 24px; background: #004aad; color: #fff; font-size: 12px; font-weight: 600;
+    }
+    @media (max-width: 860px) {
+      .lab-shell { grid-template-columns: 1fr; }
+      .lab-sidebar { position: static; max-height: none; }
+      .code-window pre { max-height: 55vh; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <img src="assets/broadway_white_logo.png" alt="Broadway Infosys">
+    <nav class="site-nav" aria-label="Course sections">
+      <a href="index.html">Slides</a>
+      <a class="active" href="coding.html">Coding</a>
+    </nav>
+    <div>Professional Java Programming Training Course · Java Package</div>
+  </header>
+
+  <div class="lab-shell">
+    <aside class="lab-sidebar" id="lab-menu">
+      <h1 class="serif">Lab files</h1>
+      <p class="note" style="margin:0;font-size:13px">Same files as in the <code>coding/</code> folder. Pick one to show it.</p>
+    </aside>
+    <section class="lab-pane">
+      <p class="kicker">Coding</p>
+      <h1 class="serif" id="lab-title">Choose a file</h1>
+      <div class="lab-meta">
+        <span id="lab-path"></span>
+        <a id="lab-slides" href="index.html">Open slides</a>
+      </div>
+      <div class="code-window">
+        <div class="code-bar"><i></i><i></i><i></i></div>
+        <pre id="lab-source">Loading…</pre>
+      </div>
+      <div class="run-box">
+        <strong>Run in the terminal</strong><br>
+        <code id="lab-run">cd coding/…</code>
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <span>www.broadwayinfosys.com</span>
+    <span>+977-1-4117578 / 4111849 / 9841002000</span>
+    <span>Shree Ganesh Marg, Subidhanagar, Tinkune, Kathmandu</span>
+  </footer>
+
+  <script src="js/lab-map.js"></script>
+  <script>
+    const menu = document.getElementById("lab-menu");
+    const titleEl = document.getElementById("lab-title");
+    const pathEl = document.getElementById("lab-path");
+    const slidesEl = document.getElementById("lab-slides");
+    const sourceEl = document.getElementById("lab-source");
+    const runEl = document.getElementById("lab-run");
+
+    function fileKey(group, file) {
+      return group.folder + "/" + file;
+    }
+
+    function className(file) {
+      return file.replace(/\.java$/, "");
+    }
+
+    function findLab(hash) {
+      const wanted = decodeURIComponent((hash || "").replace(/^#/, ""));
+      for (const group of LABS) {
+        for (const file of group.files) {
+          if (fileKey(group, file) === wanted) {
+            return { group: group, file: file };
+          }
+        }
+      }
+      return { group: LABS[0], file: LABS[0].files[0] };
+    }
+
+    LABS.forEach((group) => {
+      const block = document.createElement("div");
+      block.className = "lab-group";
+      block.innerHTML = `<h2 class="serif">${group.id} · ${group.title}</h2>`;
+      group.files.forEach((file) => {
+        const link = document.createElement("a");
+        link.className = "lab-file";
+        link.href = "#" + fileKey(group, file);
+        link.dataset.key = fileKey(group, file);
+        link.textContent = file;
+        block.appendChild(link);
+      });
+      menu.appendChild(block);
+    });
+
+    async function showLab() {
+      const { group, file } = findLab(location.hash);
+      const key = fileKey(group, file);
+      document.querySelectorAll(".lab-file").forEach((el) => {
+        el.classList.toggle("active", el.dataset.key === key);
+      });
+      titleEl.textContent = file;
+      pathEl.textContent = "coding/" + key;
+      slidesEl.href = group.slides;
+      slidesEl.textContent = "Open " + group.id + " slides";
+      const classN = className(file);
+      runEl.textContent = "cd coding/" + group.folder + " && javac " + file + " && java " + classN;
+      if (location.hash.replace(/^#/, "") !== key) {
+        history.replaceState(null, "", "#" + key);
+      }
+      try {
+        const res = await fetch("../coding/" + key);
+        if (!res.ok) throw new Error("missing");
+        sourceEl.textContent = await res.text();
+      } catch (err) {
+        sourceEl.textContent =
+          "Could not load coding/" + key + ".\nOpen this page through a local server or GitHub Pages.\nThen pick the file again.";
+      }
+    }
+
+    window.addEventListener("hashchange", showLab);
+    showLab();
+  </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.3b Array and Methods · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/string-array.css">
+</head>
+<body
+  data-lesson="1.3b"
+  data-title="Array and Methods"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Methods and types|Array|Arrays class|Array with methods|Naming conventions|Student marks exercise">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">Methods first. Then arrays. Then both together.</h2>
+        <p class="slide-lead reveal">You already know <code>for</code> and <code>main</code>. Today we name a block of code, store many marks in one list, and pass that list into a method.</p>
+        <div class="outline-chips reveal">
+          <span>Method and types</span>
+          <span>Array</span>
+          <span>Arrays class</span>
+          <span>Array with methods</span>
+          <span>Naming conventions</span>
+          <span>One program</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why methods</p>
+        <h2 class="slide-title reveal">Write the logic once. Call it whenever you need it.</h2>
+        <p class="slide-lead reveal">A method is a named block of code for one task. Three students is fine as copy-paste. One hundred is not.</p>
+        <div class="compare">
+          <article class="bank-card g3">
+            <h3>Without a method</h3>
+            <p><code>System.out.println("Hello Ram");</code><br><code>System.out.println("Hello Hari");</code><br><code>System.out.println("Hello Shyam");</code></p>
+          </article>
+          <article class="bank-card g2">
+            <h3>With a method</h3>
+            <p><code>greet("Ram");</code><br><code>greet("Hari");</code><br><code>greet("Shyam");</code></p>
+            <p class="foot-note">Lab: <code>WhyMethods.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why methods</p>
+        <h2 class="slide-title reveal">Five reasons we bother</h2>
+        <p class="slide-lead reveal">Change tax from 10% to 15% in one place — not in twenty. One method, one job.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1"><p class="mini">1</p><h3>Reuse</h3><p>Write <code>square</code> once. Call it with 5, 10, 20.</p></article>
+          <article class="bank-card g2"><p class="mini">2</p><h3>Do not repeat</h3><p>Same total logic should not live in four copies of <code>price + tax</code>.</p></article>
+          <article class="bank-card g3"><p class="mini">3</p><h3>Easier to read</h3><p><code>main</code> can say <code>calculateTotal(marks)</code> instead of a pile of math.</p></article>
+        </div>
+        <div class="compare" style="margin-top:0.85rem">
+          <article class="bank-card g4"><p class="mini">4</p><h3>Easy to change</h3><p>Fix <code>calculateTax</code> once. Every call is correct.</p></article>
+          <article class="bank-card g1"><p class="mini">5</p><h3>Easy to test</h3><p><code>add(10, 20)</code> — check that piece alone.</p></article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>SquareReuse.java</code> — one formula, three calls.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why methods</p>
+        <h2 class="slide-title reveal">A calculator button. You already call methods.</h2>
+        <p class="slide-lead reveal">You do not need a method for every tiny line. They matter when the program grows, logic repeats, or a task deserves a name.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Buttons</h3>
+            <p><code>add()</code> <code>subtract()</code> <code>multiply()</code> <code>divide()</code> — each button is one task. <code>add(10, 20)</code> is pressing +.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Java already does this</h3>
+            <p><code>System.out.println()</code> and <code>Arrays.sort()</code> are method calls. We will write our own next.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>Split a big job</h3>
+            <p><code>main</code> should not do register, marks, average, pass/fail, print. Each gets a method.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Method</p>
+        <h2 class="slide-title reveal">Read this line from left to right</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public static void greet() {
+    System.out.println("Hello, Java!");
+}
+
+greet();</pre>
+          </div>
+          <table class="info-table">
+            <thead><tr><th>Part</th><th>Meaning today</th></tr></thead>
+            <tbody>
+              <tr><td><code>public</code></td><td>Other code can call it</td></tr>
+              <tr><td><code>static</code></td><td>Call it like <code>main</code> — no object yet</td></tr>
+              <tr><td><code>void</code></td><td>Does a job. Gives no value back</td></tr>
+              <tr><td><code>greet</code></td><td>The name we call</td></tr>
+              <tr><td><code>()</code></td><td>No data going in</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Method types</p>
+        <h2 class="slide-title reveal">Four useful combinations</h2>
+        <p class="slide-lead reveal">Ask two questions: does data go in? Does a value come out?</p>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><p class="mini">1</p><h3>No in · no out</h3><p><code>void greet()</code> — just print Hello.</p></article>
+          <article class="bank-card g2"><p class="mini">2</p><h3>In · no out</h3><p><code>void greet(String name)</code> — print Hello Ram.</p></article>
+          <article class="bank-card g3"><p class="mini">3</p><h3>No in · out</h3><p><code>int getAge()</code> — <code>return 25;</code></p></article>
+          <article class="bank-card g4"><p class="mini">4</p><h3>In · out</h3><p><code>int add(int a, int b)</code> — send 10 and 20, get 30.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Parameter vs argument</p>
+        <h2 class="slide-title reveal">The hole in the box. The value you put in.</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public static void greet(String name) {
+    System.out.println("Hello " + name);
+}
+
+greet("Ram");
+greet("Hari");</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Remember</h3>
+            <p><code>name</code> is the <strong>parameter</strong> — the placeholder.</p>
+            <p style="margin-top:0.5rem"><code>"Ram"</code> is the <strong>argument</strong> — the real value.</p>
+            <p class="foot-note">Lab later: <code>coding/1.3-array/MethodsDemo.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Return</p>
+        <h2 class="slide-title reveal">void does a job. return gives a value back.</h2>
+        <p class="slide-lead reveal">This <code>return</code> is not “leave login” from 1.2. Here it means: send an answer to the caller.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>10 and 20 go in</h3>
+            <p><code>add(10, 20)</code></p>
+          </article>
+          <article class="bank-card g2">
+            <h3>The method adds</h3>
+            <p><code>return a + b;</code></p>
+          </article>
+          <article class="bank-card g3">
+            <h3>30 comes out</h3>
+            <p><code>int result = add(10, 20);</code></p>
+          </article>
+        </div>
+        <div class="code-window reveal" style="margin-top:1rem">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>public static int add(int a, int b) {
+    return a + b;
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Overloading</p>
+        <h2 class="slide-title reveal">Same name. Different parameters.</h2>
+        <p class="slide-lead reveal">Java picks the method by what you pass in. Changing only the return type is not enough. OOP overloading with objects waits in 1.5.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public static int add(int a, int b) {
+    return a + b;
+}
+
+public static int add(int a, int b, int c) {
+    return a + b + c;
+}
+
+add(10, 20);        // two ints
+add(10, 20, 30);    // three ints</pre>
+          </div>
+          <article class="bank-card g3">
+            <h3>Not allowed</h3>
+            <p>Two methods named <code>add</code> with the same <code>(int, int)</code> — even if one returns <code>int</code> and one returns <code>double</code>.</p>
+            <p class="foot-note">Lab: <code>print</code> in MethodsDemo — one string, or string plus times.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Array</p>
+        <h2 class="slide-title reveal">Many marks. One name.</h2>
+        <p class="slide-lead reveal">1.2 showed one line. Today we use it for real. Same type only — all <code>int</code>, or all <code>String</code>.</p>
+        <div class="compare">
+          <article class="bank-card g3">
+            <h3>Four variables</h3>
+            <p><code>int student1 = 80;</code><br><code>int student2 = 75;</code><br><code>int student3 = 90;</code><br><code>int student4 = 85;</code></p>
+          </article>
+          <article class="bank-card g2">
+            <h3>One array</h3>
+            <p><code>int[] marks = {80, 75, 90, 85};</code></p>
+            <p style="margin-top:0.5rem">One list. Easy to loop. Easy to pass into a method.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Array</p>
+        <h2 class="slide-title reveal">Two ways to create. Empty slots start at 0.</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>int[] numbers = {10, 20, 30, 40, 50};
+
+int[] empty = new int[5];
+// [0, 0, 0, 0, 0]</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Remember</h3>
+            <p>Curly braces fill values now. <code>new int[5]</code> makes five rooms. Java puts <code>0</code> in each <code>int</code> room until you set them.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Array index</p>
+        <h2 class="slide-title reveal">Counting starts at 0</h2>
+        <p class="slide-lead reveal">Change one room: <code>numbers[1] = 100</code> turns <code>[10, 20, 30]</code> into <code>[10, 100, 30]</code>.</p>
+        <div class="array-row reveal" data-cycle="800">
+          <div class="array-cell cycle-item"><span class="idx">0</span>10</div>
+          <div class="array-cell cycle-item"><span class="idx">1</span>20</div>
+          <div class="array-cell cycle-item"><span class="idx">2</span>30</div>
+          <div class="array-cell cycle-item"><span class="idx">3</span>40</div>
+          <div class="array-cell cycle-item"><span class="idx">4</span>50</div>
+        </div>
+        <p class="note reveal" style="margin-top:1rem"><code>numbers[0]</code> is 10. <code>numbers[3]</code> is 40. There is no <code>numbers[5]</code> — that crashes.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Trap</p>
+        <h2 class="slide-title reveal">length has no ( ). length() has ( ).</h2>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>Array</h3>
+            <p>A field. No brackets.</p>
+            <span class="cmd">marks.length</span>
+          </article>
+          <article class="bank-card g2">
+            <h3>String — from 1.3</h3>
+            <p>A method. Needs brackets.</p>
+            <span class="cmd">name.length()</span>
+          </article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Write <code>marks.length()</code> and Java will not compile. Write <code>"Ram".length</code> and it will not compile either.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Loop</p>
+        <h2 class="slide-title reveal">You know for. Today we add for-each.</h2>
+        <p class="slide-lead reveal">From 1.2: <code>for (int i = 0; i &lt; marks.length; i++)</code> and <code>marks[i]</code>. When you only need the value, use for-each.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>int[] marks = {80, 75, 90, 85};
+
+for (int mark : marks) {
+    System.out.println(mark);
+}</pre>
+          </div>
+          <article class="bank-card g2">
+            <h3>Read it as</h3>
+            <p>Take each number from <code>marks</code>. Put it in <code>mark</code>. Print. Repeat until the list ends.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">java.util.Arrays</p>
+        <h2 class="slide-title reveal">Main helpers. Two more names. Then explore.</h2>
+        <p class="slide-lead reveal">Import: <code>import java.util.Arrays;</code> Do not print the raw array — you get an address, not the values.</p>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>toString</h3><p>Readable print: <code>[10, 20, 30]</code></p></article>
+          <article class="bank-card g2"><h3>sort</h3><p>Orders the <strong>same</strong> array. The original list changes.</p></article>
+          <article class="bank-card g3"><h3>equals</h3><p>Same contents? Not <code>a == b</code>.</p></article>
+          <article class="bank-card g4"><h3>copyOf</h3><p>A new array. Extra <code>int</code> rooms are 0.</p></article>
+        </div>
+        <div class="compare" style="margin-top:0.85rem">
+          <article class="bank-card g1">
+            <h3>fill</h3>
+            <p><code>Arrays.fill(scores, 0)</code> — put the same value in every slot.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>binarySearch</h3>
+            <p>Find a value in a <strong>sorted</strong> array. Sort first. We do not teach the algorithm today.</p>
+          </article>
+        </div>
+        <p class="note reveal" style="margin-top:0.75rem">These are the major names for class. <strong>More methods exist</strong> — explore <code>Arrays</code> in the docs when you need them. Lab: <code>ArrayDemo.java</code> and <code>ArraysFillSearch.java</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Array with methods</p>
+        <h2 class="slide-title reveal">Send the list in. Or send a list back.</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public static void printMarks(int[] marks) {
+    for (int mark : marks) {
+        System.out.println(mark);
+    }
+}
+
+printMarks(marks);
+
+public static int[] getNumbers() {
+    return new int[]{10, 20, 30, 40};
+}</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>The list is the argument</h3>
+            <p><code>int[] marks</code> is the parameter. The whole array goes in — you do not pass one number at a time.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Together</p>
+        <h2 class="slide-title reveal">Student marks — one small program</h2>
+        <p class="slide-lead reveal"><code>main</code> holds the array. It asks <code>printMarks</code> to show each score. It asks <code>calculateTotal</code> for the sum.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>int[] marks = {80, 75, 90, 85, 70};
+printMarks(marks);
+int total = calculateTotal(marks);
+System.out.println("Total: " + total);</pre>
+          </div>
+          <article class="bank-card g2">
+            <h3>Flow</h3>
+            <p><code>main</code> → array → <code>printMarks(marks)</code> → <code>calculateTotal(marks)</code> → <code>total</code> comes back.</p>
+            <p class="foot-note">Lab: <code>coding/1.3-array/StudentMarks.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Naming</p>
+        <h2 class="slide-title reveal">Java has a dress code for names</h2>
+        <p class="slide-lead reveal">Class from 1.1 stays PascalCase. Methods and variables use camelCase. Constants shout in UPPER_SNAKE.</p>
+        <table class="info-table">
+          <thead><tr><th>What</th><th>Style</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Class</td><td>PascalCase</td><td><code>StudentMarks</code></td></tr>
+            <tr><td>Object / variable / parameter</td><td>camelCase</td><td><code>studentMarks</code>, <code>marks</code></td></tr>
+            <tr><td>Method — start with a verb</td><td>camelCase</td><td><code>calculateTotal()</code></td></tr>
+            <tr><td>Constant</td><td>UPPER_SNAKE_CASE</td><td><code>MAX_MARKS</code></td></tr>
+            <tr><td>Package</td><td>lowercase</td><td><code>com.example.student</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these six files</h2>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>WhyMethods</h3>
+            <p><code>greet</code> for Ram, Hari, Shyam.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>SquareReuse</h3>
+            <p><code>square(int)</code> used three times.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>MethodsDemo</h3>
+            <p><code>greet</code>, <code>add</code>, overload <code>print</code>.</p>
+          </article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem">
+          <article class="bank-card g4">
+            <h3>ArrayDemo</h3>
+            <p>Index, for-each, <code>toString</code>, <code>sort</code>, <code>copyOf</code>.</p>
+          </article>
+          <article class="bank-card g1">
+            <h3>ArraysFillSearch</h3>
+            <p><code>fill</code>, then <code>sort</code>, then <code>binarySearch</code>.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>StudentMarks</h3>
+            <p>Pass the array. Return a total. Use the names from the table.</p>
+          </article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Folder: <code>coding/1.3-array/</code>. Next lesson: 1.4 Object Oriented Programming — class, object, constructor, <code>this</code>.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>

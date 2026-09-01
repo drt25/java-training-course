@@ -17,11 +17,30 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
       padding: 22px 40px;
       background: linear-gradient(90deg, #004aad, #0056b3);
       color: #fff;
+      flex-wrap: wrap;
     }
     .top img { height: 48px; }
+    .site-nav { display: flex; gap: 8px; }
+    .site-nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+    .site-nav a.active,
+    .site-nav a:hover {
+      background: #00adee;
+      border-color: #00adee;
+    }
     .wrap { max-width: 1180px; margin: 0 auto; padding: 36px 24px 80px; }
     .hero h1 { margin: 8px 0 10px; font-size: 46px; color: #06245c; }
     .module { margin-top: 36px; }
@@ -55,13 +74,17 @@
 <body>
   <header class="top">
     <img src="assets/broadway_white_logo.png" alt="Broadway Infosys">
+    <nav class="site-nav" aria-label="Course sections">
+      <a class="active" href="index.html">Slides</a>
+      <a href="coding.html">Coding</a>
+    </nav>
     <div>Professional Java Programming Training Course · Java Package</div>
   </header>
   <main class="wrap">
     <section class="hero">
       <p class="kicker">Broadway Infosys · Since 2008</p>
       <h1 class="serif">Java classroom slides</h1>
-      <p class="note">Start with Meet your trainer, then 1.1 Introduction, 1.2 Data Type and Control Flow, and 1.3 String. Array and methods come next as 1.3b. Other lessons will use the same start page, footer, and engine.</p>
+      <p class="note">Slides for the board. Coding for the lab files. Start with Meet your trainer, then 1.1 Introduction, 1.2 Data Type and Control Flow, and 1.3 String. Array and methods come next as 1.3b.</p>
     </section>
     <div id="modules"></div>
   </main>

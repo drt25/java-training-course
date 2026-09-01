@@ -1,0 +1,50 @@
+window.LABS = [
+  {
+    id: "1.1",
+    title: "Introduction",
+    folder: "1.1",
+    slides: "lessons/1.1-introduction.html",
+    files: ["HelloWorld.java", "PrintArgs.java"],
+  },
+  {
+    id: "1.2",
+    title: "Data Type and Control Flow",
+    folder: "1.2",
+    slides: "lessons/1.2-data-types-control-flow.html",
+    files: [
+      "TypesDemo.java",
+      "IfLogic.java",
+      "LoopsDemo.java",
+      "SwitchDemo.java",
+      "BreakContinueReturn.java",
+    ],
+  },
+  {
+    id: "1.3",
+    title: "String",
+    folder: "1.3-string",
+    slides: "lessons/1.3-string.html",
+    files: [
+      "StringBasics.java",
+      "StringMethods.java",
+      "ImmutabilityDemo.java",
+      "StringPoolDemo.java",
+      "BuilderBufferDemo.java",
+      "StudentEntry.java",
+    ],
+  },
+  {
+    id: "1.3b",
+    title: "Array and Methods",
+    folder: "1.3-array",
+    slides: "lessons/1.3b-array-methods.html",
+    files: [
+      "WhyMethods.java",
+      "SquareReuse.java",
+      "MethodsDemo.java",
+      "ArrayDemo.java",
+      "ArraysFillSearch.java",
+      "StudentMarks.java",
+    ],
+  },
+];
