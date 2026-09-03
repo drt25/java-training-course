@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.4 Object Oriented Programming · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/string-array.css">
+</head>
+<body
+  data-lesson="1.4"
+  data-title="Object Oriented Programming"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Class and objects|Properties and methods|Constructor and encapsulation|this|Has-a|Static|Static block">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">Write a class. Build objects. Keep the wallet private.</h2>
+        <p class="slide-lead reveal">1.1 already said blueprint vs Ram’s account. 1.3b already taught methods. Today the methods belong to the object.</p>
+        <div class="outline-chips reveal">
+          <span>Class and objects</span>
+          <span>Properties and methods</span>
+          <span>Constructor and encapsulation</span>
+          <span>this</span>
+          <span>Has-a</span>
+          <span>Static</span>
+          <span>Static block</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Class and objects</p>
+        <h2 class="slide-title reveal">One blueprint. Two real accounts.</h2>
+        <p class="slide-lead reveal">Same <code>Account</code> class. Ram and Hari are two objects. Two names. Two balances.</p>
+        <div class="compare">
+          <article class="bank-card g3">
+            <h3>Class — from 1.1</h3>
+            <p>The blueprint. It is not a person yet.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Today we write it</h3>
+            <p><code>new Account()</code> twice. Each object keeps its own data.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Class and objects</p>
+        <h2 class="slide-title reveal">Fields live on the object</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Account ram = new Account();
+ram.name = "Ram";
+ram.balance = 15000;
+
+Account hari = new Account();
+hari.name = "Hari";
+hari.balance = 8000;</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Remember</h3>
+            <p>Change Ram’s balance. Hari’s balance does not move.</p>
+            <p class="foot-note">Lab: <code>AccountObjects.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Properties and methods</p>
+        <h2 class="slide-title reveal">Data on the object. Actions on the object.</h2>
+        <p class="slide-lead reveal">1.3b taught <code>add(10, 20)</code> as a static helper. Today we say <code>ram.deposit(500)</code>.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Properties</h3>
+            <p>What it has. <code>name</code>. <code>balance</code>.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Methods</h3>
+            <p>What it can do. <code>deposit</code>. <code>print</code>.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>One job</h3>
+            <p><code>deposit</code> only adds money. It does not print a receipt.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Properties and methods</p>
+        <h2 class="slide-title reveal">Call the method on that object</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>ram.deposit(500);
+hari.deposit(200);
+ram.print();</pre>
+          </div>
+          <article class="bank-card g2">
+            <h3>Who changes?</h3>
+            <p><code>ram.deposit(500)</code> adds to Ram only. Hari stays 8000 until you call <code>hari.deposit</code>.</p>
+            <p class="foot-note">Lab: <code>AccountMethods.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Constructor</p>
+        <h2 class="slide-title reveal">Same name as the class. Runs when you new.</h2>
+        <p class="slide-lead reveal">Without a constructor, numbers start at 0 and names start empty. The constructor sets the first values.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Name</h3>
+            <p>Must match the class: <code>Account</code>.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>No return type</h3>
+            <p>Not <code>void</code>. Not <code>int</code>.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>When</h3>
+            <p>Java calls it on <code>new Account(...)</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Constructor</p>
+        <h2 class="slide-title reveal">Pass the starting name and balance</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Account ram = new Account("Ram", 15000);
+Account hari = new Account("Hari", 8000);</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>One line each</h3>
+            <p>No more <code>ram.name =</code> after <code>new</code>. The constructor does that job.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Encapsulation</p>
+        <h2 class="slide-title reveal">Keep the wallet in the pocket</h2>
+        <p class="slide-lead reveal">If <code>balance</code> is public, anyone can write <code>ram.balance = -500</code>. A real bank would not allow that.</p>
+        <div class="compare">
+          <article class="bank-card g3">
+            <h3>Open field</h3>
+            <p><code>ram.balance = -500;</code> — broken wallet.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Private field</h3>
+            <p>Use <code>deposit</code>, <code>withdraw</code>, <code>getBalance</code>. The object checks the rules.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Encapsulation</p>
+        <h2 class="slide-title reveal">private data. public actions.</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>private int balance;
+
+public int getBalance() {
+    return balance;
+}
+
+public void deposit(int amount) {
+    if (amount > 0) {
+        balance += amount;
+    }
+}</pre>
+          </div>
+          <article class="bank-card g4">
+            <h3>One getter is enough</h3>
+            <p>Read the balance. Do not give the world a <code>setBalance</code> that skips the rules.</p>
+            <p class="foot-note">Lab: <code>ConstructorEncaps.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">this</p>
+        <h2 class="slide-title reveal">this.name is the field. name is the parameter.</h2>
+        <p class="slide-lead reveal">When both have the same name, Java uses the nearest one. <code>this</code> points at this object.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public Account(String name, int balance) {
+    this.name = name;
+    this.balance = balance;
+}</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Without this</h3>
+            <p><code>name = name;</code> copies the parameter onto itself. The field stays empty.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">this</p>
+        <h2 class="slide-title reveal">this() calls another constructor</h2>
+        <p class="slide-lead reveal">Name only today. Do not drill chaining. One extra use of the same word.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public Account(String name) {
+    this(name, 0);
+}</pre>
+          </div>
+          <article class="bank-card g3">
+            <h3>Read it as</h3>
+            <p>Start this account with a name. Balance starts at 0. Reuse the other constructor.</p>
+            <p class="foot-note">Lab: <code>ConstructorEncaps.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Has-a</p>
+        <h2 class="slide-title reveal">A student has an address</h2>
+        <p class="slide-lead reveal">One object can hold another object. That is <strong>has-a</strong>. <strong>is-a</strong> (<code>extends</code>) waits in 1.5.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>Has-a · today</h3>
+            <p><code>Student</code> has an <code>Address</code>. Tinkune, Kathmandu.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>Is-a · later</h3>
+            <p>SavingsAccount <em>is an</em> Account. That is inheritance.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Has-a</p>
+        <h2 class="slide-title reveal">Object inside an object</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Address home = new Address("Tinkune", "Kathmandu");
+Student ram = new Student("Ram", home);
+System.out.println(ram.address.city);</pre>
+          </div>
+          <article class="bank-card g2">
+            <h3>Walk the path</h3>
+            <p><code>ram</code> → <code>address</code> → <code>city</code>. The student does not copy every street field.</p>
+            <p class="foot-note">Lab: <code>StudentAddress.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Static</p>
+        <h2 class="slide-title reveal">One value shared by every account</h2>
+        <p class="slide-lead reveal">1.3b said <code>static</code> means call it like <code>main</code>. Today: it belongs to the <strong>class</strong>, not to Ram or Hari.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Each object</h3>
+            <p><code>name</code> and <code>balance</code> — Ram and Hari each have their own.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>The class</h3>
+            <p><code>accountCount</code> — one number for the bank.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>Call it on the class</h3>
+            <p><code>Account.accountCount</code> — not <code>ram.accountCount</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Static</p>
+        <h2 class="slide-title reveal">Count how many accounts you built</h2>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>static int accountCount = 0;
+
+Account() {
+    accountCount++;
+}
+
+System.out.println(Account.accountCount);</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Shared</h3>
+            <p>Two <code>new Account()</code> calls. Count is 2. Both objects see the same number.</p>
+            <p class="foot-note">Lab: <code>StaticUses.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Static block</p>
+        <h2 class="slide-title reveal">Runs once when the class loads</h2>
+        <p class="slide-lead reveal">Not a constructor. A constructor runs for every object. A static block runs one time, before you use the class.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>static {
+    System.out.println("Bank ready");
+}</pre>
+          </div>
+          <article class="bank-card g4">
+            <h3>Use it for</h3>
+            <p>One-time setup. A starting message. A default rate. Then <code>main</code> runs.</p>
+            <p class="foot-note">Lab: <code>StaticBlockDemo.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these six files</h2>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>AccountObjects</h3>
+            <p>Class plus two objects. Ram and Hari.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>AccountMethods</h3>
+            <p><code>deposit</code> on the object.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>ConstructorEncaps</h3>
+            <p>Constructor, <code>private</code>, <code>this.name</code>.</p>
+          </article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem">
+          <article class="bank-card g4">
+            <h3>StudentAddress</h3>
+            <p>Student has an Address.</p>
+          </article>
+          <article class="bank-card g1">
+            <h3>StaticUses</h3>
+            <p>Shared <code>accountCount</code>.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>StaticBlockDemo</h3>
+            <p>Static block prints once, then <code>main</code>.</p>
+          </article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Folder: <code>coding/1.4/</code>. Next lesson: 1.5 Inheritance and Polymorphism — <code>extends</code>, override, abstract, interface.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>

@@ -47,4 +47,18 @@ window.LABS = [
       "StudentMarks.java",
     ],
   },
+  {
+    id: "1.4",
+    title: "Object Oriented Programming",
+    folder: "1.4",
+    slides: "lessons/1.4-oop.html",
+    files: [
+      "AccountObjects.java",
+      "AccountMethods.java",
+      "ConstructorEncaps.java",
+      "StudentAddress.java",
+      "StaticUses.java",
+      "StaticBlockDemo.java",
+    ],
+  },
 ];
