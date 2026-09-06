@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.5 Inheritance and Polymorphism · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/string-array.css">
+</head>
+<body
+  data-lesson="1.5"
+  data-title="Inheritance and Polymorphism"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Four pillars|Encapsulation|Inheritance|Overload and override|super|final|Polymorphism|Abstract|Interface|Object">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">One family: Object, Animal, Dog, Cat</h2>
+        <p class="slide-lead reveal">We use the same example all day. First the four OOP ideas. Then we write them, one step at a time.</p>
+        <div class="bank-grid" style="margin-bottom:1rem">
+          <article class="bank-card g1"><h3>Object</h3><p>The root. Every class sits under it.</p></article>
+          <article class="bank-card g2"><h3>Animal</h3><p>The parent. Name, eat, sleep.</p></article>
+          <article class="bank-card g3"><h3>Dog and Cat</h3><p>The children. Bark or meow.</p></article>
+        </div>
+        <div class="outline-chips reveal">
+          <span>Four pillars</span>
+          <span>Inheritance</span>
+          <span>Types</span>
+          <span>Overload / override</span>
+          <span>super</span>
+          <span>final</span>
+          <span>Polymorphism</span>
+          <span>Abstract</span>
+          <span>Interface</span>
+          <span>Object</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Four pillars</p>
+        <h2 class="slide-title reveal">OOP is four ideas working together</h2>
+        <p class="slide-lead reveal">Learn the meaning first. Code comes after. Each idea solves one problem.</p>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><p class="mini">1</p><h3>Encapsulation</h3><p>Keep data private. Use getter and setter.</p></article>
+          <article class="bank-card g2"><p class="mini">2</p><h3>Inheritance</h3><p>A child class gets the parent’s features.</p></article>
+          <article class="bank-card g3"><p class="mini">3</p><h3>Polymorphism</h3><p>One name. Many forms. Dog and Cat both <code>sound()</code>.</p></article>
+          <article class="bank-card g4"><p class="mini">4</p><h3>Abstraction</h3><p>Show the job. Hide the how. Every animal must make a sound.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Encapsulation</p>
+        <h2 class="slide-title reveal">Private data. Getter to read. Setter to change.</h2>
+        <p class="slide-lead reveal">What: the field stays inside the class. Why: anyone can write <code>age = -100</code> if the field is open. Benefit: protect, check, hide the inside. 1.4 used a wallet. Today the same idea is <code>name</code> on Animal.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>private String name;
+
+public String getName() {
+    return name;
+}
+
+public void setName(String name) {
+    if (name != null && !name.isEmpty()) {
+        this.name = name;
+    }
+}</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Flow</h3>
+            <p>Outside world → getter / setter → private field. Empty name is rejected.</p>
+            <p class="foot-note">Lab: <code>EncapsulateAnimal.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Inheritance</p>
+        <h2 class="slide-title reveal">A child class gets the parent’s features</h2>
+        <p class="slide-lead reveal">What: Dog can use <code>eat</code> and <code>sleep</code> without writing them again. Why: Dog and Cat both eat and sleep. Copy-paste is easy to break. Benefit: write once, fix once. This is an <strong>is-a</strong> link: Dog is an Animal. (1.4 was has-a: Student has an Address.)</p>
+        <div class="compare">
+          <article class="bank-card g3">
+            <h3>Without inheritance</h3>
+            <p>Dog and Cat each copy <code>name</code>, <code>eat()</code>, <code>sleep()</code>.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>With inheritance</h3>
+            <p>Animal holds the common parts. Dog adds <code>bark</code>. Cat adds <code>meow</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Polymorphism</p>
+        <h2 class="slide-title reveal">One word. Many forms.</h2>
+        <p class="slide-lead reveal">Poly = many. Morph = forms. What: the same call <code>sound()</code> can mean bark or meow. Why: you do not want a new button for every animal. Benefit: one Animal remote, Dog or Cat box. The real object decides what runs.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1"><h3>The remote</h3><p><code>Animal a</code> — the type we talk to.</p></article>
+          <article class="bank-card g2"><h3>The box</h3><p><code>new Dog()</code> or <code>new Cat()</code> — the real object.</p></article>
+          <article class="bank-card g3"><h3>The call</h3><p><code>a.sound()</code> — Dog barks. Cat meows.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Abstraction</p>
+        <h2 class="slide-title reveal">Show the job. Hide the how.</h2>
+        <p class="slide-lead reveal">What: Animal says “you must have a sound” without writing a generic sound. Why: you never create a bare Animal at the zoo. Benefit: common <code>eat()</code> stays in Animal. Each child fills <code>sound()</code>. Interface later: what the object <em>can do</em> (swim), not only what it <em>is</em>.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>Abstract class</h3>
+            <p>What it <strong>is</strong>. Dog is an Animal. Shared fields plus a hole.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>Interface</h3>
+            <p>What it <strong>can do</strong>. Dog can swim. Dog can run.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Inheritance in code</p>
+        <h2 class="slide-title reveal">extends means Dog already has eat and sleep</h2>
+        <p class="slide-lead reveal">Dog does not write <code>eat()</code>. It still works because <code>class Dog extends Animal</code>.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog is barking");
+    }
+}
+
+Dog dog = new Dog();
+dog.setName("Tommy");
+dog.eat();
+dog.bark();</pre>
+            <div class="out-box">Animal is eating
+Dog is barking</div>
+          </div>
+          <article class="bank-card g2">
+            <h3>Remember</h3>
+            <p>Common code lives in Animal. Dog only adds what is new.</p>
+            <p class="foot-note">Lab: <code>InheritDog.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Types in Java</p>
+        <h2 class="slide-title reveal">Four shapes. A class cannot have two parents.</h2>
+        <p class="slide-lead reveal">Multiple inheritance through two classes is not allowed. Two interfaces later — that is allowed.</p>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>Single</h3><p>One parent, one child. Animal → Dog.</p></article>
+          <article class="bank-card g2"><h3>Multilevel</h3><p>Parent → child → grandchild. Animal → Mammal → Dog.</p></article>
+          <article class="bank-card g3"><h3>Hierarchical</h3><p>One parent, many children. Animal → Dog and Cat.</p></article>
+          <article class="bank-card g4"><h3>Multiple</h3><p>Not with classes. <code>class Robot extends Animal, Machine</code> will not compile.</p></article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>InheritTypes.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Overloading</p>
+        <h2 class="slide-title reveal">Same method name. Different parameters.</h2>
+        <p class="slide-lead reveal">1.3b already showed this. Java picks the method when you <strong>compile</strong>, by what you pass in. Memory: same name, different parameters.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>int add(int a, int b) {
+    return a + b;
+}
+
+int add(int a, int b, int c) {
+    return a + b + c;
+}
+
+add(10, 20);
+add(10, 20, 30);</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Compile time</h3>
+            <p>This is static polymorphism. Changing only the return type is not enough.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Overriding</p>
+        <h2 class="slide-title reveal">The child changes the parent’s method</h2>
+        <p class="slide-lead reveal">Same name. Same parameters. Dog and Cat each write their own <code>sound()</code>. Java picks the method when you <strong>run</strong>, from the real object.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>class Dog extends Animal {
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+Dog dog = new Dog();
+dog.sound();</pre>
+            <div class="out-box">Dog barks</div>
+          </div>
+          <article class="bank-card g3">
+            <h3>Surface rule</h3>
+            <p>Parent has <code>sound()</code>. Child writes <code>sound()</code> again. The child’s version runs.</p>
+            <p class="foot-note">Lab: <code>OverrideSound.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Overload vs override</p>
+        <h2 class="slide-title reveal">Two different tools. Learn the table.</h2>
+        <table class="info-table">
+          <thead><tr><th></th><th>Overloading</th><th>Overriding</th></tr></thead>
+          <tbody>
+            <tr><td>Where</td><td>Usually the same class</td><td>Parent and child</td></tr>
+            <tr><td>Name</td><td>Same</td><td>Same</td></tr>
+            <tr><td>Parameters</td><td>Must differ</td><td>Must be the same</td></tr>
+            <tr><td>When Java decides</td><td>Compile time</td><td>Run time</td></tr>
+            <tr><td>Example</td><td><code>add()</code></td><td><code>sound()</code></td></tr>
+          </tbody>
+        </table>
+        <p class="note reveal" style="margin-top:1rem">Overloading = same name, different parameters. Overriding = child changes the parent’s behavior.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">super</p>
+        <h2 class="slide-title reveal">super talks to the parent. this talks to me.</h2>
+        <p class="slide-lead reveal">1.4: <code>this</code> is the current object. Today: <code>super</code> is the parent. <code>super(...)</code> must be the first line in a constructor.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Parent field</h3>
+            <p><code>super.name</code> — the parent’s name, not the child’s.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Parent method</h3>
+            <p><code>super.eat()</code> — run Animal’s eat, then add Dog’s extra line.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>Parent constructor</h3>
+            <p><code>super(name)</code> — set the name in Animal first.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>SuperDemo.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">final</p>
+        <h2 class="slide-title reveal">final means you cannot change it further</h2>
+        <p class="slide-lead reveal">Three places. Same word. Three locks.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Variable</h3>
+            <p><code>final int MAX_AGE = 100;</code> — you cannot assign 200 later.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Method</h3>
+            <p><code>final void breathe()</code> — Dog cannot override breathe. Every animal breathes the same way.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>Class</h3>
+            <p><code>String</code> is final. You cannot write <code>class MyString extends String</code>.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>FinalDemo.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Dynamic polymorphism</p>
+        <h2 class="slide-title reveal">The variable says Animal. The object is a Dog.</h2>
+        <p class="slide-lead reveal">At run time Java looks at the real object and calls Dog’s <code>sound()</code>. That is overriding + a parent-type variable.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Animal a = new Dog();
+a.sound();</pre>
+            <div class="out-box">Dog barks</div>
+          </div>
+          <article class="bank-card g2">
+            <h3>Read the line</h3>
+            <p>Left: reference type <code>Animal</code>. Right: real object <code>Dog</code>. The call uses the object.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Static polymorphism</p>
+        <h2 class="slide-title reveal">Overloading is decided when you compile</h2>
+        <p class="slide-lead reveal">Same word “polymorphism.” Two times. Easy pair to remember.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>Static · compile</h3>
+            <p>Overloading. <code>add(10, 20)</code> vs <code>add(10, 20, 30)</code>.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>Dynamic · run</h3>
+            <p>Overriding. <code>Animal a = new Dog(); a.sound();</code></p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>PolyAnimal.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Abstract class</p>
+        <h2 class="slide-title reveal">A base class with a hole the child must fill</h2>
+        <p class="slide-lead reveal">You cannot <code>new Animal()</code> if Animal is abstract. Common <code>eat()</code> stays. <code>sound()</code> has no body. Dog and Cat must write it. Simple idea: common work + rules for children.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>abstract class Animal {
+    abstract void sound();
+
+    void eat() {
+        System.out.println("Eating");
+    }
+}</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Allowed</h3>
+            <p><code>Animal dog = new Dog();</code> — not <code>new Animal()</code>.</p>
+            <p class="foot-note">Lab: <code>AbstractAnimal.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Interface</p>
+        <h2 class="slide-title reveal">A contract. If you implement me, you must swim.</h2>
+        <p class="slide-lead reveal">An interface is not a parent family. It is a skill. A class can implement more than one interface. That is how Java does multiple inheritance of behavior.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>interface Swimmable {
+    void swim();
+}
+
+class Dog implements Swimmable {
+    public void swim() {
+        System.out.println("Dog swims");
+    }
+}</pre>
+          </div>
+          <article class="bank-card g3">
+            <h3>Can do</h3>
+            <p>Dog is an Animal (class). Dog can swim (interface). Fish can swim too — not the same family.</p>
+            <p class="foot-note">Lab: <code>CanSwim.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Abstract vs interface</p>
+        <h2 class="slide-title reveal">Is-a versus can-do</h2>
+        <p class="slide-lead reveal">No holy war. Pick the one that matches the sentence you would say in English.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>Abstract class</h3>
+            <p><strong>What the object is.</strong> Dog is an Animal. Shared name and <code>eat()</code>. A hole for <code>sound()</code>.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>Interface</h3>
+            <p><strong>What the object can do.</strong> Dog can swim. Dog can run. Many unrelated classes can sign the same contract.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Object</p>
+        <h2 class="slide-title reveal">If you write no extends, you still extend Object</h2>
+        <p class="slide-lead reveal">Object is the root. Printing an object without <code>toString</code> looks like an address — same idea as a raw array in 1.3b. Override <code>toString</code> so the console says Tommy.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public String toString() {
+    return getName();
+}
+
+System.out.println(dog);</pre>
+            <div class="out-box">Tommy</div>
+          </div>
+          <article class="bank-card g2">
+            <h3>Today only</h3>
+            <p>We do not teach <code>equals</code> here. That stays with String in 1.3.</p>
+            <p class="foot-note">Lab: <code>ObjectToString.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Cheat sheet</p>
+        <h2 class="slide-title reveal">Simple meanings. Then type the files.</h2>
+        <table class="info-table">
+          <thead><tr><th>Topic</th><th>Simple meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Encapsulation</td><td>Private field + getter / setter</td></tr>
+            <tr><td>Inheritance / <code>extends</code></td><td>Child gets parent features</td></tr>
+            <tr><td>Overloading</td><td>Same name, different parameters</td></tr>
+            <tr><td>Overriding</td><td>Child changes the parent’s method</td></tr>
+            <tr><td><code>this</code> / <code>super</code></td><td>Me / my parent</td></tr>
+            <tr><td><code>final</code></td><td>Cannot reassign, override, or extend</td></tr>
+            <tr><td>Polymorphism</td><td>One reference, different objects</td></tr>
+            <tr><td>Abstract class</td><td>Common base + a hole to fill</td></tr>
+            <tr><td>Interface</td><td>A contract / a skill</td></tr>
+            <tr><td><code>toString</code></td><td>How the object prints</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these ten files in coding/1.5/</h2>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>EncapsulateAnimal</h3><p>Private name. Getter and setter.</p></article>
+          <article class="bank-card g2"><h3>InheritDog</h3><p><code>extends</code>. eat, sleep, bark.</p></article>
+          <article class="bank-card g3"><h3>InheritTypes</h3><p>Dog, Cat, Mammal.</p></article>
+          <article class="bank-card g4"><h3>OverrideSound</h3><p>Dog barks. Cat meows.</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.75rem">
+          <article class="bank-card g1"><h3>SuperDemo</h3><p><code>super(name)</code> and <code>super.eat()</code>.</p></article>
+          <article class="bank-card g2"><h3>FinalDemo</h3><p><code>MAX_AGE</code> and <code>breathe</code>.</p></article>
+          <article class="bank-card g3"><h3>PolyAnimal</h3><p><code>Animal a = new Dog()</code>.</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.75rem">
+          <article class="bank-card g4"><h3>AbstractAnimal</h3><p>Abstract parent. Two children.</p></article>
+          <article class="bank-card g1"><h3>CanSwim</h3><p>Interface. Dog swims.</p></article>
+          <article class="bank-card g2"><h3>ObjectToString</h3><p>Override <code>toString</code>.</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:0.85rem">Next lesson: 1.6 Generics and Exceptions — <code>try</code> / <code>catch</code>.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>

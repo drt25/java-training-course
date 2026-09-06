@@ -61,4 +61,22 @@ window.LABS = [
       "StaticBlockDemo.java",
     ],
   },
+  {
+    id: "1.5",
+    title: "Inheritance and Polymorphism",
+    folder: "1.5",
+    slides: "lessons/1.5-inheritance.html",
+    files: [
+      "EncapsulateAnimal.java",
+      "InheritDog.java",
+      "InheritTypes.java",
+      "OverrideSound.java",
+      "SuperDemo.java",
+      "FinalDemo.java",
+      "PolyAnimal.java",
+      "AbstractAnimal.java",
+      "CanSwim.java",
+      "ObjectToString.java",
+    ],
+  },
 ];
