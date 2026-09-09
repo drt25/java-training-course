@@ -6,6 +6,7 @@
   <title>Coding labs · Broadway Infosys Java</title>
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/lesson.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
   <style>
     body {
       min-height: 100vh;
@@ -104,10 +105,43 @@
       font-size: 14px;
     }
     .lab-meta a { color: #004aad; font-weight: 700; }
+    .code-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .code-dots { display: flex; gap: 6px; }
+    .code-btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #d7e7ff;
+      background: #163056;
+      border: 1px solid #2a4a78;
+      border-radius: 8px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .code-btn:hover { background: #1c3c68; }
+    .code-window pre,
+    .code-window code.hljs {
+      background: transparent !important;
+      font-family: var(--mono);
+    }
     .code-window pre {
       white-space: pre;
       overflow: auto;
       max-height: calc(100vh - 320px);
+      margin: 0;
+    }
+    .code-window code {
+      display: block;
+      padding: 1rem 1.1rem 1.15rem;
+      font-size: 0.88rem;
+      line-height: 1.6;
     }
     .run-box {
       margin-top: 14px;
@@ -162,8 +196,11 @@
         <a id="lab-slides" href="index.html">Open slides</a>
       </div>
       <div class="code-window">
-        <div class="code-bar"><i></i><i></i><i></i></div>
-        <pre id="lab-source">Loading…</pre>
+        <div class="code-bar">
+          <span class="code-dots"><i></i><i></i><i></i></span>
+          <button type="button" class="code-btn" id="btn-copy">Copy</button>
+        </div>
+        <pre><code id="lab-source" class="language-java">Loading…</code></pre>
       </div>
       <div class="run-box">
         <strong>Run in the terminal</strong><br>
@@ -178,6 +215,8 @@
     <span>Shree Ganesh Marg, Subidhanagar, Tinkune, Kathmandu</span>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
   <script src="js/lab-map.js"></script>
   <script>
     const menu = document.getElementById("lab-menu");
@@ -186,6 +225,10 @@
     const slidesEl = document.getElementById("lab-slides");
     const sourceEl = document.getElementById("lab-source");
     const runEl = document.getElementById("lab-run");
+    const copyBtn = document.getElementById("btn-copy");
+
+    let rawSource = "";
+    let copyTimer = 0;
 
     function fileKey(group, file) {
       return group.folder + "/" + file;
@@ -205,6 +248,16 @@
         }
       }
       return { group: LABS[0], file: LABS[0].files[0] };
+    }
+
+    function paintSource(text) {
+      rawSource = text;
+      sourceEl.removeAttribute("data-highlighted");
+      sourceEl.className = "language-java";
+      sourceEl.textContent = text;
+      if (window.hljs) {
+        window.hljs.highlightElement(sourceEl);
+      }
     }
 
     LABS.forEach((group) => {
@@ -232,20 +285,38 @@
       pathEl.textContent = "coding/" + key;
       slidesEl.href = group.slides;
       slidesEl.textContent = "Open " + group.id + " slides";
-      const classN = className(file);
-      runEl.textContent = "cd coding/" + group.folder + " && javac " + file + " && java " + classN;
+      runEl.textContent = "cd coding/" + group.folder + " && javac " + file + " && java " + className(file);
       if (location.hash.replace(/^#/, "") !== key) {
         history.replaceState(null, "", "#" + key);
       }
       try {
         const res = await fetch("../coding/" + key);
         if (!res.ok) throw new Error("missing");
-        sourceEl.textContent = await res.text();
+        paintSource(await res.text());
       } catch (err) {
-        sourceEl.textContent =
-          "Could not load coding/" + key + ".\nOpen this page through a local server or GitHub Pages.\nThen pick the file again.";
+        paintSource(
+          "Could not load coding/" + key + ".\nOpen this page through a local server or GitHub Pages.\nThen pick the file again."
+        );
       }
     }
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(rawSource);
+      } catch (err) {
+        const range = document.createRange();
+        range.selectNodeContents(sourceEl);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand("copy");
+      }
+      copyBtn.textContent = "Copied";
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => {
+        copyBtn.textContent = "Copy";
+      }, 1200);
+    });
 
     window.addEventListener("hashchange", showLab);
     showLab();

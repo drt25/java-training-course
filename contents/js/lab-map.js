@@ -79,4 +79,21 @@ window.LABS = [
       "ObjectToString.java",
     ],
   },
+  {
+    id: "1.6",
+    title: "Exception Handling",
+    folder: "1.6",
+    slides: "lessons/1.6-exception.html",
+    files: [
+      "DivideByZero.java",
+      "DivideCalculator.java",
+      "NullPointerCatch.java",
+      "CommonExceptions.java",
+      "MultiCatch.java",
+      "FinallyDemo.java",
+      "ThrowVsThrows.java",
+      "Propagation.java",
+      "InsufficientBalance.java",
+    ],
+  },
 ];

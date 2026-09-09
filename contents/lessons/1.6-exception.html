@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.6 Exception Handling · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/string-array.css">
+  <link rel="stylesheet" href="../css/exception.css">
+</head>
+<body
+  data-lesson="1.6"
+  data-title="Exception Handling"
+  data-module="Lesson 1 · Core Java"
+  data-topics="What is an exception|try catch|finally|throw and throws|Propagation|Custom exception|Checked vs unchecked">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">A problem while the program runs. Handle it. Do not crash.</h2>
+        <p class="slide-lead reveal">No generics today. We learn what an exception is, how to catch it, how to throw it, how it moves up, and how to make our own.</p>
+        <div class="outline-chips reveal">
+          <span>What is an exception</span>
+          <span>Common names</span>
+          <span>try / catch</span>
+          <span>Multiple catch</span>
+          <span>finally</span>
+          <span>throw / throws</span>
+          <span>Propagation</span>
+          <span>Custom</span>
+          <span>Checked vs unchecked</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">What is an exception</p>
+        <h2 class="slide-title reveal">A problem that happens while the program is running</h2>
+        <p class="slide-lead reveal">Java does not know what you want. Without handling, the program stops. Real life: Ram wants Rs. 1000. Balance is Rs. 500. Show an error. Do not crash the app.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>int result = 10 / 0;</pre>
+            <div class="out-box">ArithmeticException: / by zero</div>
+          </div>
+          <article class="bank-card g3">
+            <h3>Remember</h3>
+            <p>This is not a compile error. The file compiles. It fails when that line runs.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Common exceptions</p>
+        <h2 class="slide-title reveal">Know why they happen. Do not memorize a list.</h2>
+        <div class="bank-grid four">
+          <article class="bank-card g1">
+            <h3>ArithmeticException</h3>
+            <p><code>10 / 0</code> — you cannot divide by zero.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>ArrayIndexOutOfBounds</h3>
+            <p><code>numbers[5]</code> on a list of three rooms. Room 5 does not exist.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>NullPointerException</h3>
+            <p><code>name.length()</code> when <code>name</code> is <code>null</code>. There is no String yet.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>NumberFormatException</h3>
+            <p><code>Integer.parseInt("abc")</code> — that text is not a number.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>CommonExceptions.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">try / catch</p>
+        <h2 class="slide-title reveal">Catch the problem. Then the program continues.</h2>
+        <p class="slide-lead reveal">try = the risky line. catch = what to do if it fails.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>try {
+    int result = 10 / 0;
+    System.out.println(result);
+} catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero.");
+}
+System.out.println("Program continues...");</pre>
+            <div class="out-box">Cannot divide by zero.
+Program continues...</div>
+          </div>
+          <article class="bank-card g2">
+            <h3>Why</h3>
+            <p>The app can show a message and keep going. Lab: <code>DivideByZero.java</code></p>
+          </article>
+        </div>
+        <div class="ex-flow reveal" data-cycle="1100" style="margin-top:1rem">
+          <div class="ex-node cycle-item stop">
+            <p class="mini">Without catch</p>
+            <h3>Exception</h3>
+            <p>Program stops.</p>
+          </div>
+          <div class="ex-node cycle-item ok">
+            <p class="mini">With catch</p>
+            <h3>Exception</h3>
+            <p>catch handles it. Program continues.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Multiple catch</p>
+        <h2 class="slide-title reveal">Specific first. General last.</h2>
+        <p class="slide-lead reveal"><code>Exception</code> can catch many types. If you put it first, the specific catch never runs.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>try {
+    System.out.println(numbers[5]);
+} catch (ArrayIndexOutOfBoundsException e) {
+    System.out.println("Invalid array index.");
+} catch (Exception e) {
+    System.out.println("Something went wrong.");
+}</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Order</h3>
+            <p>Child type first. Parent <code>Exception</code> last.</p>
+            <p class="foot-note">Lab: <code>MultiCatch.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">finally</p>
+        <h2 class="slide-title reveal">This block always runs</h2>
+        <p class="slide-lead reveal">Exception or no exception. Use it for cleanup. try = try · catch = handle · finally = cleanup.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>try {
+    System.out.println("Trying...");
+} catch (Exception e) {
+    System.out.println("Error occurred.");
+} finally {
+    System.out.println("This always executes.");
+}</pre>
+            <div class="out-box">Trying...
+This always executes.</div>
+          </div>
+          <article class="bank-card g4">
+            <h3>Always</h3>
+            <p>Even if catch runs, finally still runs.</p>
+            <p class="foot-note">Lab: <code>FinallyDemo.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">throw</p>
+        <h2 class="slide-title reveal">I want to throw an exception right here</h2>
+        <p class="slide-lead reveal">The method decides: this is not allowed. Stop and tell the caller.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>if (amount > balance) {
+    throw new IllegalArgumentException(
+        "Insufficient balance."
+    );
+}</pre>
+          </div>
+          <article class="bank-card g3">
+            <h3>Memory</h3>
+            <p><code>throw</code> actually throws. You create the exception object and send it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">throws</p>
+        <h2 class="slide-title reveal">A warning on the method. Not the throw itself.</h2>
+        <p class="slide-lead reveal"><code>throws</code> sits on the method line. It tells the caller: this method may produce this exception.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>throw</h3>
+            <p>Inside the body. Actually throws an exception.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>throws</h3>
+            <p>On the method. Declares that it may throw.</p>
+            <p style="margin-top:0.5rem"><code>void withdraw(double amount) throws InsufficientBalanceException</code></p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>ThrowVsThrows.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Propagation</p>
+        <h2 class="slide-title reveal">The exception walks up until someone catches it</h2>
+        <p class="slide-lead reveal">It happens in <code>methodC</code>. C does not catch. B does not catch. A does not catch. <code>main</code> catches it.</p>
+        <div class="ex-flow reveal" data-cycle="900">
+          <div class="ex-node cycle-item">
+            <p class="mini">1</p>
+            <h3>methodC</h3>
+            <p><code>10 / 0</code> happens here.</p>
+          </div>
+          <div class="ex-node cycle-item">
+            <p class="mini">2</p>
+            <h3>methodB</h3>
+            <p>Did not catch. Passes up.</p>
+          </div>
+          <div class="ex-node cycle-item">
+            <p class="mini">3</p>
+            <h3>methodA</h3>
+            <p>Did not catch. Passes up.</p>
+          </div>
+          <div class="ex-node cycle-item ok">
+            <p class="mini">4</p>
+            <h3>main</h3>
+            <p>try / catch handles it.</p>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>Propagation.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Custom exception</p>
+        <h2 class="slide-title reveal">Name the bank’s problem. Not a generic Exception.</h2>
+        <p class="slide-lead reveal">Ram withdraws more than the balance. We throw <code>InsufficientBalanceException</code>. The caller catches it and prints the message.</p>
+        <div class="ex-flow reveal" data-cycle="1000" style="margin-bottom:1rem">
+          <div class="ex-node cycle-item">
+            <p class="mini">1</p>
+            <h3>amount too big</h3>
+            <p>Balance is not enough.</p>
+          </div>
+          <div class="ex-node cycle-item">
+            <p class="mini">2</p>
+            <h3>throw</h3>
+            <p>Inside <code>withdraw</code>.</p>
+          </div>
+          <div class="ex-node cycle-item ok">
+            <p class="mini">3</p>
+            <h3>catch</h3>
+            <p>main prints <code>getMessage()</code>.</p>
+          </div>
+        </div>
+        <div class="code-window reveal">
+          <div class="code-bar"><i></i><i></i><i></i></div>
+          <pre>class InsufficientBalanceException extends Exception {
+    InsufficientBalanceException(String message) {
+        super(message);
+    }
+}</pre>
+        </div>
+        <p class="foot-note reveal">Lab: <code>InsufficientBalance.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Checked vs unchecked</p>
+        <h2 class="slide-title reveal">Does Java force you to handle it?</h2>
+        <p class="slide-lead reveal">Surface only. Do not go deep today.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>Checked</h3>
+            <p>Java checks. You must try/catch or write <code>throws</code>. Example: <code>IOException</code>.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>Unchecked</h3>
+            <p>Children of <code>RuntimeException</code>. Java does not force you. Example: divide by zero, null, bad index, <code>parseInt</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Six questions</p>
+        <h2 class="slide-title reveal">You should be able to say these in one sentence</h2>
+        <table class="info-table">
+          <thead><tr><th>Question</th><th>Simple answer</th></tr></thead>
+          <tbody>
+            <tr><td>What is an exception?</td><td>A problem while the program is running.</td></tr>
+            <tr><td>Why try/catch?</td><td>Handle it so the app does not stop.</td></tr>
+            <tr><td>throw vs throws?</td><td>throw does it. throws warns the caller.</td></tr>
+            <tr><td>Propagation?</td><td>The exception walks up the methods until someone catches it.</td></tr>
+            <tr><td>Why a custom exception?</td><td>Name our problem, like insufficient balance.</td></tr>
+            <tr><td>Checked vs unchecked?</td><td>Checked: Java forces try/catch or throws. Unchecked: it does not.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these files in coding/1.6/</h2>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>DivideByZero</h3><p><code>10 / 0</code> inside try/catch.</p></article>
+          <article class="bank-card g2"><h3>DivideCalculator</h3><p>Scanner divide. catch zero. finally.</p></article>
+          <article class="bank-card g3"><h3>NullPointerCatch</h3><p><code>null.length()</code>.</p></article>
+          <article class="bank-card g4"><h3>CommonExceptions</h3><p>Index, null, <code>parseInt</code>.</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem">
+          <article class="bank-card g1"><h3>MultiCatch</h3><p>Specific, then <code>Exception</code>.</p></article>
+          <article class="bank-card g2"><h3>FinallyDemo</h3><p>finally always prints.</p></article>
+          <article class="bank-card g3"><h3>ThrowVsThrows</h3><p><code>throw</code> and <code>throws</code>.</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem">
+          <article class="bank-card g4"><h3>Propagation</h3><p>C → B → A → main.</p></article>
+          <article class="bank-card g1"><h3>InsufficientBalance</h3><p>Ram’s withdraw.</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Next lesson: 1.7 File IO. Generics wait for collections.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>
