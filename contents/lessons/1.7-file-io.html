@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.7 File IO · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/file-io.css">
+</head>
+<body
+  data-lesson="1.7"
+  data-title="File IO"
+  data-module="Lesson 1 · Core Java"
+  data-topics="File|Write text|Read text|Java data|Tokens|Jump|Project">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">A file lives on disk. Java can manage it, write it, and read it.</h2>
+        <p class="slide-lead reveal">No buffering, NIO, or serialization today. One idea at a time. Creating a file can throw <code>IOException</code>. Catch it. Do not crash.</p>
+        <div class="outline-chips reveal">
+          <span>File</span>
+          <span>Write</span>
+          <span>Read</span>
+          <span>Java data</span>
+          <span>Tokens</span>
+          <span>Jump</span>
+          <span>Project</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">File vs stream</p>
+        <h2 class="slide-title reveal">File is the paper. A stream is the pen.</h2>
+        <p class="slide-lead reveal"><code>File</code> helps us manage the file itself. It does not read or write the content. Streams move data in or out.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>File</h3>
+            <p>The paper on disk. Name it. Create it. Check it. Delete it.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>Stream</h3>
+            <p>The pen. Write text into the file. Read text out of the file.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Path: File → Write → Read → Store Java types → Tokens → Jump → Small project</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">File class</p>
+        <h2 class="slide-title reveal">Manage the file. Do not write the story yet.</h2>
+        <p class="slide-lead reveal"><code>exists()</code>, <code>getName()</code>, <code>createNewFile()</code>, <code>delete()</code>. If create fails, catch <code>IOException</code>.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>File file = new File("student.txt");
+
+System.out.println(file.exists());
+System.out.println(file.getName());
+
+if (file.createNewFile()) {
+    System.out.println("File created.");
+} else {
+    System.out.println("File already exists.");
+}</pre>
+          </div>
+          <article class="bank-card g2">
+            <h3>Remember</h3>
+            <p><code>File</code> helps us manage the file itself.</p>
+            <p style="margin-top:0.5rem"><code>file.delete()</code> removes it.</p>
+            <p class="foot-note">Lab: <code>FileManage.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Write text</p>
+        <h2 class="slide-title reveal">FileWriter puts text into the file</h2>
+        <p class="slide-lead reveal">Open. Write. Close. Always close when you finish.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>FileWriter writer = new FileWriter("student.txt");
+
+writer.write("John");
+writer.write("\nSarah");
+
+writer.close();</pre>
+            <div class="out-box">John
+Sarah</div>
+          </div>
+          <article class="bank-card g3">
+            <h3>Remember</h3>
+            <p><code>FileWriter</code> writes text. Lab: <code>WriteNames.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Read text</p>
+        <h2 class="slide-title reveal">FileReader brings text back into the program</h2>
+        <p class="slide-lead reveal">Read one character. <code>-1</code> means the file is finished.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>FileReader reader = new FileReader("student.txt");
+
+int data;
+while ((data = reader.read()) != -1) {
+    System.out.print((char) data);
+}
+
+reader.close();</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Remember</h3>
+            <p><code>FileWriter</code> → file. <code>FileReader</code> ← file.</p>
+            <p class="foot-note">Lab: <code>ReadNames.java</code></p>
+          </article>
+        </div>
+        <div class="io-flow reveal" data-cycle="1100" style="margin-top:1rem">
+          <div class="io-node cycle-item">
+            <p class="mini">Write</p>
+            <h3>Program</h3>
+            <p>FileWriter → student.txt</p>
+          </div>
+          <div class="io-arrow">→</div>
+          <div class="io-node cycle-item">
+            <p class="mini">Read</p>
+            <h3>student.txt</h3>
+            <p>FileReader → Program</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why data streams</p>
+        <h2 class="slide-title reveal">FileWriter stores text. Sometimes we want real Java values.</h2>
+        <p class="slide-lead reveal"><code>int</code>, <code>double</code>, <code>boolean</code>, <code>String</code>. <code>FileOutputStream</code> only gives the data stream a file to write into.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>DataOutputStream output =
+        new DataOutputStream(
+                new FileOutputStream("student.dat"));
+
+output.writeInt(101);
+output.writeUTF("John");
+output.writeDouble(85.5);
+
+output.close();</pre>
+          </div>
+          <article class="bank-card g4">
+            <h3>Remember</h3>
+            <p><code>DataOutputStream</code> writes Java data. Lab: <code>DataWrite.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Read Java data</p>
+        <h2 class="slide-title reveal">Read in the same order you wrote</h2>
+        <p class="slide-lead reveal">Write int, then String, then double. Read int, then String, then double.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>DataInputStream input =
+        new DataInputStream(
+                new FileInputStream("student.dat"));
+
+int id = input.readInt();
+String name = input.readUTF();
+double marks = input.readDouble();
+
+input.close();</pre>
+          </div>
+          <article class="bank-card g2">
+            <h3>Beginner rule</h3>
+            <p><code>DataOutputStream</code> writes Java data. <code>DataInputStream</code> reads Java data.</p>
+            <p class="foot-note">Lab: <code>DataRead.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Tokens</p>
+        <h2 class="slide-title reveal">A token is one small piece of text</h2>
+        <p class="slide-lead reveal">You already used <code>Scanner</code> for the keyboard. The same <code>Scanner</code> can read a file. <code>next()</code> reads one token.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Scanner scanner = new Scanner(new File("student.txt"));
+
+while (scanner.hasNext()) {
+    String token = scanner.next();
+    System.out.println(token);
+}
+
+scanner.close();</pre>
+            <div class="out-box">John
+25
+Kathmandu</div>
+          </div>
+          <article class="bank-card g3">
+            <h3>Example</h3>
+            <p><code>John 25 Kathmandu</code> has three tokens: John, 25, Kathmandu.</p>
+            <p class="foot-note">Lab: <code>TokenRead.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Jump</p>
+        <h2 class="slide-title reveal">seek() moves to a particular position</h2>
+        <p class="slide-lead reveal">Normal read goes start to end. Random access lets us jump. After <code>WriteNames</code>, position 5 is <code>S</code>.</p>
+        <div class="io-positions reveal" data-cycle="700" style="margin-bottom:1rem">
+          <div class="io-cell cycle-item"><p class="pos">0</p><p class="ch">J</p></div>
+          <div class="io-cell cycle-item"><p class="pos">1</p><p class="ch">o</p></div>
+          <div class="io-cell cycle-item"><p class="pos">2</p><p class="ch">h</p></div>
+          <div class="io-cell cycle-item"><p class="pos">3</p><p class="ch">n</p></div>
+          <div class="io-cell cycle-item"><p class="pos">4</p><p class="ch">\n</p></div>
+          <div class="io-cell cycle-item jump"><p class="pos">5 seek</p><p class="ch">S</p></div>
+          <div class="io-cell cycle-item"><p class="pos">6</p><p class="ch">a</p></div>
+          <div class="io-cell cycle-item"><p class="pos">7</p><p class="ch">r</p></div>
+          <div class="io-cell cycle-item"><p class="pos">8</p><p class="ch">a</p></div>
+          <div class="io-cell cycle-item"><p class="pos">9</p><p class="ch">h</p></div>
+        </div>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>RandomAccessFile file =
+        new RandomAccessFile("student.txt", "r");
+
+file.seek(5);
+System.out.println((char) file.read());
+
+file.close();</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Remember</h3>
+            <p><code>seek()</code> jumps. Then we read from that place. Lab: <code>JumpRead.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">You should be able to say these in one sentence</h2>
+        <table class="info-table">
+          <thead><tr><th>Topic</th><th>Main idea</th></tr></thead>
+          <tbody>
+            <tr><td><code>File</code></td><td>Manage a file</td></tr>
+            <tr><td><code>FileWriter</code></td><td>Write text</td></tr>
+            <tr><td><code>FileReader</code></td><td>Read text</td></tr>
+            <tr><td><code>DataOutputStream</code></td><td>Write Java data</td></tr>
+            <tr><td><code>DataInputStream</code></td><td>Read Java data</td></tr>
+            <tr><td><code>Scanner</code></td><td>Read tokens</td></tr>
+            <tr><td><code>RandomAccessFile</code></td><td>Jump to a file position</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Project</p>
+        <h2 class="slide-title reveal">Student File Manager. One student. Save, then show.</h2>
+        <p class="slide-lead reveal">Ask for name and marks. Save <code>students.txt</code>. Read it back. Display it. Use <code>File</code>, <code>FileWriter</code>, <code>FileReader</code>, <code>Scanner</code>, try/catch.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Enter student name: John
+Enter marks: 85
+
+Student information saved.
+
+Stored Student:
+Name: John
+Marks: 85</pre>
+          </div>
+          <article class="bank-card g4">
+            <h3>Keep it small</h3>
+            <p>One student only. Not a list. Lab: <code>StudentFileManager.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these files in coding/1.7/</h2>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>FileManage</h3><p><code>exists</code>, name, create.</p></article>
+          <article class="bank-card g2"><h3>WriteNames</h3><p>Write John and Sarah.</p></article>
+          <article class="bank-card g3"><h3>ReadNames</h3><p>Read the text file.</p></article>
+          <article class="bank-card g4"><h3>DataWrite</h3><p>Write int, name, marks.</p></article>
+        </div>
+        <div class="bank-grid four" style="margin-top:0.85rem">
+          <article class="bank-card g1"><h3>DataRead</h3><p>Read them back.</p></article>
+          <article class="bank-card g2"><h3>TokenRead</h3><p><code>next()</code> one token.</p></article>
+          <article class="bank-card g3"><h3>JumpRead</h3><p><code>seek(5)</code>.</p></article>
+          <article class="bank-card g4"><h3>StudentFileManager</h3><p>Save one student.</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Run <code>WriteNames</code> first. Then <code>ReadNames</code>, <code>TokenRead</code>, and <code>JumpRead</code> can use <code>student.txt</code>. Next lesson: 1.8 Multithreading.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+</body>
+</html>
