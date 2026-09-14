@@ -114,4 +114,21 @@ window.LABS = [
       "StudentFileManager.java",
     ],
   },
+  {
+    id: "1.8",
+    title: "Multithreading",
+    folder: "1.8",
+    slides: "lessons/1.8-multithreading.html",
+    files: [
+      "ExtendThread.java",
+      "ImplementRunnable.java",
+      "StartVsRun.java",
+      "SleepDemo.java",
+      "JoinDemo.java",
+      "RaceCounter.java",
+      "SyncCounter.java",
+      "PoolDemo.java",
+      "PaymentWorkers.java",
+    ],
+  },
 ];

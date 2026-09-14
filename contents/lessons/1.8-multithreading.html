@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.8 Multithreading · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/multithreading.css">
+</head>
+<body
+  data-lesson="1.8"
+  data-title="Multithreading"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Process vs Thread|Create Thread|Lifecycle|sleep / join|Sync|Pools">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">One program. Many workers. Jobs can run together.</h2>
+        <p class="slide-lead reveal">We learn what a thread is, how to start one, how to wait, how to share data safely, and how a pool reuses workers.</p>
+        <div class="outline-chips reveal">
+          <span>Process vs Thread</span>
+          <span>Runnable</span>
+          <span>start vs run</span>
+          <span>Lifecycle</span>
+          <span>sleep / join</span>
+          <span>Race</span>
+          <span>synchronized</span>
+          <span>Thread pool</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Process vs Thread</p>
+        <h2 class="slide-title reveal">The process is the kitchen. A thread is one cook.</h2>
+        <p class="slide-lead reveal">A process is the whole running program. Threads are workers inside it. <code>Runnable</code> is the job card a cook can follow.</p>
+        <div class="split-visual">
+          <div>
+            <div class="mt-vs reveal">
+              <article class="bank-card g1">
+                <h3>Process</h3>
+                <p>The kitchen. One running program with its own memory.</p>
+              </article>
+              <article class="bank-card g2">
+                <h3>Thread</h3>
+                <p>One cook in that kitchen. One path of work.</p>
+              </article>
+              <article class="bank-card g3">
+                <h3>Runnable</h3>
+                <p>The recipe. Work to run. Not a cook yet.</p>
+              </article>
+            </div>
+            <div class="def-box reveal">A <strong>single-threaded</strong> app has one cook. Jobs run one after another. The next job waits.</div>
+          </div>
+          <div class="reveal" data-demo="console">
+            <div class="mt-console" id="console-demo">
+              <div class="mt-console-bar">
+                <span class="title">StudentApp.java</span>
+                <span class="mt-console-badge">Single thread</span>
+              </div>
+              <div class="mt-console-banner">
+                <span class="mt-pulse"></span>
+                Running on: <strong>main</strong> thread
+              </div>
+              <div class="mt-console-body" id="mt-console-body"></div>
+            </div>
+            <p class="mt-label">One worker · jobs run <strong>one after another</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner mt-tight">
+        <div class="mt-demo">
+          <div>
+            <p class="kicker reveal">Why</p>
+            <h2 class="slide-title reveal">One worker. Many payments.</h2>
+            <p class="slide-lead reveal">Fonepay QR rush. Many users pay at once. With one thread, the server handles one payment at a time.</p>
+            <div class="mt-stats reveal">
+              <div class="mt-stat"><div class="label">Workers</div><div class="value bad">1</div></div>
+              <div class="mt-stat"><div class="label">Queue</div><div class="value bad" id="s-queue">0</div></div>
+              <div class="mt-stat"><div class="label">Success</div><div class="value good" id="s-success">0</div></div>
+              <div class="mt-stat"><div class="label">Failed</div><div class="value bad" id="s-failed">0</div></div>
+            </div>
+            <div class="mt-callout warn reveal">One worker finishes slowly. Later payments hit <strong>response timeout</strong> and fail.</div>
+          </div>
+          <div class="mt-board reveal" data-demo="single">
+            <div class="mt-board-header">
+              <div class="mt-fonepay">
+                <div class="mt-logo"><span class="fone">fone</span><span class="pay">pay</span></div>
+                QR Payments
+              </div>
+              <div class="mt-live"><span class="mt-live-dot"></span> Overloaded</div>
+            </div>
+            <div class="mt-board-body">
+              <div class="mt-queue">
+                <div class="mt-col-label">Incoming payments</div>
+                <div id="queue-single"></div>
+              </div>
+              <div class="mt-workers">
+                <div class="mt-col-label">Server workers</div>
+                <div class="mt-worker busy" id="s-w1">
+                  <div class="mt-avatar">W1</div>
+                  <div class="mt-winfo">
+                    <div class="wname">Worker-1 (only)</div>
+                    <div class="wstatus" id="s-w1-status">Idle…</div>
+                    <div class="mt-track"><div class="mt-fill" id="s-w1-bar"></div></div>
+                  </div>
+                </div>
+                <div class="mt-worker idle" style="opacity:0.4">
+                  <div class="mt-avatar">—</div>
+                  <div class="mt-winfo">
+                    <div class="wname">Worker-2</div>
+                    <div class="wstatus">Not available — single thread</div>
+                  </div>
+                </div>
+                <div class="mt-worker idle" style="opacity:0.4">
+                  <div class="mt-avatar">—</div>
+                  <div class="mt-winfo">
+                    <div class="wname">Worker-3</div>
+                    <div class="wstatus">Not available — single thread</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-board-footer">
+              <span>Mode: single-threaded</span>
+              <span>Slow success → then timeouts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner mt-tight">
+        <div class="mt-demo">
+          <div>
+            <p class="kicker reveal">Many workers</p>
+            <h2 class="slide-title reveal">Many workers. Queue drains.</h2>
+            <p class="slide-lead reveal"><strong>Multithreading</strong> means one program runs several threads at the same time. Same rush. Far better wait times.</p>
+            <div class="mt-stats reveal">
+              <div class="mt-stat"><div class="label">Workers</div><div class="value good">3</div></div>
+              <div class="mt-stat"><div class="label">Queue</div><div class="value good" id="m-queue">0</div></div>
+              <div class="mt-stat"><div class="label">Avg wait</div><div class="value good" id="m-wait">~1s</div></div>
+            </div>
+            <div class="mt-callout ok reveal">Payments keep arriving. Three workers handle them in parallel — queue stays healthy.</div>
+            <div class="mt-cpu reveal">
+              <div class="mt-cpu-label">One process · many threads</div>
+              <div class="mt-cores">
+                <div class="mt-core"><div class="cname">Core 1</div><div class="mt-bar t1">Pay TXN-1</div></div>
+                <div class="mt-core"><div class="cname">Core 2</div><div class="mt-bar t2">Pay TXN-2</div></div>
+                <div class="mt-core"><div class="cname">Core 3</div><div class="mt-bar t3">Pay TXN-3</div></div>
+                <div class="mt-core"><div class="cname">Core 4</div><div class="mt-bar t4">Notify</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-board reveal" data-demo="multi">
+            <div class="mt-board-header">
+              <div class="mt-fonepay">
+                <div class="mt-logo"><span class="fone">fone</span><span class="pay">pay</span></div>
+                QR Payments
+              </div>
+              <div class="mt-live ok"><span class="mt-live-dot"></span> Healthy</div>
+            </div>
+            <div class="mt-board-body">
+              <div class="mt-queue">
+                <div class="mt-col-label">Incoming payments</div>
+                <div id="queue-multi"></div>
+              </div>
+              <div class="mt-workers">
+                <div class="mt-col-label">Server workers (thread pool)</div>
+                <div class="mt-worker busy" id="m-w1">
+                  <div class="mt-avatar">W1</div>
+                  <div class="mt-winfo">
+                    <div class="wname">Worker-1</div>
+                    <div class="wstatus" id="m-w1-status">Ready</div>
+                    <div class="mt-track"><div class="mt-fill" id="m-w1-bar"></div></div>
+                  </div>
+                </div>
+                <div class="mt-worker busy" id="m-w2">
+                  <div class="mt-avatar">W2</div>
+                  <div class="mt-winfo">
+                    <div class="wname">Worker-2</div>
+                    <div class="wstatus" id="m-w2-status">Ready</div>
+                    <div class="mt-track"><div class="mt-fill" id="m-w2-bar"></div></div>
+                  </div>
+                </div>
+                <div class="mt-worker busy" id="m-w3">
+                  <div class="mt-avatar">W3</div>
+                  <div class="mt-winfo">
+                    <div class="wname">Worker-3</div>
+                    <div class="wstatus" id="m-w3-status">Ready</div>
+                    <div class="mt-track"><div class="mt-fill" id="m-w3-bar"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-board-footer">
+              <span>Mode: multithreaded</span>
+              <span>Live stream · continuous handling</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Creating threads</p>
+        <h2 class="slide-title reveal">Two ways. Prefer Runnable.</h2>
+        <p class="slide-lead reveal">Extend <code>Thread</code>, or implement <code>Runnable</code> and pass it to a <code>Thread</code>. Then call <code>start()</code>. Runnable is preferred — your class can still extend something else.</p>
+        <div class="mt-code-pair">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>class HelloThread extends Thread {
+    public void run() {
+        System.out.println("Hello");
+    }
+}
+
+HelloThread t = new HelloThread();
+t.start();</pre>
+          </div>
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>class HelloTask implements Runnable {
+    public void run() {
+        System.out.println("Hello");
+    }
+}
+
+Thread t = new Thread(new HelloTask());
+t.start();</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Labs: <code>ExtendThread.java</code> · <code>ImplementRunnable.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">start vs run</p>
+        <h2 class="slide-title reveal"><code>run()</code> stays on main. <code>start()</code> hires a worker.</h2>
+        <p class="slide-lead reveal">If you call <code>run()</code>, it is just a method. No new thread. <code>start()</code> creates the worker, then Java calls <code>run()</code> for you.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Worker a = new Worker("A");
+Worker b = new Worker("B");
+
+a.run();   // still main
+b.run();   // still main
+
+a.start(); // new thread
+b.start(); // new thread</pre>
+            <div class="out-box">A on main
+B on main
+A on Thread-0
+B on Thread-1</div>
+          </div>
+          <article class="bank-card g3">
+            <h3>Remember</h3>
+            <p>Call <code>start()</code>. Never call <code>run()</code> when you want a new thread.</p>
+            <p class="foot-note">Lab: <code>StartVsRun.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lifecycle</p>
+        <h2 class="slide-title reveal">A thread moves through a few states</h2>
+        <p class="slide-lead reveal">Keep this conceptual. You do not pick CPU cores. Java and the OS schedule the work.</p>
+        <div class="mt-life reveal" data-cycle="1100">
+          <article class="mt-node cycle-item">
+            <h3>NEW</h3>
+            <p>Created. Not started yet.</p>
+          </article>
+          <article class="mt-node cycle-item">
+            <h3>RUNNABLE</h3>
+            <p>Ready, or running on a CPU.</p>
+          </article>
+          <article class="mt-node cycle-item wait">
+            <h3>BLOCKED</h3>
+            <p>Waiting to enter a lock.</p>
+          </article>
+          <article class="mt-node cycle-item wait">
+            <h3>WAITING</h3>
+            <p>Waiting until someone wakes it.</p>
+          </article>
+          <article class="mt-node cycle-item wait">
+            <h3>TIMED_WAITING</h3>
+            <p>Waiting with a time limit. Sleep.</p>
+          </article>
+          <article class="mt-node cycle-item done">
+            <h3>TERMINATED</h3>
+            <p><code>run()</code> finished. Done.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Path: NEW → start() → RUNNABLE → maybe wait → TERMINATED</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner mt-tight mt-full-code">
+        <p class="kicker reveal">sleep</p>
+        <h2 class="slide-title reveal"><code>sleep()</code> pauses. Then the next add runs.</h2>
+        <p class="slide-lead reveal">Add 1 to 5. Wait one second after each add. 1000 means one second. Catch <code>InterruptedException</code>.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public class SleepDemo {
+    public static void main(String[] args) {
+        int sum = 0;
+        try {
+            for (int n = 1; n &lt;= 5; n++) {
+                sum = sum + n;
+                System.out.println("Add " + n + " → sum = " + sum);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Sleep was interrupted.");
+        }
+        System.out.println("Done. Sum = " + sum);
+    }
+}</pre>
+            <div class="out-box">Add 1 → sum = 1
+Add 2 → sum = 3
+Add 3 → sum = 6
+Add 4 → sum = 10
+Add 5 → sum = 15
+Done. Sum = 15</div>
+          </div>
+          <article class="bank-card g2">
+            <h3>Remember</h3>
+            <p>Sleep does not start a thread. It pauses the worker that is already running this loop.</p>
+            <p style="margin-top:0.5rem">1 + 2 + 3 + 4 + 5 = 15. You see each step.</p>
+            <p class="foot-note">Lab: <code>SleepDemo.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner mt-tight mt-full-code">
+        <p class="kicker reveal">join</p>
+        <h2 class="slide-title reveal">Main waits. Then it prints the total.</h2>
+        <p class="slide-lead reveal">A worker adds 1 to 5. Without <code>join()</code>, main prints too soon. Total is often 0. <code>join()</code> waits until the worker finishes.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>public class JoinDemo {
+    static int total = 0;
+
+    public static void main(String[] args)
+            throws InterruptedException {
+        Thread t = new Thread(new AddOneToFive());
+        t.start();
+        t.join();
+        System.out.println("Total: " + total);
+    }
+}
+
+class AddOneToFive implements Runnable {
+    public void run() {
+        for (int n = 1; n &lt;= 5; n++) {
+            JoinDemo.total = JoinDemo.total + n;
+        }
+    }
+}</pre>
+            <div class="out-box">Without join: Total: 0
+With join:    Total: 15</div>
+          </div>
+          <article class="bank-card g1">
+            <h3>Remember</h3>
+            <p>Start. Join. Then print. 1 + 2 + 3 + 4 + 5 = 15 only after the worker ends.</p>
+            <p class="foot-note">Lab: <code>JoinDemo.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Race</p>
+        <h2 class="slide-title reveal">ATM and mobile. Same Rs. 1000.</h2>
+        <p class="slide-lead reveal">Ram has Rs. 1000. ATM takes Rs. 800. Mobile takes Rs. 800. Both cannot succeed. They read the balance at the same time, so both take the money.</p>
+        <div class="mt-bank-cycle reveal" data-cycle="1400">
+          <div class="mt-bank-step cycle-item">
+            <article class="mt-node">
+              <h3>ATM</h3>
+              <p>Sees Rs. 1000. Wants Rs. 800.</p>
+            </article>
+            <div class="mt-shared">
+              <span class="mini">Account</span>
+              <strong>Rs. 1000</strong>
+            </div>
+            <article class="mt-node">
+              <h3>Mobile</h3>
+              <p>Sees Rs. 1000. Wants Rs. 800.</p>
+            </article>
+          </div>
+          <div class="mt-bank-step cycle-item">
+            <article class="mt-node">
+              <h3>ATM</h3>
+              <p>Takes Rs. 800 now.</p>
+            </article>
+            <div class="mt-shared">
+              <span class="mini">Account</span>
+              <strong>Rs. 1000</strong>
+            </div>
+            <article class="mt-node">
+              <h3>Mobile</h3>
+              <p>Takes Rs. 800 now.</p>
+            </article>
+          </div>
+          <div class="mt-bank-step cycle-item bad">
+            <article class="mt-node">
+              <h3>ATM</h3>
+              <p>Got Rs. 800.</p>
+            </article>
+            <div class="mt-shared">
+              <span class="mini">Wrong</span>
+              <strong>Rs. -600</strong>
+            </div>
+            <article class="mt-node">
+              <h3>Mobile</h3>
+              <p>Got Rs. 800.</p>
+            </article>
+          </div>
+        </div>
+        <article class="bank-card g3 reveal" style="margin-top:0.9rem">
+          <h3>Remember</h3>
+          <p>Both saw Rs. 1000. Both took Rs. 800. The bank is wrong. One withdraw should fail. Lab: <code>RaceCounter.java</code></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">synchronized</p>
+        <h2 class="slide-title reveal">One lock. Balance is Rs. 200.</h2>
+        <p class="slide-lead reveal">Same ATM and mobile. <code>synchronized</code> lets only one withdraw at a time. The second sees Rs. 200 and fails.</p>
+        <div class="mt-bank-cycle reveal" data-cycle="1400">
+          <div class="mt-bank-step cycle-item ok">
+            <article class="mt-node busy">
+              <h3>ATM</h3>
+              <p>Holds the lock. Takes Rs. 800.</p>
+            </article>
+            <div class="mt-shared">
+              <span class="mini">Account</span>
+              <strong>Rs. 1000</strong>
+              <span class="mt-lock-badge">Locked</span>
+            </div>
+            <article class="mt-node wait">
+              <h3>Mobile</h3>
+              <p>Waits outside.</p>
+            </article>
+          </div>
+          <div class="mt-bank-step cycle-item ok">
+            <article class="mt-node wait">
+              <h3>ATM</h3>
+              <p>Done. Leaves the lock.</p>
+            </article>
+            <div class="mt-shared">
+              <span class="mini">Account</span>
+              <strong>Rs. 200</strong>
+              <span class="mt-lock-badge">Locked</span>
+            </div>
+            <article class="mt-node wait">
+              <h3>Mobile</h3>
+              <p>Still waiting.</p>
+            </article>
+          </div>
+          <div class="mt-bank-step cycle-item ok">
+            <article class="mt-node wait">
+              <h3>ATM</h3>
+              <p>Already took Rs. 800.</p>
+            </article>
+            <div class="mt-shared">
+              <span class="mini">Account</span>
+              <strong>Rs. 200</strong>
+              <span class="mt-lock-badge">Locked</span>
+            </div>
+            <article class="mt-node busy">
+              <h3>Mobile</h3>
+              <p>Enters. Sees Rs. 200.</p>
+            </article>
+          </div>
+          <div class="mt-bank-step cycle-item ok">
+            <article class="mt-node wait">
+              <h3>ATM</h3>
+              <p>Got Rs. 800.</p>
+            </article>
+            <div class="mt-shared">
+              <span class="mini">Safe</span>
+              <strong>Rs. 200</strong>
+            </div>
+            <article class="mt-node wait">
+              <h3>Mobile</h3>
+              <p>Failed. Not enough money.</p>
+            </article>
+          </div>
+        </div>
+        <article class="bank-card g2 reveal" style="margin-top:0.9rem">
+          <h3>Remember</h3>
+          <p>One lock. One withdraw at a time. A synchronized block is the same idea. Lab: <code>SyncCounter.java</code></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Thread pool</p>
+        <h2 class="slide-title reveal">Three tellers. Four payments.</h2>
+        <p class="slide-lead reveal">Do not hire a new worker for every payment. A pool of 3 reuses tellers. ATM, mobile, QR, then counter.</p>
+        <div class="mt-pool-cycle reveal" data-cycle="1400">
+          <div class="mt-pool-scene cycle-item">
+            <div class="mt-tellers">
+              <article class="mt-teller busy"><h3>Teller 1</h3><p>ATM Rs. 800</p></article>
+              <article class="mt-teller idle"><h3>Teller 2</h3><p>Ready</p></article>
+              <article class="mt-teller idle"><h3>Teller 3</h3><p>Ready</p></article>
+            </div>
+            <div class="mt-pay-chips">
+              <span class="on">ATM 800</span><span>Mobile 500</span><span>QR 150</span><span>Counter 200</span>
+            </div>
+          </div>
+          <div class="mt-pool-scene cycle-item">
+            <div class="mt-tellers">
+              <article class="mt-teller idle"><h3>Teller 1</h3><p>Ready</p></article>
+              <article class="mt-teller busy"><h3>Teller 2</h3><p>Mobile Rs. 500</p></article>
+              <article class="mt-teller idle"><h3>Teller 3</h3><p>Ready</p></article>
+            </div>
+            <div class="mt-pay-chips">
+              <span>ATM 800</span><span class="on">Mobile 500</span><span>QR 150</span><span>Counter 200</span>
+            </div>
+          </div>
+          <div class="mt-pool-scene cycle-item">
+            <div class="mt-tellers">
+              <article class="mt-teller idle"><h3>Teller 1</h3><p>Ready</p></article>
+              <article class="mt-teller idle"><h3>Teller 2</h3><p>Ready</p></article>
+              <article class="mt-teller busy"><h3>Teller 3</h3><p>QR Rs. 150</p></article>
+            </div>
+            <div class="mt-pay-chips">
+              <span>ATM 800</span><span>Mobile 500</span><span class="on">QR 150</span><span>Counter 200</span>
+            </div>
+          </div>
+          <div class="mt-pool-scene cycle-item">
+            <div class="mt-tellers">
+              <article class="mt-teller busy reuse"><h3>Teller 1</h3><p>Counter Rs. 200 — reuse</p></article>
+              <article class="mt-teller idle"><h3>Teller 2</h3><p>Ready</p></article>
+              <article class="mt-teller idle"><h3>Teller 3</h3><p>Ready</p></article>
+            </div>
+            <div class="mt-pay-chips">
+              <span>ATM 800</span><span>Mobile 500</span><span>QR 150</span><span class="on">Counter 200</span>
+            </div>
+          </div>
+        </div>
+        <p class="mt-snippet reveal"><code>Executors.newFixedThreadPool(3)</code> · <code>submit()</code> · <code>shutdown()</code></p>
+        <article class="bank-card g4 reveal" style="margin-top:0.75rem">
+          <h3>Remember</h3>
+          <p>Four payments. Only three workers. Counter reuses Teller 1. Labs: <code>PoolDemo.java</code> · <code>PaymentWorkers.java</code></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">You should be able to say these in one sentence</h2>
+        <table class="info-table">
+          <thead><tr><th>Topic</th><th>Main idea</th></tr></thead>
+          <tbody>
+            <tr><td>Process</td><td>The whole running program</td></tr>
+            <tr><td>Thread</td><td>One worker inside the program</td></tr>
+            <tr><td><code>Runnable</code></td><td>The job a thread can run</td></tr>
+            <tr><td><code>start()</code></td><td>Hire a new worker. Do not call <code>run()</code> for that</td></tr>
+            <tr><td><code>sleep()</code></td><td>Pause this worker for a time</td></tr>
+            <tr><td><code>join()</code></td><td>Wait until another thread finishes</td></tr>
+            <tr><td>Race</td><td>Shared data, wrong result</td></tr>
+            <tr><td><code>synchronized</code></td><td>One thread at a time on the shared lines</td></tr>
+            <tr><td>Pool</td><td>Reuse a fixed set of workers</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these files in coding/1.8/</h2>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>ExtendThread</h3><p>Two threads. <code>start()</code>.</p></article>
+          <article class="bank-card g2"><h3>ImplementRunnable</h3><p>Job card. Then a thread.</p></article>
+          <article class="bank-card g3"><h3>StartVsRun</h3><p><code>run()</code> then <code>start()</code>.</p></article>
+          <article class="bank-card g4"><h3>SleepDemo</h3><p>Add 1 to 5. Pause each step.</p></article>
+        </div>
+        <div class="bank-grid four" style="margin-top:0.85rem">
+          <article class="bank-card g1"><h3>JoinDemo</h3><p>Wait. Then print 15.</p></article>
+          <article class="bank-card g2"><h3>RaceCounter</h3><p>ATM and mobile. Balance wrong.</p></article>
+          <article class="bank-card g3"><h3>SyncCounter</h3><p>One fails. Balance Rs. 200.</p></article>
+          <article class="bank-card g4"><h3>PoolDemo</h3><p>Four payments. Three tellers.</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem">
+          <article class="bank-card g4"><h3>PaymentWorkers</h3><p>Three QR payments on a fixed pool.</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Next lesson: 1.9 Collection classes and Reflection. Priority, daemon threads, and virtual threads wait for later.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/thread-demo.js"></script>
+</body>
+</html>

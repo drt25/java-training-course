@@ -108,6 +108,7 @@
     });
     startCycles(current);
     history.replaceState(null, "", `#slide-${index + 1}`);
+    window.dispatchEvent(new CustomEvent("lesson-slide-show", { detail: { index, slide: current } }));
   }
 
   function next() { show(index + 1); }
@@ -119,7 +120,7 @@
   }
 
   deck.addEventListener("click", (event) => {
-    if (event.target.closest("a, button, .ui-bar, .footer-dots")) return;
+    if (event.target.closest("a, button, .ui-bar, .footer-dots, [data-demo]")) return;
     next();
   });
   document.getElementById("btn-fs").addEventListener("click", (event) => {
