@@ -131,4 +131,21 @@ window.LABS = [
       "PaymentWorkers.java",
     ],
   },
+  {
+    id: "1.9",
+    title: "Collection Classes",
+    folder: "1.9",
+    slides: "lessons/1.9-collections.html",
+    files: [
+      "ArrayVsList.java",
+      "ListDemo.java",
+      "LinkedListEnds.java",
+      "SetDemo.java",
+      "MapDemo.java",
+      "CollectionsUtil.java",
+      "ArraysUtil.java",
+      "InstanceOfDemo.java",
+      "ChooseCollection.java",
+    ],
+  },
 ];

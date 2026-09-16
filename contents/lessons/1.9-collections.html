@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.9 Collection Classes · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/collections.css">
+</head>
+<body
+  data-lesson="1.9"
+  data-title="Collection Classes"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Why collections|List / ArrayList|LinkedList|Set / HashSet|Map / HashMap|Collections vs Arrays|instanceof">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">Store many values. Pick the right collection.</h2>
+        <p class="slide-lead reveal">You already know arrays. Today we learn when a collection is the better fit, and how List, Set, and Map differ.</p>
+        <div class="outline-chips reveal">
+          <span>Why collections</span>
+          <span>List</span>
+          <span>ArrayList</span>
+          <span>LinkedList</span>
+          <span>Set</span>
+          <span>HashSet</span>
+          <span>Map</span>
+          <span>HashMap</span>
+          <span>Collections</span>
+          <span>Arrays</span>
+          <span>instanceof</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why collections</p>
+        <h2 class="slide-title reveal">If arrays store many values, why collections?</h2>
+        <p class="slide-lead reveal">An array has a <strong>fixed</strong> size. That is fine when you already know the count.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>String[] months = new String[12];
+
+String[] names = new String[3];
+names[0] = "John";
+names[1] = "Sarah";
+names[2] = "David";</pre>
+            </div>
+            <div class="def-box reveal" style="margin-top:0.85rem">Twelve months never change. An array is a good fit. A student roster can grow next week.</div>
+          </div>
+          <div class="reveal">
+            <div class="col-grow-row">
+              <article class="col-grow-card">
+                <p class="mini">Today</p>
+                <h3>10</h3>
+                <p>students</p>
+              </article>
+              <article class="col-grow-card">
+                <p class="mini">Next week</p>
+                <h3>15</h3>
+                <p>students</p>
+              </article>
+              <article class="col-grow-card">
+                <p class="mini">Next month</p>
+                <h3>20</h3>
+                <p>students</p>
+              </article>
+            </div>
+            <p class="note" style="margin-top:0.9rem">To add a fourth name to a size-3 array, you would make a new array and copy the old data.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Collection</p>
+        <h2 class="slide-title reveal">A collection grows as you add and shrinks as you remove.</h2>
+        <p class="slide-lead reveal">Use an array when the size is fixed and known. Use a collection when the number of elements can change.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>List&lt;String&gt; students = new ArrayList&lt;&gt;();
+
+students.add("John");
+students.add("Sarah");
+students.add("David");
+
+students.add("Emma");
+students.remove("John");</pre>
+          </div>
+          <div class="reveal" data-demo="grow">
+            <div class="col-demo">
+              <article class="col-pane">
+                <div class="col-pane-bar">
+                  <span>String[] names = new String[3]</span>
+                  <span class="col-badge">Fixed</span>
+                </div>
+                <div class="col-chips">
+                  <span class="col-chip">John</span>
+                  <span class="col-chip">Sarah</span>
+                  <span class="col-chip">David</span>
+                  <span class="col-chip ghost" data-grow-ghost>Emma</span>
+                </div>
+                <p class="col-status" data-grow-array-status>Size is 3. It stays 3.</p>
+              </article>
+              <article class="col-pane">
+                <div class="col-pane-bar">
+                  <span>List&lt;String&gt; students</span>
+                  <span class="col-badge ok">Grows</span>
+                </div>
+                <div class="col-chips" data-grow-list></div>
+                <p class="col-status ok" data-grow-list-status></p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Three types</p>
+        <h2 class="slide-title reveal">List. Set. Map. Pick by the job.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr>
+              <th>Collection</th>
+              <th>Main purpose</th>
+              <th>Duplicate values?</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>List</code></td>
+              <td>Ordered data</td>
+              <td>Yes</td>
+              <td>Student names</td>
+            </tr>
+            <tr>
+              <td><code>Set</code></td>
+              <td>Unique data</td>
+              <td>No</td>
+              <td>Unique emails</td>
+            </tr>
+            <tr>
+              <td><code>Map</code></td>
+              <td>Key → Value</td>
+              <td>Keys: no</td>
+              <td>Student ID → name</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="bank-grid" style="margin-top:1rem">
+          <article class="bank-card g1"><h3>List</h3><p>Order matters. The same name can appear twice.</p></article>
+          <article class="bank-card g2"><h3>Set</h3><p>Each value is stored once.</p></article>
+          <article class="bank-card g4"><h3>Map</h3><p>Look up a value by its key.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">List</p>
+        <h2 class="slide-title reveal">A List keeps order. Duplicates are allowed.</h2>
+        <p class="slide-lead reveal">You can read an element by its position. Counting starts at 0, same as an array.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>List&lt;String&gt; names = new ArrayList&lt;&gt;();
+
+names.add("John");
+names.add("Sarah");
+names.add("John");
+
+System.out.println(names.get(0));</pre>
+          </div>
+          <div>
+            <div class="col-idx-row reveal">
+              <div class="col-idx-cell is-on"><span class="idx">0</span><span class="val">John</span></div>
+              <div class="col-idx-cell"><span class="idx">1</span><span class="val">Sarah</span></div>
+              <div class="col-idx-cell"><span class="idx">2</span><span class="val">John</span></div>
+            </div>
+            <div class="def-box reveal" style="margin-top:0.85rem"><code>get(0)</code> prints <strong>John</strong>. The second John stays. A List does not throw that away.</div>
+            <p class="foot-note reveal">Use a List for students, products, orders, or messages — when order matters and repeats are fine.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">ArrayList</p>
+        <h2 class="slide-title reveal">Start with ArrayList.</h2>
+        <p class="slide-lead reveal">If you need a List and have no special reason to pick something else, use <code>ArrayList</code>.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>List&lt;String&gt; names = new ArrayList&lt;&gt;();
+
+names.add("John");
+names.add("Sarah");
+names.add("David");
+
+System.out.println(names.get(1));</pre>
+          </div>
+          <div class="bank-grid" style="grid-template-columns:1fr">
+            <article class="bank-card g1"><h3>Index access</h3><p><code>get(1)</code> is Sarah. Reading by position is what ArrayList is good at.</p></article>
+            <article class="bank-card g2"><h3>Mostly add</h3><p>You usually append names at the end. That is the common beginner pattern.</p></article>
+            <article class="bank-card g3"><h3>General purpose</h3><p>This is the default List for class work and small apps.</p></article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>ListDemo.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">LinkedList</p>
+        <h2 class="slide-title reveal">LinkedList is another List. It shines at the ends.</h2>
+        <p class="slide-lead reveal">Use it when you often add or remove from the beginning or the end.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>LinkedList&lt;String&gt; names = new LinkedList&lt;&gt;();
+
+names.addFirst("John");
+names.addLast("Sarah");
+
+names.removeFirst();
+names.removeLast();</pre>
+          </div>
+          <div class="bank-grid" style="grid-template-columns:1fr">
+            <article class="bank-card g3"><h3>addFirst / addLast</h3><p>Put a name at the front or the back in one call.</p></article>
+            <article class="bank-card g1"><h3>removeFirst / removeLast</h3><p>Take a name off either end. A queue-like flow.</p></article>
+            <article class="bank-card g2"><h3>Still a List</h3><p>Order is kept. Duplicates are still allowed.</p></article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>LinkedListEnds.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Compare</p>
+        <h2 class="slide-title reveal">The better List depends on the operation.</h2>
+        <p class="slide-lead reveal">For most beginner programs, <code>List&lt;String&gt; names = new ArrayList&lt;&gt;();</code> is the default.</p>
+        <table class="info-table reveal">
+          <thead>
+            <tr>
+              <th></th>
+              <th>ArrayList</th>
+              <th>LinkedList</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Ordered</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Duplicates</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Access by index</td><td>Fast</td><td>Slower</td></tr>
+            <tr><td>General-purpose</td><td>Yes</td><td>Less common</td></tr>
+            <tr><td>Add / remove at beginning or end</td><td>Not its main advantage</td><td>Good</td></tr>
+            <tr><td>Beginner default</td><td>Yes</td><td>When you work at the ends</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Set</p>
+        <h2 class="slide-title reveal">A Set stores unique values.</h2>
+        <p class="slide-lead reveal">A duplicate is not added. Java does not throw an error. <code>add()</code> returns <code>true</code> or <code>false</code>.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Set&lt;String&gt; emails = new HashSet&lt;&gt;();
+
+System.out.println(emails.add("john@gmail.com"));
+System.out.println(emails.add("sarah@gmail.com"));
+System.out.println(emails.add("john@gmail.com"));</pre>
+          </div>
+          <div class="reveal" data-demo="set">
+            <article class="col-pane">
+              <div class="col-pane-bar">
+                <span>Set&lt;String&gt; emails</span>
+                <span class="col-badge ok">Unique</span>
+              </div>
+              <div class="col-chips" data-set-box></div>
+              <div class="col-log" data-set-log></div>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Use a Set for usernames, emails, product IDs, tags, or permissions. Lab: <code>SetDemo.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">HashSet</p>
+        <h2 class="slide-title reveal">HashSet means unique values. Order is not promised.</h2>
+        <p class="slide-lead reveal">Do not expect 101, then 102, then 103 every time you print the set.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Set&lt;Integer&gt; ids = new HashSet&lt;&gt;();
+
+ids.add(101);
+ids.add(102);
+ids.add(101);</pre>
+          </div>
+          <div>
+            <div class="col-idx-row reveal">
+              <div class="col-idx-cell"><span class="idx">stored</span><span class="val">101</span></div>
+              <div class="col-idx-cell"><span class="idx">stored</span><span class="val">102</span></div>
+              <div class="col-idx-cell miss"><span class="idx">ignored</span><span class="val">101</span></div>
+            </div>
+            <div class="def-box reveal" style="margin-top:0.85rem">The second <code>101</code> is not stored. <strong>HashSet = unique values.</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Map</p>
+        <h2 class="slide-title reveal">A Map stores a key and a value together.</h2>
+        <p class="slide-lead reveal">Think of a dictionary. You ask with a key. You get the matching value.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Map&lt;Integer, String&gt; students = new HashMap&lt;&gt;();
+
+students.put(101, "John");
+students.put(102, "Sarah");
+students.put(103, "David");
+
+System.out.println(students.get(101));</pre>
+          </div>
+          <div class="reveal">
+            <div class="col-dict">
+              <div class="col-pair"><span class="col-key">101</span><span class="col-arrow">→</span><span class="col-val">John</span></div>
+              <div class="col-pair"><span class="col-key">102</span><span class="col-arrow">→</span><span class="col-val">Sarah</span></div>
+              <div class="col-pair is-on"><span class="col-key">103</span><span class="col-arrow">→</span><span class="col-val">David</span></div>
+            </div>
+            <div class="def-box" style="margin-top:0.85rem"><code>get(101)</code> prints <strong>John</strong>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why Map</p>
+        <h2 class="slide-title reveal">A List knows positions. A Map knows IDs.</h2>
+        <p class="slide-lead reveal">Use a Map when one identifier belongs with one value — student ID, product ID, username, country code.</p>
+        <div class="col-demo reveal" data-demo="map">
+          <article class="col-pane">
+            <div class="col-pane-bar">
+              <span>List of names</span>
+              <span class="col-badge">Walk</span>
+            </div>
+            <div class="col-idx-row" data-map-list>
+              <div class="col-idx-cell"><span class="idx">0</span><span class="val">John</span></div>
+              <div class="col-idx-cell"><span class="idx">1</span><span class="val">Sarah</span></div>
+              <div class="col-idx-cell"><span class="idx">2</span><span class="val">David</span></div>
+            </div>
+            <p class="col-status" data-map-list-status>Find "Sarah". Walk index 0, then 1, then 2.</p>
+          </article>
+          <article class="col-pane">
+            <div class="col-pane-bar">
+              <span>Map&lt;Integer, String&gt;</span>
+              <span class="col-badge ok">Lookup</span>
+            </div>
+            <div class="col-dict" data-map-dict>
+              <div class="col-pair"><span class="col-key">101</span><span class="col-arrow">→</span><span class="col-val">John</span></div>
+              <div class="col-pair"><span class="col-key">102</span><span class="col-arrow">→</span><span class="col-val">Sarah</span></div>
+              <div class="col-pair"><span class="col-key">103</span><span class="col-arrow">→</span><span class="col-val">David</span></div>
+            </div>
+            <p class="col-status ok" data-map-dict-status>students.get(102)</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Lab: <code>MapDemo.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Choose</p>
+        <h2 class="slide-title reveal">Say this in one sentence.</h2>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <p class="mini">List</p>
+            <h3>Ordered. Duplicates are okay.</h3>
+            <p><code>List&lt;String&gt; names = new ArrayList&lt;&gt;();</code></p>
+          </article>
+          <article class="bank-card g2">
+            <p class="mini">Set</p>
+            <h3>I need unique values.</h3>
+            <p><code>Set&lt;String&gt; emails = new HashSet&lt;&gt;();</code></p>
+          </article>
+          <article class="bank-card g4">
+            <p class="mini">Map</p>
+            <h3>I need key → value.</h3>
+            <p><code>Map&lt;Integer, String&gt; students = new HashMap&lt;&gt;();</code></p>
+          </article>
+        </div>
+        <p class="foot-note reveal" style="margin-top:1rem">Lab: <code>ChooseCollection.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Collections</p>
+        <h2 class="slide-title reveal">Collection is a group. Collections is the helper.</h2>
+        <p class="slide-lead reveal"><code>Collections</code> is a utility class. It sorts, reverses, shuffles, and finds min and max.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>List&lt;Integer&gt; numbers = new ArrayList&lt;&gt;();
+numbers.add(50);
+numbers.add(10);
+numbers.add(30);
+numbers.add(20);
+
+Collections.sort(numbers);</pre>
+            </div>
+            <div class="compare" style="margin-top:0.85rem">
+              <article class="bank-card g1"><h3>Collection</h3><p>A group of objects — List or Set.</p></article>
+              <article class="bank-card g3"><h3>Collections</h3><p>Helper methods for that group.</p></article>
+            </div>
+          </div>
+          <div>
+            <p class="mini reveal">Collections.sort(numbers)</p>
+            <div class="col-sort reveal" data-cycle="1600">
+              <div class="cycle-item">
+                <span class="col-num">50</span>
+                <span class="col-num">10</span>
+                <span class="col-num">30</span>
+                <span class="col-num">20</span>
+              </div>
+              <div class="cycle-item">
+                <span class="col-num">10</span>
+                <span class="col-num">20</span>
+                <span class="col-num">30</span>
+                <span class="col-num">50</span>
+              </div>
+            </div>
+            <div class="bank-grid four" style="margin-top:0.9rem">
+              <article class="bank-card g1"><h3>sort</h3><p>Low to high</p></article>
+              <article class="bank-card g2"><h3>reverse</h3><p>Flip the order</p></article>
+              <article class="bank-card g3"><h3>shuffle</h3><p>Mix at random</p></article>
+              <article class="bank-card g4"><h3>min / max</h3><p>Smallest / largest</p></article>
+            </div>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>CollectionsUtil.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Arrays</p>
+        <h2 class="slide-title reveal">Arrays helps arrays. Collections helps collections.</h2>
+        <p class="slide-lead reveal">You used <code>java.util.Arrays</code> in 1.3b. Same idea. Different helper.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>int[] numbers = {50, 10, 30, 20};
+Arrays.sort(numbers);
+
+List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+Collections.sort(list);</pre>
+          </div>
+          <table class="info-table">
+            <thead><tr><th>Data structure</th><th>Utility class</th><th>Beginner methods</th></tr></thead>
+            <tbody>
+              <tr><td>Array</td><td><code>Arrays</code></td><td><code>sort</code> · <code>toString</code> · <code>equals</code></td></tr>
+              <tr><td>Collection</td><td><code>Collections</code></td><td><code>sort</code> · <code>reverse</code> · <code>shuffle</code> · <code>min</code> · <code>max</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="foot-note reveal">Lab: <code>ArraysUtil.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">instanceof</p>
+        <h2 class="slide-title reveal">Ask: is this object that type?</h2>
+        <p class="slide-lead reveal"><code>instanceof</code> checks the actual type. From 1.5: a Dog is also an Animal.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Student student = new Student();
+if (student instanceof Student) {
+    System.out.println("This is a Student object.");
+}
+
+Animal animal = new Dog();
+if (animal instanceof Dog) {
+    System.out.println("This is a Dog.");
+}</pre>
+          </div>
+          <div>
+            <div class="def-box reveal">Use it when you have a parent-type variable and need to know the real child type before you act.</div>
+            <article class="bank-card g2 reveal" style="margin-top:0.85rem">
+              <h3>Read it as</h3>
+              <p>Is <code>animal</code> a <code>Dog</code>? If yes, print. The check is true because we stored a Dog.</p>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>InstanceOfDemo.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Decide</p>
+        <h2 class="slide-title reveal">Choose by the question. Not by memorizing names.</h2>
+        <div class="split-visual">
+          <div class="col-tree reveal">
+            <div class="col-tree-q">Need to store multiple values?</div>
+            <div class="col-tree-q">Is the size fixed?</div>
+            <div class="col-tree-row">
+              <article class="col-tree-card g-array"><p class="mini">Yes</p><h3>Array</h3></article>
+              <article class="col-tree-card"><p class="mini">No</p><h3>Collection</h3></article>
+            </div>
+            <div class="col-tree-row" data-cycle="1400">
+              <article class="col-tree-card cycle-item g-list is-on"><p class="mini">Ordered</p><h3>ArrayList</h3></article>
+              <article class="col-tree-card cycle-item g-set"><p class="mini">Unique</p><h3>HashSet</h3></article>
+              <article class="col-tree-card cycle-item g-map"><p class="mini">Key → Value</p><h3>HashMap</h3></article>
+            </div>
+          </div>
+          <div>
+            <div class="col-tree reveal">
+              <div class="col-tree-q">Need a List?</div>
+              <div class="col-tree-row">
+                <article class="col-tree-card g-list"><p class="mini">General purpose</p><h3>ArrayList</h3></article>
+                <article class="col-tree-card g-array"><p class="mini">Add / remove at the ends</p><h3>LinkedList</h3></article>
+              </div>
+            </div>
+            <table class="info-table" style="margin-top:0.85rem">
+              <thead><tr><th>Topic</th><th>Main idea</th></tr></thead>
+              <tbody>
+                <tr><td>List</td><td>Ordered. Duplicates okay. <code>get(index)</code></td></tr>
+                <tr><td>ArrayList</td><td>Default List</td></tr>
+                <tr><td>LinkedList</td><td>Work at the beginning or end</td></tr>
+                <tr><td>Set / HashSet</td><td>Unique values. Order not promised</td></tr>
+                <tr><td>Map / HashMap</td><td>Key → value lookup</td></tr>
+                <tr><td>Collections / Arrays</td><td>Helpers: sort and friends</td></tr>
+                <tr><td><code>instanceof</code></td><td>Check the actual type</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these files in coding/1.9/</h2>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>ArrayVsList</h3><p>Fixed array. Growing ArrayList.</p></article>
+          <article class="bank-card g2"><h3>ListDemo</h3><p>Add. Duplicate John. <code>get(0)</code>.</p></article>
+          <article class="bank-card g3"><h3>LinkedListEnds</h3><p>addFirst / addLast / remove.</p></article>
+          <article class="bank-card g4"><h3>SetDemo</h3><p>Unique emails. true / false.</p></article>
+        </div>
+        <div class="bank-grid four" style="margin-top:0.85rem">
+          <article class="bank-card g1"><h3>MapDemo</h3><p>ID → name. Then <code>get(101)</code>.</p></article>
+          <article class="bank-card g2"><h3>CollectionsUtil</h3><p>sort, reverse, shuffle, min, max.</p></article>
+          <article class="bank-card g3"><h3>ArraysUtil</h3><p>sort, toString, equals.</p></article>
+          <article class="bank-card g4"><h3>InstanceOfDemo</h3><p>Animal stored as Dog.</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem">
+          <article class="bank-card g4"><h3>ChooseCollection</h3><p>Names in a List. Emails in a Set. IDs in a Map.</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Next lesson: 1.10 Java 8.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/collection-demo.js"></script>
+</body>
+</html>
