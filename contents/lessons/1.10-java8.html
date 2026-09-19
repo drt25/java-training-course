@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.10 Java 8 · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/java8.css">
+</head>
+<body
+  data-lesson="1.10"
+  data-title="Java 8"
+  data-module="Lesson 1 · Core Java"
+  data-topics="What Java 8 is|stream()|filter / map|forEach / collect|LocalDate / LocalTime|Format and plus/minus">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">Shorter collection work. Safer dates.</h2>
+        <p class="slide-lead reveal">Java 8 (2014) gave us a pipeline over the lists you already know, and a new way to write dates and times.</p>
+        <div class="outline-chips reveal">
+          <span>What Java 8 is</span>
+          <span>stream()</span>
+          <span>filter</span>
+          <span>map</span>
+          <span>forEach</span>
+          <span>collect</span>
+          <span>LocalDate</span>
+          <span>LocalTime</span>
+          <span>LocalDateTime</span>
+          <span>Format</span>
+          <span>plus / minus</span>
+          <span>Compare</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Java 8</p>
+        <h2 class="slide-title reveal">A major version from 2014. Code got shorter.</h2>
+        <p class="slide-lead reveal">You already process a list with a loop. Today we learn two tools that make that work cleaner.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1">
+            <h3>Stream API</h3>
+            <p>Process a List or a Set in a pipeline: select, change, print, store.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>Date-Time API</h3>
+            <p>Dates and times in <code>java.time</code>. Easier and safer than the old classes.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>Today</h3>
+            <p>These two. Enough for class work. We use a short arrow form inside stream calls.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why Java 8</p>
+        <h2 class="slide-title reveal">Same job. Less ceremony.</h2>
+        <p class="slide-lead reveal">Printing every name is still “for each name, print it.” Java 8 just writes that in a shorter line.</p>
+        <div class="duo-code">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>for (String name : names) {
+    System.out.println(name);
+}</pre>
+            <div class="out-box">Traditional loop</div>
+          </div>
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>names.stream()
+     .forEach(name -&gt; System.out.println(name));</pre>
+            <div class="out-box">Java 8 stream</div>
+          </div>
+        </div>
+        <div class="def-box reveal" style="margin-top:0.85rem">A stream is not a new kind of list. It is a way to process the list you already have.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Stream API</p>
+        <h2 class="slide-title reveal">A pipeline over a collection.</h2>
+        <p class="slide-lead reveal">Use it on a <code>List</code> or a <code>Set</code> when you want to select, change, print, or collect values.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>List&lt;Integer&gt; numbers =
+    Arrays.asList(10, 20, 30, 40, 50);</pre>
+            </div>
+            <div class="def-box reveal" style="margin-top:0.85rem">A stream <strong>does not store data</strong>. The original collection holds the values. The stream processes them.</div>
+          </div>
+          <div class="j8-flow reveal">
+            <div class="j8-flow-step source">Collection<small>List or Set</small></div>
+            <div class="j8-flow-arrow">↓</div>
+            <div class="j8-flow-step">stream()</div>
+            <div class="j8-flow-arrow">↓</div>
+            <div class="j8-flow-step mid">filter / map</div>
+            <div class="j8-flow-arrow">↓</div>
+            <div class="j8-flow-step end">forEach / collect<small>Result</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">stream()</p>
+        <h2 class="slide-title reveal">Start processing the list.</h2>
+        <p class="slide-lead reveal"><code>numbers.stream()</code> means: I want to process the elements of this list.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>List&lt;Integer&gt; numbers =
+    Arrays.asList(10, 20, 30, 40);
+
+numbers.stream();
+
+numbers.stream()
+       .forEach(n -&gt; System.out.println(n));</pre>
+          </div>
+          <div class="bank-grid" style="grid-template-columns:1fr">
+            <article class="bank-card g1"><h3>Creates a stream</h3><p>From the collection you already have. Nothing is copied into a new store.</p></article>
+            <article class="bank-card g3"><h3>Almost never alone</h3><p>You connect <code>stream()</code> to <code>filter</code>, <code>map</code>, <code>forEach</code>, or <code>collect</code>.</p></article>
+            <article class="bank-card g2"><h3>Then an action</h3><p>Print, select, change, or store. The chain is the pipeline.</p></article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>StreamForEach.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">filter()</p>
+        <h2 class="slide-title reveal">Keep only the values that pass a test.</h2>
+        <p class="slide-lead reveal"><code>n -&gt; n &gt; 20</code> means: take each number <code>n</code>. Keep it if it is greater than 20.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>List&lt;Integer&gt; numbers =
+    Arrays.asList(10, 20, 30, 40, 50);
+
+numbers.stream()
+       .filter(n -&gt; n &gt; 20)
+       .forEach(n -&gt; System.out.println(n));</pre>
+            </div>
+            <div class="out-box reveal">30
+40
+50</div>
+            <div class="def-box reveal" style="margin-top:0.75rem"><strong>filter()</strong> selects elements based on a condition.</div>
+          </div>
+          <div class="reveal">
+            <div class="j8-keep-row" data-cycle="900">
+              <article class="j8-num cycle-item drop is-on"><strong>10</strong><span>drop</span></article>
+              <article class="j8-num cycle-item drop"><strong>20</strong><span>drop</span></article>
+              <article class="j8-num cycle-item keep"><strong>30</strong><span>keep</span></article>
+              <article class="j8-num cycle-item keep"><strong>40</strong><span>keep</span></article>
+              <article class="j8-num cycle-item keep"><strong>50</strong><span>keep</span></article>
+            </div>
+            <p class="note" style="margin-top:0.85rem">20 is not greater than 20, so it drops too.</p>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>StreamFilter.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">map()</p>
+        <h2 class="slide-title reveal">Change each element into another value.</h2>
+        <p class="slide-lead reveal"><code>map()</code> does not drop items. Every item goes in. A new value comes out.</p>
+        <div class="duo-code">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>List&lt;Integer&gt; numbers =
+    Arrays.asList(1, 2, 3, 4);
+
+numbers.stream()
+       .map(n -&gt; n * 2)
+       .forEach(n -&gt; System.out.println(n));</pre>
+            </div>
+            <div class="j8-map-row reveal">
+              <div class="j8-map-item">1<small>→ 2</small></div>
+              <div class="j8-map-item">2<small>→ 4</small></div>
+              <div class="j8-map-item">3<small>→ 6</small></div>
+              <div class="j8-map-item">4<small>→ 8</small></div>
+            </div>
+          </div>
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>List&lt;String&gt; names =
+    Arrays.asList("ram", "sita", "hari");
+
+names.stream()
+     .map(name -&gt; name.toUpperCase())
+     .forEach(name -&gt; System.out.println(name));</pre>
+            </div>
+            <div class="j8-map-row reveal">
+              <div class="j8-map-item">ram<small>→ RAM</small></div>
+              <div class="j8-map-item">sita<small>→ SITA</small></div>
+              <div class="j8-map-item">hari<small>→ HARI</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="def-box reveal" style="margin-top:0.85rem"><strong>map()</strong> transforms each element into another value.</div>
+        <p class="foot-note reveal">Lab: <code>StreamMap.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">forEach()</p>
+        <h2 class="slide-title reveal">For every element, do this.</h2>
+        <p class="slide-lead reveal">Same idea as the for-each loop. The stream version is one chain.</p>
+        <div class="duo-code">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>for (String name : names) {
+    System.out.println(name);
+}</pre>
+            <div class="out-box">Traditional</div>
+          </div>
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>List&lt;String&gt; names =
+    Arrays.asList("Ram", "Sita", "Hari");
+
+names.stream()
+     .forEach(name -&gt; System.out.println(name));</pre>
+            <div class="out-box">Ram
+Sita
+Hari</div>
+          </div>
+        </div>
+        <div class="def-box reveal" style="margin-top:0.85rem"><strong>forEach()</strong> performs an action for every element. It does not build a new list.</div>
+        <p class="foot-note reveal">Lab: <code>StreamForEach.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">collect()</p>
+        <h2 class="slide-title reveal">Store the processed values in a new list.</h2>
+        <p class="slide-lead reveal">Use <code>collect</code> when you need the result back as a collection. The original list stays as it was.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>List&lt;Integer&gt; numbers =
+    Arrays.asList(10, 20, 30, 40, 50);
+
+List&lt;Integer&gt; result =
+    numbers.stream()
+           .filter(n -&gt; n &gt; 20)
+           .collect(Collectors.toList());</pre>
+            </div>
+            <div class="out-box reveal">result → [30, 40, 50]</div>
+          </div>
+          <div class="j8-flow reveal">
+            <div class="j8-flow-step source">Original<small>[10, 20, 30, 40, 50]</small></div>
+            <div class="j8-flow-arrow">↓ stream()</div>
+            <div class="j8-flow-step mid">filter &gt; 20<small>[30, 40, 50]</small></div>
+            <div class="j8-flow-arrow">↓ collect()</div>
+            <div class="j8-flow-step end">New List<small>[30, 40, 50]</small></div>
+          </div>
+        </div>
+        <div class="def-box reveal" style="margin-top:0.85rem"><strong>collect()</strong> collects the processed stream elements into a collection.</div>
+        <p class="foot-note reveal">Lab: <code>StreamPipeline.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Pipeline</p>
+        <h2 class="slide-title reveal">Filter, then map, then collect.</h2>
+        <p class="slide-lead reveal">Read the chain top to bottom. Each step feeds the next.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>List&lt;Integer&gt; numbers =
+    Arrays.asList(10, 20, 30, 40, 50);
+
+List&lt;Integer&gt; result =
+    numbers.stream()
+           .filter(n -&gt; n &gt; 20)
+           .map(n -&gt; n * 2)
+           .collect(Collectors.toList());</pre>
+            </div>
+            <div class="out-box reveal">[60, 80, 100]</div>
+            <table class="info-table" style="margin-top:0.7rem">
+              <thead><tr><th>Method</th><th>Meaning</th></tr></thead>
+              <tbody>
+                <tr><td><code>stream()</code></td><td>Start processing</td></tr>
+                <tr><td><code>filter()</code></td><td>Select</td></tr>
+                <tr><td><code>map()</code></td><td>Change</td></tr>
+                <tr><td><code>forEach()</code></td><td>Do something</td></tr>
+                <tr><td><code>collect()</code></td><td>Store a new list</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="reveal" data-demo="pipeline">
+            <div class="j8-pipe">
+              <div class="j8-stage">
+                <div class="j8-stage-bar"><span>List</span><span class="j8-badge">source</span></div>
+                <div class="j8-chips" data-pipe-source></div>
+              </div>
+              <div class="j8-stage">
+                <div class="j8-stage-bar"><span>filter n &gt; 20</span></div>
+                <div class="j8-chips" data-pipe-filter></div>
+              </div>
+              <div class="j8-stage">
+                <div class="j8-stage-bar"><span>map n * 2</span></div>
+                <div class="j8-chips" data-pipe-map></div>
+              </div>
+              <div class="j8-stage result">
+                <div class="j8-stage-bar"><span>collect</span><span class="j8-badge">new list</span></div>
+                <div class="j8-chips" data-pipe-collect></div>
+              </div>
+            </div>
+            <p class="j8-status" data-pipe-status>List holds the data.</p>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>StreamPipeline.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Date-Time API</p>
+        <h2 class="slide-title reveal">Dates and times live in java.time.</h2>
+        <p class="slide-lead reveal">Java 8 added a new Date-Time API. For beginners, three classes cover most work.</p>
+        <div class="j8-dt-row" data-cycle="1400">
+          <article class="bank-card g1 cycle-item is-on">
+            <p class="mini">Date only</p>
+            <h3>LocalDate</h3>
+            <p>Year + month + day. <code>2026-09-19</code></p>
+          </article>
+          <article class="bank-card g2 cycle-item">
+            <p class="mini">Time only</p>
+            <h3>LocalTime</h3>
+            <p>Hour + minute + second. <code>10:30</code></p>
+          </article>
+          <article class="bank-card g3 cycle-item">
+            <p class="mini">Both</p>
+            <h3>LocalDateTime</h3>
+            <p>Date and time together. <code>2026-09-19 10:30</code></p>
+          </article>
+        </div>
+        <div class="def-box reveal" style="margin-top:0.9rem">Pick the class that matches what you need. A birthday is a date. A class start is a time. A login is both.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">LocalDate</p>
+        <h2 class="slide-title reveal">A date. No clock.</h2>
+        <p class="slide-lead reveal"><code>LocalDate</code> is year + month + day. Use it for today, a birthday, or a due date.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>LocalDate today = LocalDate.now();
+System.out.println(today);
+
+LocalDate date =
+    LocalDate.of(2026, 9, 19);</pre>
+          </div>
+          <div>
+            <div class="j8-cal reveal">
+              <div class="j8-cal-head">LocalDate</div>
+              <strong>2026-09-19</strong>
+              <p>Year + Month + Day</p>
+            </div>
+            <div class="bank-grid" style="grid-template-columns:1fr;margin-top:0.75rem">
+              <article class="bank-card g1"><h3>now()</h3><p>Today’s date from the computer.</p></article>
+              <article class="bank-card g3"><h3>of(year, month, day)</h3><p>A date you choose. Month is 1 to 12.</p></article>
+            </div>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>TodayDate.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">LocalTime</p>
+        <h2 class="slide-title reveal">A time. No calendar.</h2>
+        <p class="slide-lead reveal"><code>LocalTime</code> is hour + minute + second. Use it for a class start or a shop opening.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>LocalTime currentTime =
+    LocalTime.now();
+System.out.println(currentTime);
+
+LocalTime time =
+    LocalTime.of(10, 30);</pre>
+          </div>
+          <div>
+            <div class="j8-cal reveal">
+              <div class="j8-cal-head">LocalTime</div>
+              <strong>10:30</strong>
+              <p>Hour + Minute + Second</p>
+            </div>
+            <div class="def-box reveal" style="margin-top:0.75rem"><code>of(10, 30)</code> is 10:30. You can add seconds as a third argument when you need them.</div>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>TodayDate.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">LocalDateTime</p>
+        <h2 class="slide-title reveal">Date and time together.</h2>
+        <p class="slide-lead reveal">Use <code>LocalDateTime</code> when both matter: a class on 19 Sep at 10:30.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>LocalDateTime now =
+    LocalDateTime.now();
+System.out.println(now);</pre>
+          </div>
+          <div class="j8-dt-row reveal">
+            <article class="bank-card g1">
+              <p class="mini">LocalDate</p>
+              <h3>2026-09-19</h3>
+              <p>Date only</p>
+            </article>
+            <article class="bank-card g2">
+              <p class="mini">LocalTime</p>
+              <h3>10:30:25</h3>
+              <p>Time only</p>
+            </article>
+            <article class="bank-card g3">
+              <p class="mini">LocalDateTime</p>
+              <h3>2026-09-19 10:30:25</h3>
+              <p>Date + Time</p>
+            </article>
+          </div>
+        </div>
+        <div class="def-box reveal" style="margin-top:0.85rem">This distinction matters. Do not store a birthday in <code>LocalDateTime</code> unless you truly need a clock.</div>
+        <p class="foot-note reveal">Lab: <code>TodayDate.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">DateTimeFormatter</p>
+        <h2 class="slide-title reveal">Print the date in the shape you want.</h2>
+        <p class="slide-lead reveal">Default looks like <code>2026-09-19</code>. Nepal class work often wants <code>19-09-2026</code>.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>LocalDate today = LocalDate.now();
+
+DateTimeFormatter formatter =
+    DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+String formattedDate =
+    today.format(formatter);</pre>
+            </div>
+            <div class="out-box reveal">19-09-2026</div>
+            <div class="def-box reveal" style="margin-top:0.75rem"><strong>DateTimeFormatter</strong> formats dates and times into a desired pattern.</div>
+          </div>
+          <div class="reveal">
+            <div class="j8-pattern">
+              <article><code>dd</code><span>day</span></article>
+              <article><code>MM</code><span>month</span></article>
+              <article><code>yyyy</code><span>year</span></article>
+              <article><code>HH</code><span>hour</span></article>
+              <article><code>mm</code><span>minute</span></article>
+              <article><code>ss</code><span>second</span></article>
+            </div>
+            <p class="note" style="margin-top:0.85rem"><code>dd-MM-yyyy</code> means day-month-year. <code>MM</code> is month. <code>mm</code> is minute.</p>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>FormatDate.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">plus / minus</p>
+        <h2 class="slide-title reveal">plus adds. minus subtracts. Assign the result.</h2>
+        <p class="slide-lead reveal">Dates do not change in place. <code>plusDays</code> returns a new date. Store it.</p>
+        <div class="split-visual">
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>LocalDate today = LocalDate.now();
+LocalDate tomorrow = today.plusDays(1);
+LocalDate yesterday = today.minusDays(1);
+
+today.plusMonths(2);
+today.minusYears(2);
+
+time.plusHours(2);
+time.minusMinutes(30);</pre>
+            </div>
+            <div class="def-box reveal" style="margin-top:0.75rem"><code>plus</code> adds time. <code>minus</code> subtracts time. Write <code>LocalDate tomorrow = today.plusDays(1);</code></div>
+          </div>
+          <div class="reveal" data-demo="plus">
+            <div class="j8-cal-row">
+              <article class="j8-cal" data-plus-from>
+                <div class="j8-cal-head">today</div>
+                <strong>2026-09-19</strong>
+                <p>LocalDate.now()</p>
+              </article>
+              <div class="j8-cal-op" data-plus-op>plusDays(1)</div>
+              <article class="j8-cal" data-plus-to>
+                <div class="j8-cal-head">tomorrow</div>
+                <strong>2026-09-20</strong>
+                <p>a new date</p>
+              </article>
+            </div>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>DateMath.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Compare</p>
+        <h2 class="slide-title reveal">Earlier, later, or the same.</h2>
+        <p class="slide-lead reveal">10 September comes before 20 September. Ask the date. Do not subtract by hand.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>LocalDate date1 =
+    LocalDate.of(2026, 9, 10);
+LocalDate date2 =
+    LocalDate.of(2026, 9, 20);
+
+date1.isBefore(date2);
+date1.isAfter(date2);
+date1.isEqual(date2);</pre>
+          </div>
+          <div class="j8-cmp reveal">
+            <div class="j8-cmp-line">
+              <code>isBefore()</code>
+              <span>Is it earlier?</span>
+              <span class="j8-flag yes">true</span>
+            </div>
+            <div class="j8-cmp-line">
+              <code>isAfter()</code>
+              <span>Is it later?</span>
+              <span class="j8-flag no">false</span>
+            </div>
+            <div class="j8-cmp-line">
+              <code>isEqual()</code>
+              <span>Are they the same?</span>
+              <span class="j8-flag no">false</span>
+            </div>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>CompareDates.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">You should be able to say these in one sentence.</h2>
+        <div class="split-visual">
+          <table class="info-table">
+            <thead><tr><th>Stream</th><th>Main idea</th></tr></thead>
+            <tbody>
+              <tr><td><code>stream()</code></td><td>Start processing the collection</td></tr>
+              <tr><td><code>filter()</code></td><td>Select elements</td></tr>
+              <tr><td><code>map()</code></td><td>Change each element</td></tr>
+              <tr><td><code>forEach()</code></td><td>Do something with each</td></tr>
+              <tr><td><code>collect()</code></td><td>Store a new collection</td></tr>
+            </tbody>
+          </table>
+          <table class="info-table">
+            <thead><tr><th>Date-Time</th><th>Main idea</th></tr></thead>
+            <tbody>
+              <tr><td><code>LocalDate</code></td><td>Date only</td></tr>
+              <tr><td><code>LocalTime</code></td><td>Time only</td></tr>
+              <tr><td><code>LocalDateTime</code></td><td>Date + time</td></tr>
+              <tr><td><code>DateTimeFormatter</code></td><td>Format date / time</td></tr>
+              <tr><td><code>plus</code> / <code>minus</code></td><td>Add or subtract. Assign it</td></tr>
+              <tr><td><code>isBefore</code> / <code>isAfter</code></td><td>Earlier or later</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these files in coding/1.10/</h2>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>StreamForEach</h3><p>Print Ram, Sita, Hari.</p></article>
+          <article class="bank-card g2"><h3>StreamFilter</h3><p>Keep numbers greater than 20.</p></article>
+          <article class="bank-card g3"><h3>StreamMap</h3><p><code>* 2</code> and <code>toUpperCase()</code>.</p></article>
+          <article class="bank-card g4"><h3>StreamPipeline</h3><p>filter, map, collect. Print <code>[60, 80, 100]</code>.</p></article>
+        </div>
+        <div class="bank-grid four" style="margin-top:0.85rem">
+          <article class="bank-card g1"><h3>TodayDate</h3><p><code>now()</code> and <code>of</code> for date, time, both.</p></article>
+          <article class="bank-card g2"><h3>FormatDate</h3><p><code>dd-MM-yyyy</code></p></article>
+          <article class="bank-card g3"><h3>DateMath</h3><p>plusDays, minusDays, plusMonths.</p></article>
+          <article class="bank-card g4"><h3>CompareDates</h3><p>isBefore, isAfter, isEqual.</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Next lesson: 1.11 Swing GUI Widgets.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/java8-demo.js"></script>
+</body>
+</html>

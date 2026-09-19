@@ -148,4 +148,20 @@ window.LABS = [
       "ChooseCollection.java",
     ],
   },
+  {
+    id: "1.10",
+    title: "Java 8",
+    folder: "1.10",
+    slides: "lessons/1.10-java8.html",
+    files: [
+      "StreamForEach.java",
+      "StreamFilter.java",
+      "StreamMap.java",
+      "StreamPipeline.java",
+      "TodayDate.java",
+      "FormatDate.java",
+      "DateMath.java",
+      "CompareDates.java",
+    ],
+  },
 ];
