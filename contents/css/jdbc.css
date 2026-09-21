@@ -1,0 +1,510 @@
+.jdbc-mem {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.jdbc-pane {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.jdbc-pane.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.16);
+}
+
+.jdbc-pane.lost.is-on {
+  border-color: #fecaca;
+  box-shadow: 0 10px 28px rgba(180, 35, 24, 0.12);
+}
+
+.jdbc-pane-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.55rem 0.85rem;
+  background: #10203d;
+  color: #d7e7ff;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.jdbc-badge {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  background: rgba(0, 173, 238, 0.22);
+  color: #7de7ff;
+}
+
+.jdbc-badge.warn {
+  background: rgba(180, 35, 24, 0.22);
+  color: #fda4af;
+}
+
+.jdbc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.9rem 0.85rem 0.4rem;
+  min-height: 5.2rem;
+  align-content: flex-start;
+}
+
+.jdbc-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 4.2rem;
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #e8f2ff, #fff);
+  border: 2px solid #9cc4ff;
+  color: var(--blue-800);
+  font-weight: 800;
+  font-size: 0.86rem;
+  box-shadow: 0 6px 16px rgba(0, 86, 179, 0.08);
+}
+
+.jdbc-chip.enter { animation: jdbcIn 0.35s ease both; }
+.jdbc-chip.fade {
+  border-color: #fecaca;
+  background: #fff5f5;
+  color: #b42318;
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.jdbc-status {
+  margin: auto 0.85rem 0.85rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  background: #e8f2ff;
+  color: var(--blue-800);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.jdbc-status.lost {
+  background: #fff5f5;
+  color: #b42318;
+}
+
+.jdbc-store {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+.jdbc-store-card {
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  padding: 1.05rem 1.1rem;
+  box-shadow: var(--shadow);
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+
+.jdbc-store-card.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.16);
+  transform: translateY(-3px);
+}
+
+.jdbc-store-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.jdbc-store-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.jdbc-formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.7rem;
+}
+
+.jdbc-formats span {
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  background: #fff7e6;
+  border: 1px solid #ffd48a;
+  color: #9a5b00;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.jdbc-file {
+  background: #10203d;
+  color: #d7e7ff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.jdbc-file-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.85rem;
+  background: #0a1730;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+.jdbc-file pre {
+  margin: 0;
+  padding: 1rem 1.1rem 1.15rem;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.jdbc-scale {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.jdbc-scale article {
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.1rem 0.7rem;
+  box-shadow: var(--shadow);
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+
+.jdbc-scale article.is-on {
+  border-color: var(--orange);
+  box-shadow: 0 10px 28px rgba(245, 166, 35, 0.2);
+  transform: translateY(-3px);
+}
+
+.jdbc-scale h3 {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  color: var(--blue-800);
+}
+
+.jdbc-scale p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.jdbc-table-wrap {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.jdbc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.jdbc-table th,
+.jdbc-table td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.jdbc-table th {
+  background: var(--blue-700);
+  color: #fff;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 0.35s;
+}
+
+.jdbc-table tbody tr {
+  transition: background 0.35s;
+}
+
+.jdbc-table tbody tr:nth-child(even) td { background: #f7fbff; }
+
+.jdbc-table tbody tr.is-on td {
+  background: #fff7e6;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.jdbc-table th.col-on {
+  background: #9a5b00;
+}
+
+.jdbc-table td.col-on {
+  background: #fff7e6 !important;
+  font-weight: 800;
+  color: #9a5b00;
+}
+
+.jdbc-id-col {
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.jdbc-id-col.is-hidden {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+.jdbc-id-col.is-shown {
+  opacity: 1;
+  transform: none;
+  animation: jdbcIn 0.4s ease both;
+}
+
+.jdbc-db {
+  background: linear-gradient(180deg, #e8f2ff, #fff);
+  border: 2px solid #9cc4ff;
+  border-radius: 16px;
+  padding: 1rem 1.1rem 1.15rem;
+  box-shadow: var(--shadow);
+}
+
+.jdbc-db h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  color: var(--blue-800);
+}
+
+.jdbc-db-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+
+.jdbc-db-item {
+  background: #fff;
+  border: 1px solid #9cc4ff;
+  border-radius: 12px;
+  padding: 0.7rem 0.75rem;
+  text-align: center;
+  font-weight: 800;
+  color: var(--blue-800);
+  font-size: 0.9rem;
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+
+.jdbc-db-item.is-on {
+  border-color: var(--orange);
+  box-shadow: 0 8px 22px rgba(245, 166, 35, 0.18);
+  transform: translateY(-2px);
+}
+
+.jdbc-stack {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+}
+
+.jdbc-stack-step {
+  width: 100%;
+  max-width: 22rem;
+  text-align: center;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 0.55rem 0.85rem;
+  box-shadow: var(--shadow);
+  font-weight: 800;
+  color: var(--blue-800);
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s, background 0.35s;
+}
+
+.jdbc-stack-step small {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.jdbc-stack-step.app { background: linear-gradient(165deg, #e8f2ff, #fff); border-color: #9cc4ff; }
+.jdbc-stack-step.api { background: linear-gradient(165deg, #fff6e4, #fff); border-color: #ffd48a; }
+.jdbc-stack-step.drv { background: linear-gradient(165deg, #e4fbff, #fff); border-color: #7de7ff; }
+.jdbc-stack-step.db { background: linear-gradient(165deg, #f0fdf4, #fff); border-color: #86efac; }
+
+.jdbc-stack-step.is-on {
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.16);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.jdbc-stack-arrow {
+  color: var(--orange);
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.jdbc-fan {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.jdbc-fan-head {
+  text-align: center;
+  background: linear-gradient(165deg, #e8f2ff, #fff);
+  border: 2px solid #9cc4ff;
+  border-radius: 14px;
+  padding: 0.7rem;
+  font-weight: 800;
+  color: var(--blue-800);
+  box-shadow: var(--shadow);
+}
+
+.jdbc-fan-mid {
+  text-align: center;
+  background: linear-gradient(165deg, #fff6e4, #fff);
+  border: 2px solid #ffd48a;
+  border-radius: 14px;
+  padding: 0.55rem;
+  font-weight: 800;
+  color: #9a5b00;
+}
+
+.jdbc-fan-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+
+.jdbc-fan-db {
+  text-align: center;
+  background: #fff;
+  border: 2px solid #86efac;
+  border-radius: 14px;
+  padding: 0.7rem 0.5rem;
+  box-shadow: var(--shadow);
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+
+.jdbc-fan-db.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.14);
+  transform: translateY(-3px);
+}
+
+.jdbc-fan-db h3 {
+  margin: 0 0 0.2rem;
+  font-size: 0.92rem;
+}
+
+.jdbc-fan-db p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.jdbc-flow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.jdbc-flow-node {
+  flex: 1;
+  min-width: 7.5rem;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.85rem 0.7rem;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+
+.jdbc-flow-node h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.jdbc-flow-node p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+.jdbc-flow-node.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.16);
+  transform: translateY(-3px);
+}
+
+.jdbc-flow-arrow {
+  align-self: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--blue-700);
+}
+
+.jdbc-next {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+}
+
+.jdbc-next span {
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.jdbc-next span.now {
+  background: #e8f2ff;
+  border-style: solid;
+  border-color: #9cc4ff;
+  color: var(--blue-800);
+}
+
+.bank-card.cycle-item.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.16);
+  transform: translateY(-3px);
+}
+
+@keyframes jdbcIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 900px) {
+  .jdbc-mem,
+  .jdbc-store,
+  .jdbc-scale,
+  .jdbc-db-grid,
+  .jdbc-fan-row {
+    grid-template-columns: 1fr;
+  }
+}

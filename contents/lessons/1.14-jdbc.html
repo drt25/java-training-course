@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.14 JDBC · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/jdbc.css">
+</head>
+<body
+  data-lesson="1.14"
+  data-title="JDBC"
+  data-module="Lesson 1 · Core Java"
+  data-topics="Why store data|Files vs database|Tables and keys|JDBC|Driver">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today · Part 1</p>
+        <h2 class="slide-title reveal">Data must survive after the program stops. JDBC is how Java reaches that data.</h2>
+        <p class="slide-lead reveal">No SQL yet. No statements. One idea at a time: storage, database, then the Java API that talks to it.</p>
+        <div class="outline-chips reveal">
+          <span>Why store data</span>
+          <span>Files vs database</span>
+          <span>Tables</span>
+          <span>Identifier</span>
+          <span>JDBC</span>
+          <span>Driver</span>
+          <span>Flow</span>
+        </div>
+        <p class="foot-note reveal">Path: Data → Storage → Files → Database → Tables → JDBC → Driver</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Student app</p>
+        <h2 class="slide-title reveal">A Student Management System has to remember people.</h2>
+        <p class="slide-lead reveal">Name, age, address, phone, course, email. While the program runs, Java can keep those in variables.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>String name = "Ram";
+int age = 20;
+String city = "Kathmandu";</pre>
+            <div class="out-box">Fine while the program is running</div>
+          </div>
+          <div class="bank-grid" style="grid-template-columns:1fr">
+            <article class="bank-card g1"><h3>In memory</h3><p>These values live in RAM. Fast. Easy. Temporary.</p></article>
+            <article class="bank-card g3"><h3>The problem</h3><p>Close the program and those variables disappear with it.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Memory</p>
+        <h2 class="slide-title reveal">RAM is emptied when the program stops.</h2>
+        <p class="slide-lead reveal">The student is still a real person. The program no longer has the data.</p>
+        <div class="jdbc-mem reveal" data-demo="ram-wipe">
+          <article class="jdbc-pane" data-ram-live>
+            <div class="jdbc-pane-bar">
+              <span>Java program</span>
+              <span class="jdbc-badge" data-ram-badge>Running</span>
+            </div>
+            <div class="jdbc-chips" data-ram-chips>
+              <span class="jdbc-chip">Ram</span>
+              <span class="jdbc-chip">20</span>
+              <span class="jdbc-chip">Kathmandu</span>
+            </div>
+            <p class="jdbc-status" data-ram-status>Student data is in memory.</p>
+          </article>
+          <article class="jdbc-pane lost" data-ram-gone>
+            <div class="jdbc-pane-bar">
+              <span>After close</span>
+              <span class="jdbc-badge warn">Cleared</span>
+            </div>
+            <div class="jdbc-chips">
+              <span class="jdbc-chip fade">Ram</span>
+              <span class="jdbc-chip fade">20</span>
+              <span class="jdbc-chip fade">Kathmandu</span>
+            </div>
+            <p class="jdbc-status lost">Memory cleared. Data lost.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Persistent data</p>
+        <h2 class="slide-title reveal">We need data that is still there tomorrow.</h2>
+        <p class="slide-lead reveal">Applications must store information outside RAM so it survives a restart.</p>
+        <div class="def-box reveal"><strong>Persistent data</strong> is data that remains available even after the application is closed.</div>
+        <div class="bank-grid" style="margin-top:1rem">
+          <article class="bank-card g1"><h3>Variables</h3><p>Live in memory. Gone when the program ends.</p></article>
+          <article class="bank-card g3"><h3>Storage</h3><p>Lives on disk. Still there when you open the app again.</p></article>
+          <article class="bank-card g2"><h3>Today</h3><p>How Java applications store and later reach that data.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Storage</p>
+        <h2 class="slide-title reveal">Files are one way. A database is another.</h2>
+        <p class="slide-lead reveal">You already wrote files in 1.7. A database is a different kind of persistent store — built to manage data.</p>
+        <div class="jdbc-store reveal" data-cycle="1100">
+          <article class="jdbc-store-card cycle-item">
+            <p class="mini">Temporary</p>
+            <h3>Memory</h3>
+            <p>Variables and objects in RAM. Fast. Lost on close.</p>
+          </article>
+          <article class="jdbc-store-card cycle-item">
+            <p class="mini">Persistent</p>
+            <h3>Files</h3>
+            <p>Text on disk. Fine for small, simple data.</p>
+            <div class="jdbc-formats">
+              <span>Text</span>
+              <span>CSV</span>
+              <span>JSON</span>
+              <span>XML</span>
+            </div>
+          </article>
+          <article class="jdbc-store-card cycle-item">
+            <p class="mini">Persistent</p>
+            <h3>Database</h3>
+            <p>An organized system for storing and managing data.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">We will not teach those file formats today. They are just examples of storage.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Files</p>
+        <h2 class="slide-title reveal">A small class list can live in a text file.</h2>
+        <p class="slide-lead reveal">For a few students, <code>students.txt</code> is completely fine.</p>
+        <div class="split-visual">
+          <div class="jdbc-file reveal">
+            <div class="jdbc-file-bar"><span>students.txt</span><span>plain text</span></div>
+            <pre>Ram,20,Kathmandu
+Sita,21,Pokhara
+Hari,22,Chitwan</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>This works</h3>
+            <p>Three rows. Easy to read. Easy to write with <code>FileWriter</code>.</p>
+            <p style="margin-top:0.55rem">The trouble starts when the data is no longer small.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Scale</p>
+        <h2 class="slide-title reveal">A university is not three lines of text.</h2>
+        <p class="slide-lead reveal">Ordinary files get harder to manage as the numbers grow.</p>
+        <div class="jdbc-scale reveal" data-cycle="1000">
+          <article class="cycle-item">
+            <h3>50,000</h3>
+            <p>students</p>
+          </article>
+          <article class="cycle-item">
+            <h3>2,000</h3>
+            <p>teachers</p>
+          </article>
+          <article class="cycle-item">
+            <h3>1,000</h3>
+            <p>courses</p>
+          </article>
+          <article class="cycle-item">
+            <h3>Millions</h3>
+            <p>of records</p>
+          </article>
+        </div>
+        <div class="def-box reveal" style="margin-top:1rem">Files are useful. For many larger applications, a database is a more structured way to manage persistent data.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">File limits</p>
+        <h2 class="slide-title reveal">Six reasons a file starts to struggle.</h2>
+        <p class="slide-lead reveal">None of this is advanced database theory. These are everyday problems at scale.</p>
+        <div class="bank-grid" data-cycle="1200">
+          <article class="bank-card g1 cycle-item"><h3>Organization</h3><p>Large amounts of data become hard to keep in order.</p></article>
+          <article class="bank-card g3 cycle-item"><h3>Searching</h3><p>Finding one student in a huge file gets slow and messy.</p></article>
+          <article class="bank-card g2 cycle-item"><h3>Updating</h3><p>Changing the same fact in several files is easy to get wrong.</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem" data-cycle="1200">
+          <article class="bank-card g4 cycle-item"><h3>Duplication</h3><p>The same name or address may be stored in several places.</p></article>
+          <article class="bank-card g1 cycle-item"><h3>Many users</h3><p>Several parts of an app may need the same data at once.</p></article>
+          <article class="bank-card g3 cycle-item"><h3>Management</h3><p>We need a structured way to store, find, change, and protect data.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Database</p>
+        <h2 class="slide-title reveal">A database is an organized collection of data.</h2>
+        <p class="slide-lead reveal">It is not just a bigger file. It is a system designed to store, access, and manage data.</p>
+        <div class="split-visual">
+          <div class="jdbc-db reveal">
+            <h3>Student Database</h3>
+            <div class="jdbc-db-grid" data-cycle="900">
+              <div class="jdbc-db-item cycle-item">Students</div>
+              <div class="jdbc-db-item cycle-item">Teachers</div>
+              <div class="jdbc-db-item cycle-item">Courses</div>
+              <div class="jdbc-db-item cycle-item">Attendance</div>
+              <div class="jdbc-db-item cycle-item">Results</div>
+              <div class="jdbc-db-item cycle-item">Fees</div>
+            </div>
+          </div>
+          <div>
+            <div class="def-box reveal">A <strong>database</strong> is an organized collection of data that allows data to be stored, accessed, and managed systematically.</div>
+            <p class="note reveal" style="margin-top:0.9rem">Later we will use MySQL. Today we only need the idea: related information, kept in one place, on purpose.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Table</p>
+        <h2 class="slide-title reveal">Related data sits in a table.</h2>
+        <p class="slide-lead reveal">A <strong>table</strong> organizes one kind of thing — here, students.</p>
+        <div class="jdbc-table-wrap reveal">
+          <table class="jdbc-table">
+            <thead>
+              <tr><th>ID</th><th>Name</th><th>Age</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>101</td><td>Ram</td><td>20</td></tr>
+              <tr><td>102</td><td>Sita</td><td>21</td></tr>
+              <tr><td>103</td><td>Hari</td><td>22</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="foot-note reveal">This is the Student table. A database can hold more than one table.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Row and column</p>
+        <h2 class="slide-title reveal">A row is one student. A column is one kind of fact.</h2>
+        <p class="slide-lead reveal">Watch the highlight. First one person. Then one attribute.</p>
+        <div class="split-visual">
+          <div class="jdbc-table-wrap reveal" data-demo="table">
+            <table class="jdbc-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th data-col="name">Name</th>
+                  <th>Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>101</td><td data-col="name">Ram</td><td>20</td></tr>
+                <tr><td>102</td><td data-col="name">Sita</td><td>21</td></tr>
+                <tr><td>103</td><td data-col="name">Hari</td><td>22</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <article class="bank-card g1"><h3>Row</h3><p>One student. <code>102 | Sita | 21</code></p></article>
+            <article class="bank-card g3" style="margin-top:0.75rem"><h3>Column</h3><p>One attribute across every student: ID, Name, or Age.</p></article>
+            <p class="jdbc-status reveal" data-table-status style="margin:0.85rem 0 0">A table holds related student data.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Many tables</p>
+        <h2 class="slide-title reveal">A database can hold several tables.</h2>
+        <p class="slide-lead reveal">Each table is one kind of related data. Together they make the university database.</p>
+        <div class="jdbc-db reveal">
+          <h3>University Database</h3>
+          <div class="jdbc-db-grid" data-cycle="1000" style="grid-template-columns:repeat(4, 1fr)">
+            <div class="jdbc-db-item cycle-item">Student</div>
+            <div class="jdbc-db-item cycle-item">Teacher</div>
+            <div class="jdbc-db-item cycle-item">Course</div>
+            <div class="jdbc-db-item cycle-item">Attendance</div>
+          </div>
+        </div>
+        <div class="def-box reveal" style="margin-top:1rem">Table → many rows. Each row is one person or one item. Each column is one field of information.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Identifier</p>
+        <h2 class="slide-title reveal">Names are not unique. An identifier is.</h2>
+        <p class="slide-lead reveal">Three students named Ram. Without an ID, the application cannot tell them apart.</p>
+        <div class="split-visual">
+          <div class="jdbc-table-wrap reveal" data-demo="ids">
+            <table class="jdbc-table">
+              <thead>
+                <tr>
+                  <th class="jdbc-id-col" data-id>ID</th>
+                  <th>Name</th>
+                  <th>Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="jdbc-id-col" data-id>101</td>
+                  <td>Ram</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td class="jdbc-id-col" data-id>102</td>
+                  <td>Ram</td>
+                  <td>21</td>
+                </tr>
+                <tr>
+                  <td class="jdbc-id-col" data-id>103</td>
+                  <td>Ram</td>
+                  <td>22</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="def-box reveal">An identifier allows us to uniquely distinguish one row from another.</div>
+            <p class="jdbc-status reveal" data-id-status style="margin:0.85rem 0 0">Three students named Ram. Names are not unique.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Primary key</p>
+        <h2 class="slide-title reveal">Student ID is the primary key of this table.</h2>
+        <p class="slide-lead reveal">That is the database name for the identifier that uniquely marks a row.</p>
+        <div class="split-visual">
+          <div class="jdbc-table-wrap reveal">
+            <table class="jdbc-table">
+              <thead>
+                <tr><th>ID</th><th>Name</th><th>Age</th></tr>
+              </thead>
+              <tbody>
+                <tr class="is-on"><td>101</td><td>Ram</td><td>20</td></tr>
+                <tr><td>102</td><td>Sita</td><td>21</td></tr>
+                <tr><td>103</td><td>Hari</td><td>22</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="def-box reveal">A <strong>primary key</strong> is a column used to uniquely identify a row in a table.</div>
+            <article class="bank-card g3" style="margin-top:0.85rem"><h3>For now</h3><p>Student ID → primary key. One simple column is enough.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Java + database</p>
+        <h2 class="slide-title reveal">The Java app still has to talk to that database.</h2>
+        <p class="slide-lead reveal">Storage is no longer in a variable. Java must reach the database, ask for data, and use what comes back.</p>
+        <div class="jdbc-stack reveal" data-cycle="1100">
+          <div class="jdbc-stack-step app cycle-item">Student Management System<small>the Java application</small></div>
+          <div class="jdbc-stack-arrow">↓</div>
+          <div class="jdbc-stack-step api cycle-item">Java<small>needs a way to communicate</small></div>
+          <div class="jdbc-stack-arrow">↓</div>
+          <div class="jdbc-stack-step db cycle-item">Database<small>stores the student data</small></div>
+        </div>
+        <div class="bank-grid" style="margin-top:1rem">
+          <article class="bank-card g1"><h3>Connect</h3><p>Reach the database.</p></article>
+          <article class="bank-card g3"><h3>Request</h3><p>Ask for or send data.</p></article>
+          <article class="bank-card g2"><h3>Receive</h3><p>Work with what is stored.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">JDBC</p>
+        <h2 class="slide-title reveal">JDBC is the standard Java API for databases.</h2>
+        <p class="slide-lead reveal"><strong>JDBC</strong> stands for Java Database Connectivity.</p>
+        <div class="def-box reveal">JDBC provides a standard way for Java applications to communicate with databases.</div>
+        <div class="jdbc-flow reveal" data-cycle="1000" style="margin-top:1.1rem">
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">1</p>
+            <h3>Java app</h3>
+            <p>Your program</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">2</p>
+            <h3>JDBC</h3>
+            <p>Standard Java API</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">3</p>
+            <h3>Driver</h3>
+            <p>Talks to one database</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">4</p>
+            <h3>Database</h3>
+            <p>Stores the data</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Architecture</p>
+        <h2 class="slide-title reveal">Java never talks to the database by itself.</h2>
+        <p class="slide-lead reveal">The call goes through JDBC, then a driver, then the database.</p>
+        <div class="jdbc-stack reveal" data-demo="stack">
+          <div class="jdbc-stack-step app" data-stack-step>Java Application</div>
+          <div class="jdbc-stack-arrow">↓</div>
+          <div class="jdbc-stack-step api" data-stack-step>JDBC<small>Java API</small></div>
+          <div class="jdbc-stack-arrow">↓</div>
+          <div class="jdbc-stack-step drv" data-stack-step>JDBC Driver</div>
+          <div class="jdbc-stack-arrow">↓</div>
+          <div class="jdbc-stack-step db" data-stack-step>Database</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why JDBC</p>
+        <h2 class="slide-title reveal">One Java API. A different driver for each database.</h2>
+        <p class="slide-lead reveal">You learn JDBC once. You do not learn a new Java API for every database product.</p>
+        <div class="jdbc-fan reveal" data-demo="fan">
+          <div class="jdbc-fan-head">Java application</div>
+          <div class="jdbc-fan-mid">JDBC — the common interface</div>
+          <div class="jdbc-fan-row">
+            <article class="jdbc-fan-db" data-fan>
+              <h3>Driver</h3>
+              <p>Database A</p>
+            </article>
+            <article class="jdbc-fan-db" data-fan>
+              <h3>Driver</h3>
+              <p>Database B</p>
+            </article>
+            <article class="jdbc-fan-db" data-fan>
+              <h3>Driver</h3>
+              <p>Database C</p>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal">That is why JDBC is useful: a standard Java interface, not a different Java API per database.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Driver</p>
+        <h2 class="slide-title reveal">A JDBC driver is the piece that knows one database.</h2>
+        <p class="slide-lead reveal">JDBC is the common API. The driver connects that API to a particular database.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1"><h3>JDBC</h3><p>Standard Java API for database communication.</p></article>
+          <article class="bank-card g3"><h3>JDBC Driver</h3><p>Connects JDBC with a specific database.</p></article>
+          <article class="bank-card g2"><h3>Database</h3><p>Stores and manages the data.</p></article>
+        </div>
+        <div class="def-box reveal" style="margin-top:1rem">A <strong>JDBC Driver</strong> is a software component that enables JDBC to communicate with a particular database.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Connect info</p>
+        <h2 class="slide-title reveal">Java needs to know which database, and who is connecting.</h2>
+        <p class="slide-lead reveal">No URL syntax today. Just the information a connection usually needs.</p>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>Location</h3><p>Where the database lives.</p></article>
+          <article class="bank-card g3"><h3>Database name</h3><p>Which database to open.</p></article>
+          <article class="bank-card g2"><h3>Username</h3><p>Who is trying to connect.</p></article>
+          <article class="bank-card g4"><h3>Password</h3><p>Proof that this user is allowed.</p></article>
+        </div>
+        <div class="def-box reveal" style="margin-top:1rem">Conceptually: database URL, username, password. Next time we will write the actual connection.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Flow</p>
+        <h2 class="slide-title reveal">Today we stop at the database door.</h2>
+        <p class="slide-lead reveal">Next we learn what Java does after it can reach the database.</p>
+        <div class="jdbc-flow reveal" data-cycle="1100">
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">App</p>
+            <h3>Java</h3>
+            <p>Your program</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">API</p>
+            <h3>JDBC</h3>
+            <p>Standard interface</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">Bridge</p>
+            <h3>Driver</h3>
+            <p>One database</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node cycle-item">
+            <p class="mini">Store</p>
+            <h3>Database</h3>
+            <p>The data</p>
+          </div>
+        </div>
+        <div class="jdbc-next reveal">
+          <span class="now">This lecture</span>
+          <span>Connection</span>
+          <span>Statement</span>
+          <span>SQL</span>
+          <span>Result</span>
+        </div>
+        <p class="foot-note reveal">We will not teach those last four today.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">You should be able to say these in one sentence.</h2>
+        <div class="split-visual">
+          <table class="info-table">
+            <thead><tr><th>Idea</th><th>Main idea</th></tr></thead>
+            <tbody>
+              <tr><td>Persistent data</td><td>Still there after the program closes</td></tr>
+              <tr><td>Files</td><td>Fine for small apps. Hard at university scale</td></tr>
+              <tr><td>Database</td><td>An organized collection of data</td></tr>
+              <tr><td>Table</td><td>Related data in rows and columns</td></tr>
+            </tbody>
+          </table>
+          <table class="info-table">
+            <thead><tr><th>Idea</th><th>Main idea</th></tr></thead>
+            <tbody>
+              <tr><td>Primary key</td><td>Uniquely identifies a row</td></tr>
+              <tr><td>JDBC</td><td>Standard Java API for databases</td></tr>
+              <tr><td>Driver</td><td>Connects JDBC to one database</td></tr>
+              <tr><td>Connect info</td><td>Where, which database, who</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Not today: SQL, <code>SELECT</code>, <code>Statement</code>, <code>ResultSet</code>, joins, foreign keys. Next: what Java does after it can reach the database.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/jdbc-demo.js"></script>
+</body>
+</html>
