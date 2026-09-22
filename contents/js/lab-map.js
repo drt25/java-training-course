@@ -164,4 +164,19 @@ window.LABS = [
       "CompareDates.java",
     ],
   },
+  {
+    id: "1.14",
+    title: "JDBC",
+    folder: "1.14",
+    slides: "lessons/1.14-jdbc.html",
+    files: [
+      "ConnectDemo.java",
+      "CreateDatabase.java",
+      "CreateStudentTable.java",
+      "InsertStudent.java",
+      "ViewStudents.java",
+      "UpdateStudent.java",
+      "DeleteStudent.java",
+    ],
+  },
 ];

@@ -488,6 +488,98 @@
   color: var(--blue-800);
 }
 
+.jdbc-tree {
+  background: #10203d;
+  color: #d7e7ff;
+  border-radius: var(--radius);
+  padding: 1rem 1.15rem 1.15rem;
+  box-shadow: var(--shadow);
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.jdbc-tree-root {
+  font-weight: 800;
+  color: #7de7ff;
+  margin-bottom: 0.45rem;
+}
+
+.jdbc-tree-item {
+  padding: 0.28rem 0.55rem;
+  margin-left: 0.85rem;
+  border-radius: 8px;
+  transition: background 0.35s, color 0.35s, box-shadow 0.35s;
+}
+
+.jdbc-tree-item.folder {
+  color: #ffd48a;
+  font-weight: 700;
+}
+
+.jdbc-tree-jar {
+  margin: 0.25rem 0 0.35rem 1.6rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 10px;
+  background: rgba(245, 166, 35, 0.16);
+  border: 1px solid transparent;
+  color: #f5a623;
+  font-weight: 800;
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s, background 0.35s;
+}
+
+.jdbc-tree-jar.is-on {
+  border-color: #f5a623;
+  background: rgba(245, 166, 35, 0.28);
+  box-shadow: 0 8px 22px rgba(245, 166, 35, 0.22);
+  transform: translateX(4px);
+}
+
+.jdbc-url {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: stretch;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.jdbc-url span {
+  padding: 0.55rem 0.7rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 2px solid var(--line);
+  box-shadow: var(--shadow);
+  color: var(--blue-800);
+  transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+}
+
+.jdbc-url span.is-on,
+.jdbc-url span.cycle-item.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 8px 22px rgba(0, 86, 179, 0.16);
+  transform: translateY(-2px);
+}
+
+.jdbc-url .sep {
+  align-self: center;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  color: var(--muted);
+}
+
+.jdbc-sql-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 .bank-card.cycle-item.is-on {
   border-color: var(--blue-600);
   box-shadow: 0 10px 28px rgba(0, 86, 179, 0.16);

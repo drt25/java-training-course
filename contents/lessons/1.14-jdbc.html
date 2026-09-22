@@ -15,7 +15,7 @@
   data-lesson="1.14"
   data-title="JDBC"
   data-module="Lesson 1 · Core Java"
-  data-topics="Why store data|Files vs database|Tables and keys|JDBC|Driver">
+  data-topics="Why store data|Files vs database|Tables and keys|JDBC|Driver|Connection|Student CRUD">
   <main id="lesson-slides">
 
     <section class="slide">
@@ -489,15 +489,15 @@ Hari,22,Chitwan</pre>
           <article class="bank-card g2"><h3>Username</h3><p>Who is trying to connect.</p></article>
           <article class="bank-card g4"><h3>Password</h3><p>Proof that this user is allowed.</p></article>
         </div>
-        <div class="def-box reveal" style="margin-top:1rem">Conceptually: database URL, username, password. Next time we will write the actual connection.</div>
+        <div class="def-box reveal" style="margin-top:1rem">Conceptually: database URL, username, password. Part 2 writes the actual connection.</div>
       </div>
     </section>
 
     <section class="slide">
       <div class="slide-inner">
         <p class="kicker reveal">Flow</p>
-        <h2 class="slide-title reveal">Today we stop at the database door.</h2>
-        <p class="slide-lead reveal">Next we learn what Java does after it can reach the database.</p>
+        <h2 class="slide-title reveal">Part 1 stops at the database door.</h2>
+        <p class="slide-lead reveal">Part 2 writes the connection, then SQL.</p>
         <div class="jdbc-flow reveal" data-cycle="1100">
           <div class="jdbc-flow-node cycle-item">
             <p class="mini">App</p>
@@ -524,13 +524,13 @@ Hari,22,Chitwan</pre>
           </div>
         </div>
         <div class="jdbc-next reveal">
-          <span class="now">This lecture</span>
+          <span class="now">Part 1</span>
           <span>Connection</span>
           <span>Statement</span>
           <span>SQL</span>
           <span>Result</span>
         </div>
-        <p class="foot-note reveal">We will not teach those last four today.</p>
+        <p class="foot-note reveal">Those four are Part 2.</p>
       </div>
     </section>
 
@@ -558,7 +558,461 @@ Hari,22,Chitwan</pre>
             </tbody>
           </table>
         </div>
-        <p class="note reveal" style="margin-top:1rem">Not today: SQL, <code>SELECT</code>, <code>Statement</code>, <code>ResultSet</code>, joins, foreign keys. Next: what Java does after it can reach the database.</p>
+        <p class="note reveal" style="margin-top:1rem">Part 2 next: driver JAR, connection code, and Student CRUD. Still no joins or foreign keys.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today · Part 2</p>
+        <h2 class="slide-title reveal">Connect. Then run SQL on one student table.</h2>
+        <p class="slide-lead reveal">Put the driver JAR in the project. Open a connection. Create <code>college</code>, then insert, view, update, and delete rows.</p>
+        <div class="outline-chips reveal">
+          <span>Driver JAR</span>
+          <span>Classpath</span>
+          <span>Connect</span>
+          <span>Statement</span>
+          <span>Student table</span>
+          <span>CRUD</span>
+        </div>
+        <p class="foot-note reveal">Path: Driver → Classpath → Connect → Statement → SQL → Close</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Driver JAR</p>
+        <h2 class="slide-title reveal">The driver is a <code>.jar</code> file. Java must be able to find it.</h2>
+        <p class="slide-lead reveal">For MySQL we use <strong>MySQL Connector/J</strong>. Oracle uses a different JAR. Same JDBC API. Different file.</p>
+        <div class="bank-grid">
+          <article class="bank-card g1"><h3>MySQL</h3><p><code>mysql-connector-j.jar</code> — the file we use in class.</p></article>
+          <article class="bank-card g3"><h3>Oracle</h3><p>A different <code>.jar</code>. Not today’s lab.</p></article>
+          <article class="bank-card g2"><h3>JDBC</h3><p>The Java code stays the same idea. Only the driver file changes.</p></article>
+        </div>
+        <div class="def-box reveal" style="margin-top:1rem">Download Connector/J. Keep the <code>.jar</code> in the project. Then add it to the classpath.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Location</p>
+        <h2 class="slide-title reveal">Keep the driver here: <code>coding/1.14/lib/</code></h2>
+        <p class="slide-lead reveal">That folder is the home of the JAR. Do not leave it on the Desktop with no classpath.</p>
+        <div class="split-visual">
+          <div class="jdbc-tree reveal" data-demo="lib">
+            <div class="jdbc-tree-root">coding/1.14/</div>
+            <div class="jdbc-tree-item folder">lib/</div>
+            <div class="jdbc-tree-jar" data-lib-jar>mysql-connector-j.jar</div>
+            <div class="jdbc-tree-item">ConnectDemo.java</div>
+            <div class="jdbc-tree-item">CreateDatabase.java</div>
+            <div class="jdbc-tree-item">CreateStudentTable.java</div>
+            <div class="jdbc-tree-item">InsertStudent.java</div>
+          </div>
+          <div>
+            <article class="bank-card g1"><h3>1. Download</h3><p>Get MySQL Connector/J. The file ends with <code>.jar</code>.</p></article>
+            <article class="bank-card g3" style="margin-top:0.75rem"><h3>2. Copy</h3><p>Put it in <code>coding/1.14/lib/</code>.</p></article>
+            <article class="bank-card g2" style="margin-top:0.75rem"><h3>3. Classpath</h3><p>Tell Java to look in <code>lib/</code>. Next slide.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Classpath</p>
+        <h2 class="slide-title reveal">The JAR on disk is not enough. Java must load it.</h2>
+        <p class="slide-lead reveal">Classpath is the list of places Java searches for extra libraries.</p>
+        <div class="split-visual">
+          <div>
+            <p class="jdbc-sql-label">Eclipse</p>
+            <div class="steps">
+              <div class="setup-step"><span class="step-n">1</span> Right-click the project → Properties</div>
+              <div class="setup-step"><span class="step-n">2</span> Java Build Path → Libraries</div>
+              <div class="setup-step"><span class="step-n">3</span> Add JARs… → choose <code>lib/mysql-connector-j.jar</code></div>
+            </div>
+          </div>
+          <div>
+            <p class="jdbc-sql-label">Terminal · macOS / Linux</p>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>javac -cp ".:lib/mysql-connector-j.jar" ConnectDemo.java
+
+java -cp ".:lib/mysql-connector-j.jar" ConnectDemo</pre>
+            </div>
+            <p class="foot-note reveal">On Windows use <code>;</code> instead of <code>:</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Steps</p>
+        <h2 class="slide-title reveal">Five steps every JDBC program follows.</h2>
+        <p class="slide-lead reveal">Load the driver. Connect. Create a statement. Run SQL. Close.</p>
+        <div class="jdbc-flow reveal" data-demo="stack">
+          <div class="jdbc-flow-node" data-stack-step>
+            <p class="mini">1</p>
+            <h3>Load</h3>
+            <p><code>Class.forName</code></p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node" data-stack-step>
+            <p class="mini">2</p>
+            <h3>Connect</h3>
+            <p><code>getConnection</code></p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node" data-stack-step>
+            <p class="mini">3</p>
+            <h3>Statement</h3>
+            <p>Send SQL</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node" data-stack-step>
+            <p class="mini">4</p>
+            <h3>SQL</h3>
+            <p>Create / CRUD</p>
+          </div>
+          <div class="jdbc-flow-arrow">→</div>
+          <div class="jdbc-flow-node" data-stack-step>
+            <p class="mini">5</p>
+            <h3>Close</h3>
+            <p><code>con.close()</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Connect</p>
+        <h2 class="slide-title reveal">This is the connection.</h2>
+        <p class="slide-lead reveal">Use <strong>your</strong> MySQL password. Catch errors. Close when you finish.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Class.forName("com.mysql.cj.jdbc.Driver");
+
+Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/",
+        "root",
+        "password");
+
+System.out.println("Connected.");
+con.close();</pre>
+          </div>
+          <div>
+            <div class="def-box reveal"><code>Class.forName</code> loads the MySQL driver class. Modern JDBC can auto-load it. We still write it so you see the class name.</div>
+            <p class="foot-note reveal" style="margin-top:0.85rem">Lab: <code>ConnectDemo.java</code> — first connect to the server, not yet to <code>college</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">URL</p>
+        <h2 class="slide-title reveal">The URL tells Java which MySQL to open.</h2>
+        <p class="slide-lead reveal"><code>jdbc:mysql://localhost:3306/college</code> is not a website. It is a database address.</p>
+        <div class="jdbc-url reveal" data-cycle="900">
+          <span class="cycle-item">jdbc:mysql://</span>
+          <span class="sep">+</span>
+          <span class="cycle-item">localhost</span>
+          <span class="sep">:</span>
+          <span class="cycle-item">3306</span>
+          <span class="sep">/</span>
+          <span class="cycle-item">college</span>
+        </div>
+        <div class="bank-grid four" style="margin-top:1rem">
+          <article class="bank-card g1"><h3>Protocol</h3><p><code>jdbc:mysql://</code> — we are using JDBC with MySQL.</p></article>
+          <article class="bank-card g3"><h3>Host</h3><p><code>localhost</code> — this computer.</p></article>
+          <article class="bank-card g2"><h3>Port</h3><p><code>3306</code> — MySQL’s usual port.</p></article>
+          <article class="bank-card g4"><h3>Database</h3><p><code>college</code> — omit this when you create the database.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Statement</p>
+        <h2 class="slide-title reveal">A Statement is the object that sends SQL.</h2>
+        <p class="slide-lead reveal">After you have a connection, you ask it for a statement. Then you run a SQL string.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>Statement stmt = con.createStatement();
+
+stmt.executeUpdate("...");
+stmt.executeQuery("...");</pre>
+          </div>
+          <article class="bank-card g1">
+            <h3>Remember</h3>
+            <p>Connection → Statement → SQL. We use <code>Statement</code> today. Not <code>PreparedStatement</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Two methods</p>
+        <h2 class="slide-title reveal">Change data with executeUpdate. Read data with executeQuery.</h2>
+        <p class="slide-lead reveal">Pick the method from the kind of SQL. Mixing them up is a common first error.</p>
+        <div class="compare">
+          <article class="bank-card g1">
+            <h3>executeUpdate</h3>
+            <p><code>CREATE</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code></p>
+            <p style="margin-top:0.5rem">Returns how many rows changed. No result table.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>executeQuery</h3>
+            <p><code>SELECT</code> — view rows</p>
+            <p style="margin-top:0.5rem">Returns a <code>ResultSet</code>. Walk it with <code>next()</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">CREATE DATABASE</p>
+        <h2 class="slide-title reveal">Create the database first. The URL has no database name yet.</h2>
+        <p class="slide-lead reveal">Connect to the MySQL server. Then run <code>CREATE DATABASE college</code>.</p>
+        <div class="split-visual">
+          <div>
+            <p class="jdbc-sql-label">SQL</p>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>CREATE DATABASE college;</pre>
+            </div>
+            <p class="jdbc-sql-label" style="margin-top:0.85rem">Java URL</p>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>"jdbc:mysql://localhost:3306/"</pre>
+            </div>
+          </div>
+          <div>
+            <div class="code-window reveal">
+              <div class="code-bar"><i></i><i></i><i></i></div>
+              <pre>stmt.executeUpdate(
+        "CREATE DATABASE college");</pre>
+            </div>
+            <p class="foot-note reveal" style="margin-top:0.85rem">Lab: <code>CreateDatabase.java</code>. After this, later programs use <code>.../college</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">CREATE TABLE</p>
+        <h2 class="slide-title reveal">One table. Four columns. id is the primary key.</h2>
+        <p class="slide-lead reveal">Now the URL includes <code>college</code>. The table name is <code>student</code>.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>CREATE TABLE student (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    address VARCHAR(100),
+    roll_no INT
+);</pre>
+          </div>
+          <div>
+            <div class="jdbc-table-wrap reveal">
+              <table class="jdbc-table">
+                <thead>
+                  <tr><th>id</th><th>name</th><th>address</th><th>roll_no</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="foot-note reveal" style="margin-top:0.85rem">Empty until we insert. Lab: <code>CreateStudentTable.java</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">INSERT</p>
+        <h2 class="slide-title reveal">Put two students into the table.</h2>
+        <p class="slide-lead reveal"><code>INSERT</code> adds a row. We need this before view, update, or delete have anything to work with.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>stmt.executeUpdate(
+    "INSERT INTO student VALUES (1, 'Ram', 'Kathmandu', 101)");
+
+stmt.executeUpdate(
+    "INSERT INTO student VALUES (2, 'Sita', 'Pokhara', 102)");</pre>
+          </div>
+          <div class="jdbc-table-wrap reveal">
+            <table class="jdbc-table">
+              <thead>
+                <tr><th>id</th><th>name</th><th>address</th><th>roll_no</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Ram</td><td>Kathmandu</td><td>101</td></tr>
+                <tr><td>2</td><td>Sita</td><td>Pokhara</td><td>102</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>InsertStudent.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">SELECT</p>
+        <h2 class="slide-title reveal">View rows with executeQuery and ResultSet.</h2>
+        <p class="slide-lead reveal"><code>rs.next()</code> moves to the next row. Then read each column by name.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>ResultSet rs = stmt.executeQuery(
+        "SELECT * FROM student");
+
+while (rs.next()) {
+    System.out.println(
+            rs.getInt("id") + " "
+            + rs.getString("name") + " "
+            + rs.getString("address") + " "
+            + rs.getInt("roll_no"));
+}</pre>
+          </div>
+          <article class="bank-card g3">
+            <h3>Remember</h3>
+            <p><code>getInt</code> for numbers. <code>getString</code> for text. Column names match the table.</p>
+            <p class="foot-note">Lab: <code>ViewStudents.java</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">UPDATE</p>
+        <h2 class="slide-title reveal">Change Ram’s address. Leave the other rows alone.</h2>
+        <p class="slide-lead reveal"><code>WHERE id = 1</code> picks the row. Without <code>WHERE</code>, every row would change.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>stmt.executeUpdate(
+    "UPDATE student SET address = 'Lalitpur' WHERE id = 1");</pre>
+            <div class="out-box">1 row updated</div>
+          </div>
+          <div class="jdbc-table-wrap reveal">
+            <table class="jdbc-table">
+              <thead>
+                <tr><th>id</th><th>name</th><th>address</th><th>roll_no</th></tr>
+              </thead>
+              <tbody>
+                <tr class="is-on"><td>1</td><td>Ram</td><td>Lalitpur</td><td>101</td></tr>
+                <tr><td>2</td><td>Sita</td><td>Pokhara</td><td>102</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>UpdateStudent.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">DELETE</p>
+        <h2 class="slide-title reveal">Remove one student. Use WHERE.</h2>
+        <p class="slide-lead reveal"><code>DELETE FROM student WHERE id = 2</code> removes Sita. The Ram row stays.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>stmt.executeUpdate(
+    "DELETE FROM student WHERE id = 2");</pre>
+            <div class="out-box">1 row deleted</div>
+          </div>
+          <div class="jdbc-table-wrap reveal">
+            <table class="jdbc-table">
+              <thead>
+                <tr><th>id</th><th>name</th><th>address</th><th>roll_no</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Ram</td><td>Lalitpur</td><td>101</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="foot-note reveal">Lab: <code>DeleteStudent.java</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Close</p>
+        <h2 class="slide-title reveal">Close the connection when the work is done.</h2>
+        <p class="slide-lead reveal">Same idea as closing a file. The database connection is a resource.</p>
+        <div class="split-visual">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i></div>
+            <pre>con.close();</pre>
+          </div>
+          <article class="bank-card g2">
+            <h3>Remember</h3>
+            <p>Open → work → close. Catch <code>SQLException</code> the way File IO caught <code>IOException</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">You should be able to say these in one sentence.</h2>
+        <div class="split-visual">
+          <table class="info-table">
+            <thead><tr><th>Idea</th><th>Main idea</th></tr></thead>
+            <tbody>
+              <tr><td>Driver JAR</td><td>Keep it in <code>coding/1.14/lib/</code></td></tr>
+              <tr><td>Classpath</td><td>Java must be told to load that JAR</td></tr>
+              <tr><td><code>Class.forName</code></td><td>Loads <code>com.mysql.cj.jdbc.Driver</code></td></tr>
+              <tr><td><code>getConnection</code></td><td>URL, username, password</td></tr>
+              <tr><td><code>Statement</code></td><td>Sends the SQL string</td></tr>
+            </tbody>
+          </table>
+          <table class="info-table">
+            <thead><tr><th>SQL</th><th>JDBC</th></tr></thead>
+            <tbody>
+              <tr><td><code>CREATE</code> / <code>INSERT</code> / <code>UPDATE</code> / <code>DELETE</code></td><td><code>executeUpdate</code></td></tr>
+              <tr><td><code>SELECT</code></td><td><code>executeQuery</code> + <code>ResultSet</code></td></tr>
+              <tr><td>Student table</td><td>id, name, address, roll_no</td></tr>
+              <tr><td><code>WHERE</code></td><td>Pick one row to change or delete</td></tr>
+              <tr><td><code>con.close()</code></td><td>Free the connection</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab</p>
+        <h2 class="slide-title reveal">Type these files in coding/1.14/</h2>
+        <p class="slide-lead reveal">Put <code>mysql-connector-j.jar</code> in <code>lib/</code> first. MySQL must be running. Use your password.</p>
+        <div class="bank-grid four">
+          <article class="bank-card g1"><h3>ConnectDemo</h3><p>Connect to the server. Print Connected.</p></article>
+          <article class="bank-card g2"><h3>CreateDatabase</h3><p><code>CREATE DATABASE college</code></p></article>
+          <article class="bank-card g3"><h3>CreateStudentTable</h3><p>id, name, address, roll_no</p></article>
+          <article class="bank-card g4"><h3>InsertStudent</h3><p>Ram and Sita</p></article>
+        </div>
+        <div class="bank-grid" style="margin-top:0.85rem">
+          <article class="bank-card g1"><h3>ViewStudents</h3><p><code>SELECT *</code> and print each row.</p></article>
+          <article class="bank-card g2"><h3>UpdateStudent</h3><p>Ram’s address → Lalitpur</p></article>
+          <article class="bank-card g3"><h3>DeleteStudent</h3><p>Delete id 2</p></article>
+        </div>
+        <p class="note reveal" style="margin-top:1rem">Run in that order. Create the database before you connect to <code>college</code>. Next lesson: 1.15 Final Project.</p>
       </div>
     </section>
 

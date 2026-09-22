@@ -144,6 +144,21 @@
     play();
   }
 
+  function startLib(slide) {
+    const jar = slide.querySelector("[data-lib-jar]");
+    if (!jar) return;
+
+    function play() {
+      if (!simActive) return;
+      jar.classList.remove("is-on");
+      later(() => jar.classList.add("is-on"), 400);
+      later(() => jar.classList.remove("is-on"), 1800);
+      later(play, 2800);
+    }
+
+    play();
+  }
+
   function startFan(slide) {
     const dbs = Array.from(slide.querySelectorAll("[data-fan]"));
     if (!dbs.length) return;
@@ -174,6 +189,7 @@
     if (slide.querySelector('[data-demo="ids"]')) startIds(slide);
     if (slide.querySelector('[data-demo="stack"]')) startStack(slide);
     if (slide.querySelector('[data-demo="fan"]')) startFan(slide);
+    if (slide.querySelector('[data-demo="lib"]')) startLib(slide);
   }
 
   document.querySelectorAll("#lesson-slides > .slide").forEach((slide) => {
