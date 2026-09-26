@@ -195,7 +195,13 @@ window.COURSE = {
       id: "2",
       title: "Lesson 2: Advanced Java Training (Web Applications)",
       lessons: [
-        { id: "2.1", title: "Introduction", topics: ["J2EE/JEE", "HTTP", "Tomcat"] },
+        {
+          id: "2.1",
+          title: "How a Web Application Works",
+          href: "lessons/2.1-how-a-web-app-works.html",
+          ready: true,
+          topics: ["Frontend", "Backend", "Database", "HTTP", "Server"],
+        },
         { id: "2.2", title: "JSP Servlets", topics: ["Servlet lifecycle", "JSP", "JSTL", "Bootstrap project"] },
         { id: "2.3", title: "Maven", topics: ["POM", "Lifecycle", "Repositories"] },
         { id: "2.4", title: "Hibernate Framework", topics: ["ORM", "Session", "Criteria", "hbm2ddl"] },

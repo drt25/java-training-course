@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.1 How a Web Application Works · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/webapp.css">
+</head>
+<body
+  data-lesson="2.1"
+  data-title="How a Web Application Works"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="Frontend|Backend|Database|HTTP|Server">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today's question</p>
+        <h2 class="slide-title reveal">What happens when you type hatesglobal.com and press Enter?</h2>
+        <div class="wa-chrome reveal" data-demo="url">
+          <div class="wa-chrome-bar"><i></i><i></i><i></i><span>Chrome</span></div>
+          <div class="wa-omnibox">
+            <span class="wa-typed" data-typed>hatesglobal.com</span>
+          </div>
+        </div>
+        <p class="wa-pause reveal">Pause. Let students guess. Do not answer yet.</p>
+        <p class="foot-note reveal">After the guesses: “Let's follow the request step by step.”</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Three parts</p>
+        <h2 class="slide-title reveal">A web application has three main parts.</h2>
+        <div class="wa-stack" data-demo="parts">
+          <article class="wa-box fe" data-part>
+            <p class="mini">What the user sees</p>
+            <h3>Frontend</h3>
+          </article>
+          <div class="wa-down" aria-hidden="true"></div>
+          <article class="wa-box be" data-part>
+            <p class="mini">Logic and processing</p>
+            <h3>Backend</h3>
+          </article>
+          <div class="wa-down" aria-hidden="true"></div>
+          <article class="wa-box db" data-part>
+            <p class="mini">Stores data</p>
+            <h3>Database</h3>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Frontend</p>
+        <h2 class="slide-title reveal">Everything the user sees and interacts with.</h2>
+        <p class="slide-lead reveal">Buttons, forms, pictures, menus, and the job list on the page.</p>
+        <div class="wa-two">
+          <div class="wa-cycle" data-cycle="1100">
+            <article class="wa-chip cycle-item"><h3>Buttons</h3><p>Login, Search, Apply</p></article>
+            <article class="wa-chip cycle-item"><h3>Forms</h3><p>Email and password</p></article>
+            <article class="wa-chip cycle-item"><h3>Images</h3><p>Logo and photos</p></article>
+            <article class="wa-chip cycle-item"><h3>Job listings</h3><p>Waiter, Cook, Housekeeping</p></article>
+            <article class="wa-chip cycle-item"><h3>Menus</h3><p>Home, Jobs, Contact</p></article>
+          </div>
+          <div>
+            <p class="mini">Technologies</p>
+            <div class="outline-chips">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>Bootstrap</span>
+            </div>
+            <p class="foot-note">Names only today. We are not building the page yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Backend</p>
+        <h2 class="slide-title reveal">The part working behind the screen.</h2>
+        <p class="slide-lead reveal">The user does not see this part. It follows the rules of the application.</p>
+        <div class="wa-two">
+          <div class="wa-cycle" data-cycle="1200">
+            <article class="wa-chip cycle-item"><h3>Login</h3><p>Check email and password</p></article>
+            <article class="wa-chip cycle-item"><h3>Registration</h3><p>Create a new user</p></article>
+            <article class="wa-chip cycle-item"><h3>Job search</h3><p>Find available jobs</p></article>
+            <article class="wa-chip cycle-item"><h3>Applications</h3><p>Save who applied</p></article>
+            <article class="wa-chip cycle-item"><h3>Business rules</h3><p>What is allowed</p></article>
+          </div>
+          <div class="wa-tech-col">
+            <article class="bank-card g1">
+              <p class="mini">This course</p>
+              <h3>Java · Servlet · JSP</h3>
+              <p>We will build the backend with these.</p>
+            </article>
+            <article class="bank-card g3">
+              <p class="mini">Later</p>
+              <h3>Spring Boot</h3>
+              <p>A later way to build the same backend.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Database</p>
+        <h2 class="slide-title reveal">Where the application's data is stored.</h2>
+        <p class="slide-lead reveal">The jobs are still there tomorrow. The database keeps them.</p>
+        <div class="wa-cycle wa-five" data-cycle="1000">
+          <article class="wa-chip cycle-item"><h3>Users</h3><p>People with accounts</p></article>
+          <article class="wa-chip cycle-item"><h3>Jobs</h3><p>Open positions</p></article>
+          <article class="wa-chip cycle-item"><h3>Companies</h3><p>Who is hiring</p></article>
+          <article class="wa-chip cycle-item"><h3>Applications</h3><p>Who applied</p></article>
+          <article class="wa-chip cycle-item"><h3>Skills</h3><p>What a job needs</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">HATES Global</p>
+        <h2 class="slide-title reveal">A user wants to see the available jobs.</h2>
+        <p class="slide-lead reveal">They open hatesglobal.com. Let's follow that one request.</p>
+        <div class="wa-strip" data-demo="preview">
+          <article class="wa-pill" data-hop="0">User</article>
+          <span class="wa-arrow" aria-hidden="true"></span>
+          <article class="wa-pill" data-hop="1">Browser</article>
+          <span class="wa-arrow" aria-hidden="true"></span>
+          <article class="wa-pill" data-hop="2">Frontend</article>
+          <span class="wa-arrow" aria-hidden="true"></span>
+          <article class="wa-pill" data-hop="3">Backend</article>
+          <span class="wa-arrow" aria-hidden="true"></span>
+          <article class="wa-pill" data-hop="4">Database</article>
+        </div>
+        <p class="wa-caption reveal" data-caption>User → Browser → Frontend → Backend → Database</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Step 1 · Find the server</p>
+        <h2 class="slide-title reveal">DNS is like the phone contacts of the internet.</h2>
+        <div class="wa-dns" data-demo="dns">
+          <article class="wa-analogy" data-phone>
+            <p class="mini">You remember</p>
+            <h3 data-phone-name>Mom</h3>
+            <div class="wa-down" aria-hidden="true"></div>
+            <p class="mini">Your phone finds</p>
+            <h3 class="wa-found" data-phone-num>98XXXXXXXX</h3>
+          </article>
+          <article class="wa-analogy" data-web>
+            <p class="mini">You remember</p>
+            <h3>hatesglobal.com</h3>
+            <div class="wa-dns-chain">
+              <span data-dns-step="0">DNS</span>
+              <span class="wa-arrow" aria-hidden="true"></span>
+              <span data-dns-step="1">203.0.113.24</span>
+              <span class="wa-arrow" aria-hidden="true"></span>
+              <span data-dns-step="2">Server</span>
+            </div>
+            <p class="foot-note">203.0.113.24 is an example IP address for class.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Step 2 · Send</p>
+        <h2 class="slide-title reveal">The browser sends a request to the server.</h2>
+        <div class="wa-send" data-demo="send">
+          <article class="wa-end" data-from>
+            <p class="mini">Browser</p>
+            <h3>Chrome</h3>
+          </article>
+          <div class="wa-lane">
+            <span class="wa-packet" data-packet>I want this website.</span>
+          </div>
+          <article class="wa-end" data-to>
+            <p class="mini">Server</p>
+            <h3>HATES Global</h3>
+          </article>
+        </div>
+        <div class="def-box reveal"><strong>HTTP</strong> is a set of rules that allows the browser and server to communicate. On a secure site this is <strong>HTTPS</strong>.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Step 3 · Receive</p>
+        <h2 class="slide-title reveal">The server decides what to do with the request.</h2>
+        <p class="slide-lead reveal">That decision is the backend.</p>
+        <div class="wa-receive" data-demo="receive">
+          <article class="wa-box" data-hop="0">
+            <p class="mini">Arrives</p>
+            <h3>HTTP Request</h3>
+          </article>
+          <div class="wa-down" aria-hidden="true"></div>
+          <article class="wa-box be" data-hop="1">
+            <p class="mini">Decides</p>
+            <h3>Backend</h3>
+          </article>
+          <div class="wa-down" aria-hidden="true"></div>
+          <article class="wa-box fe" data-hop="2">
+            <p class="mini">The work</p>
+            <h3>Business logic</h3>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Step 4 · Ask for data</p>
+        <h2 class="slide-title reveal">The backend does not already know the jobs.</h2>
+        <p class="slide-lead reveal">It asks the database: “Give me available jobs.”</p>
+        <div class="wa-jobs" data-demo="jobs">
+          <article class="wa-end" data-be>
+            <p class="mini">Backend</p>
+            <h3 data-be-line>Show me available jobs.</h3>
+          </article>
+          <div class="wa-vlane">
+            <span class="wa-packet down" data-ask>Give me available jobs.</span>
+            <span class="wa-packet up" data-reply>Jobs</span>
+          </div>
+          <article class="wa-table" data-db>
+            <div class="wa-table-bar"><span>Database</span><span>Job</span></div>
+            <div class="wa-job-row" data-row>Waiter</div>
+            <div class="wa-job-row" data-row>Cook</div>
+            <div class="wa-job-row" data-row>Housekeeping</div>
+            <div class="wa-job-row" data-row>Dishwasher</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Step 5 · Show the page</p>
+        <h2 class="slide-title reveal">The browser receives the result and displays the jobs.</h2>
+        <div class="wa-browser" data-demo="page">
+          <div class="wa-chrome-bar"><i></i><i></i><i></i><span class="wa-omnibox slim">hatesglobal.com</span></div>
+          <div class="wa-page">
+            <p class="wa-brand" data-page-bit>HATES Global</p>
+            <h3 data-page-bit>Available Jobs</h3>
+            <article class="wa-job-card" data-page-bit><strong>Waiter</strong><span>Kathmandu</span></article>
+            <article class="wa-job-card" data-page-bit><strong>Cook</strong><span>Lalitpur</span></article>
+            <article class="wa-job-card" data-page-bit><strong>Housekeeping</strong><span>Bhaktapur</span></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">One diagram</p>
+        <h2 class="slide-title reveal">This is the picture to remember.</h2>
+        <div class="wa-split">
+          <div class="wa-vflow" data-demo="loop">
+            <div class="wa-rail" aria-hidden="true"></div>
+            <div class="wa-dot" data-dot aria-hidden="true"></div>
+            <div class="wa-vsteps">
+              <div class="wa-vstep" data-hop="0">User</div>
+              <div class="wa-vstep" data-hop="1">Browser</div>
+              <div class="wa-vstep" data-hop="2">Server</div>
+              <div class="wa-vstep" data-hop="3">Backend</div>
+              <div class="wa-vstep" data-hop="4">Database</div>
+              <div class="wa-vstep" data-hop="5">Backend</div>
+              <div class="wa-vstep" data-hop="6">Browser</div>
+              <div class="wa-vstep" data-hop="7">User</div>
+            </div>
+          </div>
+          <div class="wa-loop-copy">
+            <p class="mini" data-direction>Request</p>
+            <p class="wa-caption" data-caption>Browser asks the server.</p>
+            <div class="def-box">Browser asks → Backend processes → Database provides data → Backend responds → Browser displays it.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Same path · Login</p>
+        <h2 class="slide-title reveal">Login uses the same path.</h2>
+        <div class="wa-login" data-demo="login">
+          <div class="wa-login-main">
+            <form class="wa-form" data-form action="#" onsubmit="return false;">
+              <label>Email <input data-email readonly value="dharma@example.com"></label>
+              <label>Password <input data-pass readonly value="******"></label>
+              <button class="wa-login-btn" data-login-btn type="button">Login</button>
+            </form>
+            <article class="wa-dash" data-dash>
+              <p class="mini">Signed in</p>
+              <h3>Dashboard</h3>
+              <p>Welcome, dharma@example.com</p>
+            </article>
+          </div>
+          <ol class="wa-hops">
+            <li data-hop="0">User</li>
+            <li data-hop="1">Login form</li>
+            <li data-hop="2">Browser</li>
+            <li data-hop="3">Backend</li>
+            <li data-hop="4">Database</li>
+            <li data-hop="5">Does this user exist?</li>
+            <li data-hop="6">Backend</li>
+            <li data-hop="7">Response</li>
+            <li data-hop="8">Browser</li>
+            <li data-hop="9">Dashboard</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Important rule</p>
+        <h2 class="slide-title reveal">The browser does not connect to the database.</h2>
+        <div class="wa-rule" data-demo="rule">
+          <article class="wa-path bad" data-bad>
+            <p class="mini">Wrong path</p>
+            <div class="wa-path-line"><span>Browser</span><b aria-hidden="true">→</b><span>Database</span></div>
+            <p>The browser should not directly connect to the database.</p>
+          </article>
+          <article class="wa-path good" data-good>
+            <p class="mini">The path we use</p>
+            <div class="wa-path-line"><span>Browser</span><b aria-hidden="true">→</b><span>Backend</span><b aria-hidden="true">→</b><span>Database</span></div>
+            <p>The browser talks to the backend. The backend talks to the database.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Where Java fits</p>
+        <h2 class="slide-title reveal">Java builds the backend of this picture.</h2>
+        <p class="slide-lead reveal">We know how a real web application works. This course learns how Java builds the backend.</p>
+        <div class="wa-java" data-demo="java">
+          <article class="wa-box" data-hop="0"><h3>Browser</h3></article>
+          <div class="wa-down labeled" aria-hidden="true"><span>HTTP</span></div>
+          <article class="wa-box be" data-hop="1"><h3>Tomcat</h3></article>
+          <div class="wa-down" aria-hidden="true"></div>
+          <article class="wa-box fe" data-hop="2"><h3>Java Servlet</h3></article>
+          <div class="wa-down" aria-hidden="true"></div>
+          <article class="wa-box db" data-hop="3"><h3>Database</h3></article>
+        </div>
+        <p class="foot-note reveal">Next class: what a Servlet is, and how Tomcat runs it.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Takeaway</p>
+        <h2 class="slide-title reveal">Five words for today.</h2>
+        <div class="wa-take">
+          <article class="bank-card g1"><h3>Frontend</h3><p>What the user interacts with</p></article>
+          <article class="bank-card g2"><h3>Backend</h3><p>What processes the request</p></article>
+          <article class="bank-card g3"><h3>Database</h3><p>Where data is stored</p></article>
+          <article class="bank-card g1"><h3>HTTP</h3><p>Communication between client and server</p></article>
+          <article class="bank-card g4"><h3>Server</h3><p>Where our application runs</p></article>
+        </div>
+        <div class="def-box reveal">Next class: How do we build the backend using Java? Servlet + Tomcat.</div>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/webapp-demo.js"></script>
+</body>
+</html>
