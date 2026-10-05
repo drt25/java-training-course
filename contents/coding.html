@@ -203,7 +203,7 @@
         <pre><code id="lab-source" class="language-java">Loading…</code></pre>
       </div>
       <div class="run-box">
-        <strong>Run in the terminal</strong><br>
+        <strong id="lab-run-label">Run in the terminal</strong><br>
         <code id="lab-run">cd coding/…</code>
       </div>
     </section>
@@ -217,6 +217,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/xml.min.js"></script>
   <script src="js/lab-map.js"></script>
   <script>
     const menu = document.getElementById("lab-menu");
@@ -224,6 +225,7 @@
     const pathEl = document.getElementById("lab-path");
     const slidesEl = document.getElementById("lab-slides");
     const sourceEl = document.getElementById("lab-source");
+    const runLabel = document.getElementById("lab-run-label");
     const runEl = document.getElementById("lab-run");
     const copyBtn = document.getElementById("btn-copy");
 
@@ -238,6 +240,12 @@
       return file.replace(/\.java$/, "");
     }
 
+    function languageFor(file) {
+      if (/\.java$/i.test(file)) return "java";
+      if (/\.(html|jsp|xml)$/i.test(file)) return "xml";
+      return "plaintext";
+    }
+
     function findLab(hash) {
       const wanted = decodeURIComponent((hash || "").replace(/^#/, ""));
       for (const group of LABS) {
@@ -250,10 +258,10 @@
       return { group: LABS[0], file: LABS[0].files[0] };
     }
 
-    function paintSource(text) {
+    function paintSource(text, language) {
       rawSource = text;
       sourceEl.removeAttribute("data-highlighted");
-      sourceEl.className = "language-java";
+      sourceEl.className = "language-" + (language || "java");
       sourceEl.textContent = text;
       if (window.hljs) {
         window.hljs.highlightElement(sourceEl);
@@ -285,17 +293,25 @@
       pathEl.textContent = "coding/" + key;
       slidesEl.href = group.slides;
       slidesEl.textContent = "Open " + group.id + " slides";
-      runEl.textContent = "cd coding/" + group.folder + " && javac " + file + " && java " + className(file);
+      const url = group.urls && group.urls[file];
+      if (url) {
+        runLabel.textContent = "Open in Tomcat";
+        runEl.textContent = url;
+      } else {
+        runLabel.textContent = "Run in the terminal";
+        runEl.textContent = "cd coding/" + group.folder + " && javac " + file + " && java " + className(file);
+      }
       if (location.hash.replace(/^#/, "") !== key) {
         history.replaceState(null, "", "#" + key);
       }
       try {
         const res = await fetch("../coding/" + key);
         if (!res.ok) throw new Error("missing");
-        paintSource(await res.text());
+        paintSource(await res.text(), languageFor(file));
       } catch (err) {
         paintSource(
-          "Could not load coding/" + key + ".\nOpen this page through a local server or GitHub Pages.\nThen pick the file again."
+          "Could not load coding/" + key + ".\nOpen this page through a local server or GitHub Pages.\nThen pick the file again.",
+          "plaintext"
         );
       }
     }

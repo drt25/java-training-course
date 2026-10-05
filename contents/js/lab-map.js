@@ -179,4 +179,22 @@ window.LABS = [
       "DeleteStudent.java",
     ],
   },
+  {
+    id: "2.2",
+    title: "Introduction to JEE, Servlets and JSP",
+    folder: "2.2",
+    slides: "lessons/2.2-servlets-jsp.html",
+    files: [
+      "HelloServlet.java",
+      "register.html",
+      "StudentServlet.java",
+      "welcome.jsp",
+    ],
+    urls: {
+      "HelloServlet.java": "http://localhost:8080/StudentApp/hello",
+      "register.html": "http://localhost:8080/StudentApp/register.html",
+      "StudentServlet.java": "http://localhost:8080/StudentApp/register",
+      "welcome.jsp": "http://localhost:8080/StudentApp/welcome.jsp",
+    },
+  },
 ];

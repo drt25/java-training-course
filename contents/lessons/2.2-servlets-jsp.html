@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.2 Introduction to JEE, Servlets and JSP · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/servlet-jsp.css">
+</head>
+<body
+  data-lesson="2.2"
+  data-title="Introduction to JEE, Servlets and JSP"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="J2EE names|GET and POST|Tomcat|Servlet lifecycle|Form parameters|Forward and redirect|JSP and EL">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">J2EE / JEE</p>
+        <h2 class="slide-title reveal">Java EE is Java for applications that live on a server.</h2>
+        <p class="slide-lead reveal">It supports web applications, business systems, and applications that use a database. The name changed. Servlet and JSP stayed.</p>
+        <div class="sj-names">
+          <article class="bank-card g1">
+            <p class="mini">Older name</p>
+            <h3>J2EE</h3>
+          </article>
+          <article class="bank-card g2">
+            <p class="mini">Later name</p>
+            <h3>Java EE</h3>
+          </article>
+          <article class="bank-card g3">
+            <p class="mini">Current name</p>
+            <h3>Jakarta EE</h3>
+          </article>
+        </div>
+        <p class="foot-note reveal">Jakarta EE is the current name, under the Eclipse Foundation.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Client and server</p>
+        <h2 class="slide-title reveal">The browser asks. The server answers.</h2>
+        <p class="slide-lead reveal">A student opens the college site and logs in. The browser sends the details. The Java application checks them and sends a response.</p>
+        <div class="sj-lane" data-demo="lane">
+          <article data-end>
+            <p class="mini">Client</p>
+            <h3>Browser</h3>
+            <p>Sends a request</p>
+          </article>
+          <div class="sj-track">
+            <span class="sj-packet" data-packet>HTTP request / response</span>
+          </div>
+          <article data-end>
+            <p class="mini">Server</p>
+            <h3>Java application</h3>
+            <p>Processes the request</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">HTTP</p>
+        <h2 class="slide-title reveal">HTTP is how the browser and the server talk.</h2>
+        <p class="slide-lead reveal">HTTP stands for Hypertext Transfer Protocol. Each method says what the request wants to do.</p>
+        <div class="sj-methods" data-demo="http">
+          <article data-method>
+            <p class="mini">GET</p>
+            <h3>Retrieve</h3>
+            <p>View student details</p>
+          </article>
+          <article data-method>
+            <p class="mini">POST</p>
+            <h3>Submit</h3>
+            <p>Register a student</p>
+          </article>
+          <article data-method>
+            <p class="mini">PUT</p>
+            <h3>Update</h3>
+            <p>Update a student record</p>
+          </article>
+          <article data-method>
+            <p class="mini">DELETE</p>
+            <h3>Delete</h3>
+            <p>Delete a student record</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Today's servlet practical uses GET and POST.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Tomcat</p>
+        <h2 class="slide-title reveal">Tomcat runs the Java web application.</h2>
+        <p class="slide-lead reveal">Apache Tomcat is a web server and a servlet container. It receives the HTTP request, calls the servlet, and returns the response.</p>
+        <div class="sj-path">
+          <article class="bank-card g1">
+            <p class="mini">1</p>
+            <h3>Receives</h3>
+            <p>The HTTP request arrives.</p>
+          </article>
+          <article class="bank-card g2">
+            <p class="mini">2</p>
+            <h3>Calls</h3>
+            <p>The matching servlet runs.</p>
+          </article>
+          <article class="bank-card g3">
+            <p class="mini">3</p>
+            <h3>Returns</h3>
+            <p>The response goes to the browser.</p>
+          </article>
+          <article class="bank-card g4">
+            <p class="mini">4</p>
+            <h3>Manages</h3>
+            <p>Tomcat runs the servlet lifecycle.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Servlet</p>
+        <h2 class="slide-title reveal">A servlet is a Java class that runs on the server.</h2>
+        <p class="slide-lead reveal">A student submits a registration form. The servlet receives the name, processes it, and sends a response.</p>
+        <div class="sj-names">
+          <article class="bank-card g1">
+            <p class="mini">Browser</p>
+            <h3>HTML form</h3>
+            <p>The student types a name.</p>
+          </article>
+          <article class="bank-card g2">
+            <p class="mini">Server</p>
+            <h3>Servlet</h3>
+            <p>Java reads and processes the data.</p>
+          </article>
+          <article class="bank-card g3">
+            <p class="mini">Browser</p>
+            <h3>Response</h3>
+            <p>The page comes back.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">First servlet</p>
+        <h2 class="slide-title reveal">This class answers /hello.</h2>
+        <div class="split-visual">
+          <div class="code-window sj-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>HelloServlet.java</span></div>
+            <pre>import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/hello")
+public class HelloServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/html");
+
+        PrintWriter out = response.getWriter();
+        out.println("&lt;h1&gt;Hello, Students!&lt;/h1&gt;");
+    }
+}</pre>
+          </div>
+          <div>
+            <div class="sj-browser reveal">
+              <div class="sj-browser-bar">/StudentApp/hello</div>
+              <h3>Hello, Students!</h3>
+            </div>
+            <p class="foot-note reveal">A GET request to that address runs doGet. jakarta.servlet runs on Tomcat 10 or newer.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Methods</p>
+        <h2 class="slide-title reveal">Five methods do the work.</h2>
+        <div class="sj-five">
+          <article class="bank-card g1">
+            <h3>init()</h3>
+            <p>Runs when the servlet is initialized.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>service()</h3>
+            <p>Receives the request and calls the HTTP method.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>doGet()</h3>
+            <p>Handles a GET request.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>doPost()</h3>
+            <p>Handles a POST request.</p>
+          </article>
+          <article class="bank-card g1">
+            <h3>destroy()</h3>
+            <p>Runs before the servlet is taken out of service.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lifecycle</p>
+        <h2 class="slide-title reveal">Tomcat calls these methods in order.</h2>
+        <p class="slide-lead reveal">init() runs once. Request handling runs again and again. destroy() runs when Tomcat removes the servlet.</p>
+        <ol class="sj-life" data-demo="life">
+          <li data-step>
+            <strong>1</strong>
+            <div>
+              <h3>Loaded and created</h3>
+              <p>Tomcat loads the class and makes one servlet object.</p>
+            </div>
+          </li>
+          <li data-step>
+            <strong>2</strong>
+            <div>
+              <h3>init()</h3>
+              <p>Initialization. Normally once for that object.</p>
+            </div>
+          </li>
+          <li data-step>
+            <strong>3</strong>
+            <div>
+              <h3>service()</h3>
+              <p>Each request. service() calls doGet() or doPost().</p>
+            </div>
+          </li>
+          <li data-step>
+            <strong>4</strong>
+            <div>
+              <h3>destroy()</h3>
+              <p>Cleanup when the container removes the servlet.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">HttpServlet</p>
+        <h2 class="slide-title reveal">We extend HttpServlet and give it a path.</h2>
+        <p class="slide-lead reveal">HttpServlet is the class made for HTTP requests. Our servlet is a subclass of it.</p>
+        <div class="code-window sj-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>StudentServlet.java</span></div>
+          <pre>@WebServlet("/students")
+public class StudentServlet extends HttpServlet {
+    // Handle HTTP requests here
+}</pre>
+        </div>
+        <div class="def-box reveal"><strong>@WebServlet("/students")</strong> maps this class to the URL path /students.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Form</p>
+        <h2 class="slide-title reveal">The form sends the student's name.</h2>
+        <p class="slide-lead reveal">Register submits the form to the register URL using POST.</p>
+        <div class="code-window sj-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>register.html</span></div>
+          <pre>&lt;form action="register" method="post"&gt;
+    &lt;label&gt;Student Name:&lt;/label&gt;
+    &lt;input type="text" name="studentName" required&gt;
+
+    &lt;button type="submit"&gt;Register&lt;/button&gt;
+&lt;/form&gt;</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Parameters</p>
+        <h2 class="slide-title reveal">The servlet reads the name and answers.</h2>
+        <div class="split-visual">
+          <div class="code-window sj-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>doPost</span></div>
+            <pre>@WebServlet("/register")
+public class StudentServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws IOException {
+
+        String name = request.getParameter("studentName");
+
+        response.setContentType("text/html");
+        response.getWriter().println("Welcome, " + name);
+    }
+}</pre>
+          </div>
+          <div>
+            <div class="sj-browser reveal">
+              <div class="sj-browser-bar">POST /register</div>
+              <h3>Welcome, Ram</h3>
+            </div>
+            <article class="bank-card g1" style="margin-top:0.7rem">
+              <h3>HttpServletRequest</h3>
+              <p>The incoming request, including the form fields.</p>
+            </article>
+            <article class="bank-card g3" style="margin-top:0.7rem">
+              <h3>HttpServletResponse</h3>
+              <p>How the servlet builds and sends the answer.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Forward</p>
+        <h2 class="slide-title reveal">Forward stays on this same request.</h2>
+        <p class="slide-lead reveal">The server passes the work to another page. The browser does not make a new request.</p>
+        <div class="code-window sj-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>RequestDispatcher</span></div>
+          <pre>request.setAttribute("name", name);
+
+request.getRequestDispatcher("/welcome.jsp")
+       .forward(request, response);</pre>
+        </div>
+        <div class="def-box reveal">The name stays on the request, so welcome.jsp can read it.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Redirect</p>
+        <h2 class="slide-title reveal">Redirect tells the browser to ask again.</h2>
+        <p class="slide-lead reveal">The server sends a new address. The browser then makes a new request to that address.</p>
+        <div class="code-window sj-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>sendRedirect</span></div>
+          <pre>response.sendRedirect("login.jsp");</pre>
+        </div>
+        <div class="def-box reveal">A forward uses the request already in progress. A redirect starts a new request.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">JSP</p>
+        <h2 class="slide-title reveal">JSP is the page that shows the result.</h2>
+        <p class="slide-lead reveal">JavaServer Pages runs on the server and builds HTML. The servlet processes the name. The JSP page presents it.</p>
+        <div class="split-visual">
+          <div class="code-window sj-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>welcome.jsp</span></div>
+            <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Welcome&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome, ${name}!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+          </div>
+          <div>
+            <div class="sj-browser reveal">
+              <div class="sj-browser-bar">welcome.jsp</div>
+              <h3>Welcome, Ram!</h3>
+            </div>
+            <div class="def-box reveal"><strong>${name}</strong> is Expression Language. It prints the value stored on the request.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Directives</p>
+        <h2 class="slide-title reveal">Directives tell the page how to be built.</h2>
+        <div class="sj-names">
+          <article class="bank-card g1">
+            <h3>&lt;%@ page %&gt;</h3>
+            <p>Page settings, such as the content type.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>&lt;%@ include %&gt;</h3>
+            <p>Includes another file while the page is translated.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>&lt;%@ taglib %&gt;</h3>
+            <p>Makes a tag library available on the page.</p>
+          </article>
+        </div>
+        <div class="code-window sj-code reveal" style="margin-top:0.9rem">
+          <div class="code-bar"><i></i><i></i><i></i><span>page</span></div>
+          <pre>&lt;%@ page contentType="text/html;charset=UTF-8" %&gt;</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Implicit objects</p>
+        <h2 class="slide-title reveal">These objects are already on the page.</h2>
+        <p class="slide-lead reveal">A JSP page can use them without declaring them.</p>
+        <div class="sj-five">
+          <article class="bank-card g1">
+            <h3>request</h3>
+            <p>Parameters and attributes from the request.</p>
+          </article>
+          <article class="bank-card g2">
+            <h3>response</h3>
+            <p>The HTTP response.</p>
+          </article>
+          <article class="bank-card g3">
+            <h3>session</h3>
+            <p>Data kept for this user's visit.</p>
+          </article>
+          <article class="bank-card g4">
+            <h3>application</h3>
+            <p>Data shared by the whole application.</p>
+          </article>
+          <article class="bank-card g1">
+            <h3>out</h3>
+            <p>Writes text into the response.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Scriptlets</p>
+        <h2 class="slide-title reveal">A scriptlet is Java written inside the page.</h2>
+        <div class="code-window sj-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>JSP tags</span></div>
+          <pre>&lt;% String name = "Ram"; %&gt;
+&lt;%= name %&gt;</pre>
+        </div>
+        <div class="def-box reveal">Older pages use these tags. New pages use <strong>${name}</strong> and JSTL to show the data.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">JSTL</p>
+        <h2 class="slide-title reveal">JSTL tags show data on the page.</h2>
+        <p class="slide-lead reveal">The core library gives the page a condition and a loop.</p>
+        <div class="split-visual">
+          <article class="bank-card g1">
+            <p class="mini">Condition</p>
+            <h3>c:if</h3>
+            <p>Shows a block when a test is true.</p>
+          </article>
+          <article class="bank-card g3">
+            <p class="mini">Loop</p>
+            <h3>c:forEach</h3>
+            <p>Repeats a block for each item in a list.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Practical</p>
+        <h2 class="slide-title reveal">Welcome a student by name.</h2>
+        <div class="sj-steps">
+          <article><strong>1</strong><p>Create an HTML form with a name field.</p></article>
+          <article><strong>2</strong><p>Submit the form to a servlet using POST.</p></article>
+          <article><strong>3</strong><p>Read the name with request.getParameter().</p></article>
+          <article><strong>4</strong><p>Store the name with request.setAttribute().</p></article>
+          <article><strong>5</strong><p>Forward the request to welcome.jsp.</p></article>
+          <article><strong>6</strong><p>Display the name with ${name}.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The path</p>
+        <h2 class="slide-title reveal">The name travels this path.</h2>
+        <div class="sj-path" data-demo="path">
+          <article data-hop>
+            <p class="mini">Browser</p>
+            <h3>HTML form</h3>
+            <p>Ram</p>
+          </article>
+          <article data-hop>
+            <p class="mini">Server</p>
+            <h3>Servlet</h3>
+            <p>Process the name</p>
+          </article>
+          <article data-hop>
+            <p class="mini">Server</p>
+            <h3>JSP</h3>
+            <p>Display the result</p>
+          </article>
+          <article data-hop>
+            <p class="mini">Browser</p>
+            <h3>Welcome, Ram!</h3>
+            <p>The page the student sees</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Spring Boot</p>
+        <h2 class="slide-title reveal">The same jobs return in Spring Boot.</h2>
+        <p class="slide-lead reveal">Today's path is the foundation: a request reaches Java, Java processes the data, and a response goes back to the browser.</p>
+        <div class="sj-map reveal">
+          <div class="sj-map-head">
+            <span>Today</span>
+            <span>Spring Boot</span>
+          </div>
+          <div class="sj-map-row">
+            <span>doGet() and doPost()</span>
+            <span>@Controller or @RestController methods</span>
+          </div>
+          <div class="sj-map-row">
+            <span>request.getParameter()</span>
+            <span>@RequestParam and @PathVariable</span>
+          </div>
+          <div class="sj-map-row">
+            <span>Creating objects yourself</span>
+            <span>Dependency injection</span>
+          </div>
+          <div class="sj-map-row">
+            <span>Writing the setup yourself</span>
+            <span>Auto-configuration</span>
+          </div>
+          <div class="sj-map-row">
+            <span>JSP page</span>
+            <span>Thymeleaf, or JSON from a REST API</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/servlet-jsp-demo.js"></script>
+</body>
+</html>
