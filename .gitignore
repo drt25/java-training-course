@@ -3,4 +3,5 @@
 .vscode/
 *.class
 coding/*.class
+target/
 *.log

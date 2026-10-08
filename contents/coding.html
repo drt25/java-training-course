@@ -294,9 +294,13 @@
       slidesEl.href = group.slides;
       slidesEl.textContent = "Open " + group.id + " slides";
       const url = group.urls && group.urls[file];
+      const command = group.commands && group.commands[file];
       if (url) {
         runLabel.textContent = "Open in Tomcat";
         runEl.textContent = url;
+      } else if (command) {
+        runLabel.textContent = "Run in the terminal";
+        runEl.textContent = command;
       } else {
         runLabel.textContent = "Run in the terminal";
         runEl.textContent = "cd coding/" + group.folder + " && javac " + file + " && java " + className(file);

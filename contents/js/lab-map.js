@@ -197,4 +197,18 @@ window.LABS = [
       "welcome.jsp": "http://localhost:8080/StudentApp/welcome.jsp",
     },
   },
+  {
+    id: "2.3",
+    title: "Maven",
+    folder: "2.3",
+    slides: "lessons/2.3-maven.html",
+    files: [
+      "mysql-maven-demo/pom.xml",
+      "mysql-maven-demo/src/main/java/com/example/Main.java",
+    ],
+    commands: {
+      "mysql-maven-demo/pom.xml": "cd coding/2.3/mysql-maven-demo && mvn compile",
+      "mysql-maven-demo/src/main/java/com/example/Main.java": "cd coding/2.3/mysql-maven-demo && mvn package",
+    },
+  },
 ];

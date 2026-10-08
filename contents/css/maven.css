@@ -1,0 +1,261 @@
+.mvn-jobs,
+.mvn-path,
+.mvn-life-row,
+.mvn-remember {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mvn-jobs { grid-template-columns: repeat(5, 1fr); }
+.mvn-path,
+.mvn-remember { grid-template-columns: repeat(4, 1fr); }
+.mvn-life-row { grid-template-columns: 1fr 1fr 1fr 0.9fr; }
+
+.mvn-jobs article,
+.mvn-path article,
+.mvn-life-row article,
+.mvn-stack article,
+.mvn-flow li {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 0.8rem 0.9rem;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.mvn-jobs h3,
+.mvn-path h3,
+.mvn-life-row h3,
+.mvn-life h3,
+.mvn-stack h3,
+.mvn-flow h3 {
+  margin: 0 0 0.2rem;
+  font-size: 1.05rem;
+  color: var(--blue-900);
+}
+
+.mvn-jobs p,
+.mvn-path p,
+.mvn-life-row p,
+.mvn-life p,
+.mvn-stack p,
+.mvn-flow p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.mvn-jobs article.is-on,
+.mvn-path article.is-on,
+.mvn-life-row article.is-on,
+.mvn-stack article.is-on,
+.mvn-flow li.is-on,
+.mvn-tree-item.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.14);
+}
+
+.mvn-jobs article.is-on,
+.mvn-path article.is-on,
+.mvn-life-row article.is-on,
+.mvn-stack article.is-on,
+.mvn-flow li.is-on {
+  transform: translateY(-2px);
+}
+
+.mvn-life-row .mvn-clean {
+  background: #fff8eb;
+  border-color: rgba(245, 166, 35, 0.45);
+}
+
+.mvn-life-row .mvn-clean.is-on {
+  border-color: #f5a623;
+  box-shadow: 0 10px 28px rgba(245, 166, 35, 0.22);
+}
+
+.mvn-stack {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.mvn-tree {
+  background: #10203d;
+  color: #d7e7ff;
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem 1rem;
+  box-shadow: var(--shadow);
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.mvn-tree-flat { border-radius: 0; box-shadow: none; }
+
+.mvn-tree-root {
+  font-weight: 800;
+  color: #7de7ff;
+  margin-bottom: 0.35rem;
+}
+
+.mvn-tree-item {
+  margin-left: 0.85rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.mvn-tree-item.folder { color: #ffd48a; font-weight: 700; }
+.mvn-tree-item.nest { margin-left: 1.7rem; }
+.mvn-tree-item.nest2 { margin-left: 2.55rem; }
+
+.mvn-tree-jar {
+  margin: 0.2rem 0 0.2rem 1.7rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 10px;
+  background: rgba(245, 166, 35, 0.16);
+  border: 1px solid transparent;
+  color: #f5a623;
+  font-weight: 800;
+  transition: border-color 0.35s, box-shadow 0.35s, opacity 0.35s;
+}
+
+.mvn-tree-jar.is-on,
+.mvn-tree .mvn-tree-item.is-on {
+  border-color: #f5a623;
+  background: rgba(245, 166, 35, 0.22);
+  color: #ffd48a;
+}
+
+.mvn-flow,
+.mvn-life {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.mvn-life { gap: 0.28rem; }
+
+.mvn-flow li,
+.mvn-life li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.mvn-life li {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 0.26rem 0.8rem;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.mvn-life li.is-on {
+  border-color: var(--blue-600);
+  box-shadow: 0 10px 28px rgba(0, 86, 179, 0.14);
+}
+
+.mvn-flow li {
+  padding: 0.38rem 0.75rem;
+}
+
+.mvn-flow h3 { font-size: 0.98rem; }
+.mvn-flow p { font-size: 0.8rem; }
+
+.mvn-flow strong,
+.mvn-life strong {
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e8f2ff;
+  color: var(--blue-800);
+  font-size: 0.85rem;
+}
+
+.mvn-flow li.is-on strong,
+.mvn-life li.is-on strong {
+  background: #004aad;
+  color: #fff;
+}
+
+.mvn-code pre {
+  font-size: 0.72rem;
+  line-height: 1.38;
+  padding: 0.7rem 0.9rem 0.8rem;
+}
+
+.code-bar span {
+  margin-left: auto;
+  color: #d7e7ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.mvn-main pre {
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.mvn-commands {
+  font-size: 0.95rem;
+}
+
+.mvn-commands th,
+.mvn-commands td {
+  padding: 0.62rem 0.85rem;
+  font-size: 0.95rem;
+}
+
+.mvn-commands code { font-size: 0.88rem; }
+
+.mvn-stage .code-window { overflow: hidden; }
+
+.mvn-ghost {
+  opacity: 0.22;
+}
+
+.mvn-stage [data-target-dir].is-on,
+.mvn-stage [data-target-classes].is-on {
+  opacity: 1;
+  color: #b7f7c8;
+  border-color: rgba(40, 200, 64, 0.45);
+  background: rgba(40, 200, 64, 0.12);
+}
+
+.mvn-stage [data-target-jar].is-on {
+  opacity: 1;
+}
+
+.mvn-status {
+  margin: 0.7rem 0 0;
+  color: var(--blue-800);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .mvn-jobs,
+  .mvn-path,
+  .mvn-life-row,
+  .mvn-remember {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mvn-jobs article,
+  .mvn-path article,
+  .mvn-life-row article,
+  .mvn-stack article,
+  .mvn-flow li,
+  .mvn-tree-item,
+  .mvn-tree-jar {
+    transition: none;
+  }
+}

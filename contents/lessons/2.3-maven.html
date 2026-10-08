@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.3 Maven · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/maven.css">
+</head>
+<body
+  data-lesson="2.3"
+  data-title="Maven"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="What Maven is|Without Maven|pom.xml|Directory structure|MySQL Connector|Repositories|Lifecycle">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Maven</p>
+        <h2 class="slide-title reveal">Maven builds and manages a Java project.</h2>
+        <p class="slide-lead reveal">Today the project needs MySQL. Java does not ship the MySQL driver. Maven will bring in MySQL Connector/J for us.</p>
+        <div class="mvn-jobs" data-demo="steps">
+          <article class="bank-card g1" data-step>
+            <p class="mini">1</p>
+            <h3>Libraries</h3>
+            <p>Downloads the JARs the project needs.</p>
+          </article>
+          <article class="bank-card g2" data-step>
+            <p class="mini">2</p>
+            <h3>Compile</h3>
+            <p>Turns <code>.java</code> files into class files.</p>
+          </article>
+          <article class="bank-card g3" data-step>
+            <p class="mini">3</p>
+            <h3>Tests</h3>
+            <p>Compiles and runs the tests.</p>
+          </article>
+          <article class="bank-card g4" data-step>
+            <p class="mini">4</p>
+            <h3>JAR</h3>
+            <p>Packages the application.</p>
+          </article>
+          <article class="bank-card g1" data-step>
+            <p class="mini">5</p>
+            <h3>Folders</h3>
+            <p>Uses one standard project layout.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Without Maven</p>
+        <h2 class="slide-title reveal">We used to download the connector JAR ourselves.</h2>
+        <p class="slide-lead reveal">Lesson 1.14 kept <code>mysql-connector-j.jar</code> in <code>coding/1.14/lib/</code> and added it to the classpath by hand.</p>
+        <div class="split-visual" data-demo="steps">
+          <div class="mvn-tree reveal">
+            <div class="mvn-tree-root">StudentApp/</div>
+            <div class="mvn-tree-item folder">src/</div>
+            <div class="mvn-tree-item nest">Main.java</div>
+            <div class="mvn-tree-item folder">lib/</div>
+            <div class="mvn-tree-jar" data-step>mysql-connector-j.jar</div>
+          </div>
+          <div class="mvn-stack">
+            <article data-step>
+              <p class="mini">Application</p>
+              <h3>Java program</h3>
+              <p>Wants a connection to MySQL.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Library</p>
+              <h3>Connector JAR</h3>
+              <p>The file we searched for and copied in.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Database</p>
+              <h3>MySQL</h3>
+              <p>The <code>college</code> database from JDBC.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The hard part</p>
+        <h2 class="slide-title reveal">One library is already several steps.</h2>
+        <p class="slide-lead reveal">Ask the class: what if the application needs five libraries?</p>
+        <ol class="mvn-life" data-demo="steps">
+          <li data-step>
+            <strong>1</strong>
+            <div>
+              <h3>Search</h3>
+              <p>Find the right library on the web.</p>
+            </div>
+          </li>
+          <li data-step>
+            <strong>2</strong>
+            <div>
+              <h3>Download</h3>
+              <p>Save the JAR onto the computer.</p>
+            </div>
+          </li>
+          <li data-step>
+            <strong>3</strong>
+            <div>
+              <h3>Place</h3>
+              <p>Put that file inside the project.</p>
+            </div>
+          </li>
+          <li data-step>
+            <strong>4</strong>
+            <div>
+              <h3>Configure</h3>
+              <p>Add it to the classpath.</p>
+            </div>
+          </li>
+          <li data-step>
+            <strong>5</strong>
+            <div>
+              <h3>Match the version</h3>
+              <p>Make sure every student has the same JAR.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">With Maven</p>
+        <h2 class="slide-title reveal">pom.xml says which library the project needs.</h2>
+        <p class="slide-lead reveal">We write “I need MySQL Connector/J.” Maven downloads the JAR.</p>
+        <div class="mvn-path" data-demo="steps">
+          <article class="bank-card g1" data-step>
+            <p class="mini">1</p>
+            <h3>pom.xml</h3>
+            <p>The project file names the connector.</p>
+          </article>
+          <article class="bank-card g2" data-step>
+            <p class="mini">2</p>
+            <h3>Maven</h3>
+            <p>Reads that file when we run <code>mvn</code>.</p>
+          </article>
+          <article class="bank-card g3" data-step>
+            <p class="mini">3</p>
+            <h3>Download</h3>
+            <p>MySQL Connector/J arrives on its own.</p>
+          </article>
+          <article class="bank-card g4" data-step>
+            <p class="mini">4</p>
+            <h3>Use it</h3>
+            <p>The Java project can import the driver.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">This is the reason beginners learn Maven: the library list lives in one file.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Installation</p>
+        <h2 class="slide-title reveal">Check Java first. Then check Maven.</h2>
+        <p class="slide-lead reveal"><code>mvn</code> is the command that runs Maven. <code>mvn compile</code> is the first build we will use.</p>
+        <div class="duo-code">
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Java</span></div>
+            <pre>java -version</pre>
+            <div class="out-box">openjdk version "21..."</div>
+          </div>
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Maven</span></div>
+            <pre>mvn -version</pre>
+            <div class="out-box">Apache Maven 3.x</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Folders</p>
+        <h2 class="slide-title reveal">Every Maven project uses the same layout.</h2>
+        <div class="split-visual">
+          <div class="mvn-tree reveal" data-demo="steps">
+            <div class="mvn-tree-root">mysql-maven-demo/</div>
+            <div class="mvn-tree-item is-on" data-step>pom.xml</div>
+            <div class="mvn-tree-item folder">src/</div>
+            <div class="mvn-tree-item folder nest">main/</div>
+            <div class="mvn-tree-item nest2 is-on" data-step>java/</div>
+            <div class="mvn-tree-item nest2" data-step>resources/</div>
+            <div class="mvn-tree-item folder nest">test/</div>
+            <div class="mvn-tree-item nest2" data-step>java/</div>
+            <div class="mvn-tree-item nest2" data-step>resources/</div>
+          </div>
+          <div class="mvn-stack">
+            <article>
+              <p class="mini">src/main/java</p>
+              <h3>Application code</h3>
+              <p><code>com/example/Main.java</code> lives here.</p>
+            </article>
+            <article>
+              <p class="mini">src/test/java</p>
+              <h3>Test code</h3>
+              <p>Tests sit apart from the application.</p>
+            </article>
+            <article>
+              <p class="mini">src/main/resources</p>
+              <h3>Config files</h3>
+              <p>Properties and other resources.</p>
+            </article>
+            <article>
+              <p class="mini">pom.xml</p>
+              <h3>Project file</h3>
+              <p>Project name, version, and libraries.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">POM</p>
+        <h2 class="slide-title reveal">POM means Project Object Model.</h2>
+        <p class="slide-lead reveal">pom.xml is Maven’s configuration file. These three names identify the project.</p>
+        <div class="split-visual">
+          <div class="code-window mvn-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+            <pre>&lt;project&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-maven-demo&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+&lt;/project&gt;</pre>
+          </div>
+          <div class="mvn-stack" data-demo="steps">
+            <article data-step>
+              <p class="mini">groupId</p>
+              <h3>com.example</h3>
+              <p>The organization or project group.</p>
+            </article>
+            <article data-step>
+              <p class="mini">artifactId</p>
+              <h3>mysql-maven-demo</h3>
+              <p>The project name.</p>
+            </article>
+            <article data-step>
+              <p class="mini">version</p>
+              <h3>1.0</h3>
+              <p>The application version.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Dependency</p>
+        <h2 class="slide-title reveal">The same three names identify MySQL Connector/J.</h2>
+        <p class="slide-lead reveal">A dependency is a library the project needs. This block replaces the manual JAR download.</p>
+        <div class="split-visual">
+          <div class="code-window mvn-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+            <pre>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+        &lt;version&gt;26.7.0&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre>
+          </div>
+          <div class="mvn-stack" data-demo="steps">
+            <article data-step>
+              <p class="mini">groupId</p>
+              <h3>com.mysql</h3>
+              <p>Who publishes the library.</p>
+            </article>
+            <article data-step>
+              <p class="mini">artifactId</p>
+              <h3>mysql-connector-j</h3>
+              <p>The library name.</p>
+            </article>
+            <article data-step>
+              <p class="mini">version</p>
+              <h3>26.7.0</h3>
+              <p>The connector version. Same JAR as lesson 1.14.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Repository</p>
+        <h2 class="slide-title reveal">Maven gets the JAR from a repository.</h2>
+        <p class="slide-lead reveal">A repository is a store of libraries. Maven checks the computer first, then downloads what is missing.</p>
+        <div class="bank-grid" data-demo="steps">
+          <article class="bank-card g1" data-step>
+            <p class="mini">On this computer</p>
+            <h3>Local</h3>
+            <p>Downloaded libraries live in <code>~/.m2/repository</code>.</p>
+          </article>
+          <article class="bank-card g2" data-step>
+            <p class="mini">Public</p>
+            <h3>Maven Central</h3>
+            <p>The public store. MySQL Connector/J is published here.</p>
+          </article>
+          <article class="bank-card g3" data-step>
+            <p class="mini">Another server</p>
+            <h3>Remote</h3>
+            <p>A repository that lives on another server. Central is one of these.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The path</p>
+        <h2 class="slide-title reveal">pom.xml, the dependency, and the repository are one path.</h2>
+        <ol class="mvn-flow" data-demo="flow">
+          <li data-hop>
+            <strong>1</strong>
+            <div>
+              <h3>pom.xml</h3>
+              <p>Names MySQL Connector/J 26.7.0.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>2</strong>
+            <div>
+              <h3>Maven</h3>
+              <p>Reads the file when we build.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>3</strong>
+            <div>
+              <h3>Maven Central</h3>
+              <p>The public place that has the JAR.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>4</strong>
+            <div>
+              <h3>MySQL Connector/J</h3>
+              <p>The driver JAR.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>5</strong>
+            <div>
+              <h3>Local repository</h3>
+              <p><code>~/.m2/repository</code> keeps a copy.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>6</strong>
+            <div>
+              <h3>Java application</h3>
+              <p>Main.java can open a JDBC connection.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>7</strong>
+            <div>
+              <h3>MySQL</h3>
+              <p>The <code>college</code> database.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lifecycle</p>
+        <h2 class="slide-title reveal">A build is a short sequence of steps.</h2>
+        <p class="slide-lead reveal">compile, then test, then package. clean is separate: it deletes generated files.</p>
+        <div class="mvn-life-row" data-demo="life">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>compile</h3>
+            <p>Compile <code>src/main/java</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>test</h3>
+            <p>Compile and run tests.</p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>package</h3>
+            <p>Build the JAR.</p>
+          </article>
+          <article class="mvn-clean" data-step>
+            <p class="mini">Beside the chain</p>
+            <h3>clean</h3>
+            <p>Remove the <code>target/</code> folder.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Commands</p>
+        <h2 class="slide-title reveal">Five commands cover the first class.</h2>
+        <table class="info-table mvn-commands reveal">
+          <thead>
+            <tr><th>Command</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>mvn compile</code></td><td>Compile Java code into <code>target/classes</code></td></tr>
+            <tr><td><code>mvn test</code></td><td>Compile and run tests</td></tr>
+            <tr><td><code>mvn package</code></td><td>Create <code>target/mysql-maven-demo-1.0.jar</code></td></tr>
+            <tr><td><code>mvn clean</code></td><td>Remove generated files in <code>target/</code></td></tr>
+            <tr><td><code>mvn clean package</code></td><td>Clean first, then package</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">This lab has no test class. <code>mvn test</code> still runs and reports that there are no tests.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Lab project</p>
+        <h2 class="slide-title reveal">mysql-maven-demo is the whole example.</h2>
+        <div class="split-visual">
+          <div class="mvn-tree reveal">
+            <div class="mvn-tree-root">mysql-maven-demo/</div>
+            <div class="mvn-tree-item is-on">pom.xml</div>
+            <div class="mvn-tree-item folder">src/main/java/com/example/</div>
+            <div class="mvn-tree-item nest">Main.java</div>
+          </div>
+          <div class="code-window mvn-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+            <pre>&lt;project xmlns="http://maven.apache.org/POM/4.0.0"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-maven-demo&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+    &lt;properties&gt;
+        &lt;maven.compiler.release&gt;21&lt;/maven.compiler.release&gt;
+    &lt;/properties&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+            &lt;version&gt;26.7.0&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/project&gt;</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>maven.compiler.release</code> is the Java version Maven compiles for. This class uses 21.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Java code</p>
+        <h2 class="slide-title reveal">Main.java only proves the connector is available.</h2>
+        <p class="slide-lead reveal">JDBC stays in lesson 1.14. This class opens <code>college</code> and prints one line.</p>
+        <div class="code-window mvn-code mvn-main reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>Main.java</span></div>
+          <pre>package com.example;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class Main {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/college";
+        String username = "root";
+        String password = "password";
+        try {
+            Connection connection =
+                    DriverManager.getConnection(url, username, password);
+            System.out.println("Database connected successfully!");
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">In class</p>
+        <h2 class="slide-title reveal">Watch target appear, go away, and come back.</h2>
+        <p class="slide-lead reveal"><code>target/</code> holds files Maven generated. <code>clean</code> removes that folder.</p>
+        <div class="mvn-stage" data-demo="target">
+          <div class="code-window">
+            <div class="code-bar"><i></i><i></i><i></i><span data-target-cmd>mvn compile</span></div>
+            <div class="mvn-tree mvn-tree-flat">
+              <div class="mvn-tree-root">mysql-maven-demo/</div>
+              <div class="mvn-tree-item">pom.xml</div>
+              <div class="mvn-tree-item">src/</div>
+              <div class="mvn-tree-item folder" data-target-dir>target/</div>
+              <div class="mvn-tree-item nest" data-target-classes>classes/</div>
+              <div class="mvn-tree-jar" data-target-jar>mysql-maven-demo-1.0.jar</div>
+            </div>
+          </div>
+          <p class="mvn-status" data-target-status>Compile writes class files into target/classes.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">One file lists the library. Maven does the rest.</h2>
+        <div class="def-box reveal">Maven manages the Java project, downloads libraries such as MySQL Connector, compiles the code, runs tests, and packages the application.</div>
+        <div class="mvn-remember" data-demo="steps">
+          <article class="bank-card g1" data-step>
+            <p class="mini">pom.xml</p>
+            <h3>Dependencies</h3>
+            <p>MySQL Connector/J 26.7.0</p>
+          </article>
+          <article class="bank-card g2" data-step>
+            <p class="mini">Layout</p>
+            <h3>src/main/java</h3>
+            <p>The standard folders</p>
+          </article>
+          <article class="bank-card g3" data-step>
+            <p class="mini">Repository</p>
+            <h3>Local and Central</h3>
+            <p><code>~/.m2/repository</code></p>
+          </article>
+          <article class="bank-card g4" data-step>
+            <p class="mini">Lifecycle</p>
+            <h3>compile, test, package</h3>
+            <p><code>clean</code> removes <code>target/</code></p>
+          </article>
+        </div>
+        <p class="foot-note reveal">I need MySQL → I need Connector/J → I add it to pom.xml → Maven downloads it → the application can use it.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/maven-demo.js"></script>
+</body>
+</html>
