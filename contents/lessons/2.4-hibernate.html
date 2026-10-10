@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.4 Hibernate · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/hibernate.css">
+</head>
+<body
+  data-lesson="2.4"
+  data-title="Hibernate"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="What Hibernate is|ORM|JDBC comparison|Architecture|hibernate.cfg.xml|Entity">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Hibernate</p>
+        <h2 class="slide-title reveal">Hibernate saves a Java object for us.</h2>
+        <p class="slide-lead reveal">Lesson 1.14 wrote the SQL. Today the program hands Hibernate a <code>Student</code>, and Hibernate writes the row.</p>
+        <div class="def-box reveal">Hibernate is an ORM tool. It maps a Java class to a database table and runs the SQL for ordinary saves, loads, changes, and deletes.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">ORM</p>
+        <h2 class="slide-title reveal">A Student object is a row in students.</h2>
+        <p class="slide-lead reveal">ORM means Object-Relational Mapping. The class is the table. The fields are the columns. One object is one row.</p>
+        <div class="split-visual">
+          <div class="code-window hb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Student.java</span></div>
+            <pre>class Student {
+    int id;
+    String name;
+    String email;
+}</pre>
+          </div>
+          <div class="reveal">
+            <table class="info-table hb-commands">
+              <thead>
+                <tr><th>id</th><th>name</th><th>email</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Ram</td><td>ram@example.com</td></tr>
+              </tbody>
+            </table>
+            <p class="foot-note">Table <code>students</code> in the database <code>hibernate_demo</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">JDBC and Hibernate</p>
+        <h2 class="slide-title reveal">The same insert, two ways.</h2>
+        <div class="split-visual">
+          <div class="code-window hb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>JDBC</span></div>
+            <pre>Connection con = DriverManager.getConnection(url, user, password);
+PreparedStatement ps = con.prepareStatement(
+        "INSERT INTO students (name, email) VALUES (?, ?)");
+ps.setString(1, "Ram");
+ps.setString(2, "ram@example.com");
+ps.executeUpdate();</pre>
+          </div>
+          <div class="code-window hb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Hibernate</span></div>
+            <pre>Student student = new Student();
+student.setName("Ram");
+student.setEmail("ram@example.com");
+
+session.persist(student);</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Hibernate still uses JDBC underneath. The program stops writing that SQL by hand.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Architecture</p>
+        <h2 class="slide-title reveal">The program reaches MySQL through five pieces.</h2>
+        <ol class="hb-flow" data-demo="flow">
+          <li data-hop>
+            <strong>1</strong>
+            <div>
+              <h3>Java application</h3>
+              <p>Creates a <code>Student</code> and asks to save it.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>2</strong>
+            <div>
+              <h3>hibernate.cfg.xml</h3>
+              <p>URL, user, password, and the entity classes.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>3</strong>
+            <div>
+              <h3>SessionFactory</h3>
+              <p>Built once for this database setup.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>4</strong>
+            <div>
+              <h3>Session</h3>
+              <p>Does the database work.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>5</strong>
+            <div>
+              <h3>Transaction</h3>
+              <p>Commits or rolls back a write.</p>
+            </div>
+          </li>
+          <li data-hop>
+            <strong>6</strong>
+            <div>
+              <h3>hibernate_demo</h3>
+              <p>The MySQL database for this lesson.</p>
+            </div>
+          </li>
+        </ol>
+        <p class="foot-note reveal">A read can run on a session alone. A write uses a transaction.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Pieces</p>
+        <h2 class="slide-title reveal">Each piece has one job.</h2>
+        <div class="hb-path" data-demo="steps">
+          <article data-step>
+            <p class="mini">Configuration</p>
+            <h3>Reads the file</h3>
+            <p><code>hibernate.cfg.xml</code> becomes the setup.</p>
+          </article>
+          <article data-step>
+            <p class="mini">SessionFactory</p>
+            <h3>Built once</h3>
+            <p>Shared by the whole program.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Session</p>
+            <h3>Does the work</h3>
+            <p>Persist, find, change, remove.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Transaction</p>
+            <h3>Commit or roll back</h3>
+            <p>A failed write leaves the database as it was.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Entity</p>
+        <h2 class="slide-title reveal">Annotations tell Hibernate this class is a table.</h2>
+        <div class="split-visual">
+          <div class="code-window hb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Student.java</span></div>
+            <pre>@Entity
+@Table(name = "students")
+public class Student {
+    @Id
+    private int id;
+    private String name;
+    private String email;
+}</pre>
+          </div>
+          <div class="hb-stack" data-demo="steps">
+            <article data-step>
+              <p class="mini">@Entity</p>
+              <h3>Persistent class</h3>
+              <p>Hibernate stores objects of this class.</p>
+            </article>
+            <article data-step>
+              <p class="mini">@Table</p>
+              <h3>students</h3>
+              <p>The table name in MySQL.</p>
+            </article>
+            <article data-step>
+              <p class="mini">@Id</p>
+              <h3>Primary key</h3>
+              <p><code>id</code> identifies one row.</p>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>@GeneratedValue</code> lets the database assign <code>id</code>. The next lesson turns that on.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Maven</p>
+        <h2 class="slide-title reveal">The lab is a Maven project with two libraries.</h2>
+        <div class="split-visual">
+          <div class="hb-tree reveal">
+            <div class="hb-tree-root">student-app/</div>
+            <div class="hb-tree-item">pom.xml</div>
+            <div class="hb-tree-item folder">src/main/resources/</div>
+            <div class="hb-tree-item nest">hibernate.cfg.xml</div>
+            <div class="hb-tree-item folder">src/main/java/com/example/</div>
+            <div class="hb-tree-item nest">Student.java</div>
+            <div class="hb-tree-item nest">HibernateUtil.java</div>
+            <div class="hb-tree-item nest">ConnectDemo.java</div>
+          </div>
+          <div class="hb-stack">
+            <div class="code-window hb-code reveal">
+              <div class="code-bar"><i></i><i></i><i></i><span>Step 1 · Hibernate</span></div>
+              <pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.hibernate.orm&lt;/groupId&gt;
+    &lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;
+    &lt;version&gt;7.4.12.Final&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+            </div>
+            <div class="code-window hb-code reveal">
+              <div class="code-bar"><i></i><i></i><i></i><span>Step 2 · MySQL driver</span></div>
+              <pre>&lt;dependency&gt;
+    &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+    &lt;version&gt;26.7.0&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+            </div>
+          </div>
+        </div>
+        <p class="foot-note reveal">Run a class with <code>mvn -q compile exec:java -Dexec.mainClass=com.example.ConnectDemo</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">hibernate.cfg.xml</p>
+        <h2 class="slide-title reveal">The file holds the database setup.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>hibernate.cfg.xml</span></div>
+          <pre>&lt;property name="hibernate.connection.url"&gt;
+    jdbc:mysql://localhost:3306/hibernate_demo
+&lt;/property&gt;
+&lt;property name="hibernate.connection.username"&gt;root&lt;/property&gt;
+&lt;property name="hibernate.connection.password"&gt;password&lt;/property&gt;
+&lt;property name="hibernate.dialect"&gt;org.hibernate.dialect.MySQLDialect&lt;/property&gt;
+&lt;property name="hibernate.show_sql"&gt;true&lt;/property&gt;
+&lt;property name="hibernate.hbm2ddl.auto"&gt;update&lt;/property&gt;
+&lt;mapping class="com.example.Student"/&gt;</pre>
+        </div>
+        <p class="foot-note reveal"><code>update</code> creates a missing table and keeps rows that are already there. <code>show_sql</code> prints the SQL Hibernate runs.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">SessionFactory</p>
+        <h2 class="slide-title reveal">Build the factory once.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>HibernateUtil.java</span></div>
+          <pre>Configuration configuration = new Configuration();
+configuration.configure();
+sessionFactory = configuration.buildSessionFactory();</pre>
+        </div>
+        <p class="foot-note reveal"><code>configure()</code> reads <code>hibernate.cfg.xml</code>. Every later class asks this factory for a session.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Check</p>
+        <h2 class="slide-title reveal">ConnectDemo opens a session and prints Connected.</h2>
+        <p class="slide-lead reveal">In MySQL, run <code>CREATE DATABASE hibernate_demo;</code> once. The JDBC database <code>college</code> stays as it is.</p>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>ConnectDemo.java</span></div>
+          <pre>Session session = HibernateUtil.getSessionFactory().openSession();
+System.out.println("Connected.");
+session.close();</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">Object, file, factory, session, transaction.</h2>
+        <div class="def-box reveal">Hibernate maps <code>Student</code> to <code>students</code>, reads <code>hibernate.cfg.xml</code>, and uses a session to do the database work.</div>
+        <div class="hb-remember" data-demo="steps">
+          <article class="bank-card g1" data-step>
+            <p class="mini">Class</p>
+            <h3>Student</h3>
+            <p><code>@Entity</code>, <code>@Table</code>, <code>@Id</code></p>
+          </article>
+          <article class="bank-card g2" data-step>
+            <p class="mini">File</p>
+            <h3>hibernate.cfg.xml</h3>
+            <p>URL, user, <code>update</code></p>
+          </article>
+          <article class="bank-card g3" data-step>
+            <p class="mini">Once</p>
+            <h3>SessionFactory</h3>
+            <p>Built in <code>HibernateUtil</code></p>
+          </article>
+          <article class="bank-card g4" data-step>
+            <p class="mini">Next</p>
+            <h3>CRUD</h3>
+            <p>Save, load, change, delete</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/hibernate-demo.js"></script>
+</body>
+</html>

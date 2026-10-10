@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.4b Hibernate CRUD · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/hibernate.css">
+</head>
+<body
+  data-lesson="2.4b"
+  data-title="Hibernate CRUD"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="persist|find|Update|remove|Rollback|List|Search">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Every write</p>
+        <h2 class="slide-title reveal">Six steps, every time we change data.</h2>
+        <div class="hb-steps" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>Open</h3>
+            <p><code>openSession()</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>Begin</h3>
+            <p><code>beginTransaction()</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>Work</h3>
+            <p>Persist, change, or remove.</p>
+          </article>
+          <article data-step>
+            <p class="mini">4</p>
+            <h3>Commit</h3>
+            <p>The database keeps the change.</p>
+          </article>
+          <article data-step>
+            <p class="mini">5</p>
+            <h3>Roll back</h3>
+            <p>On failure, undo this transaction.</p>
+          </article>
+          <article data-step>
+            <p class="mini">6</p>
+            <h3>Close</h3>
+            <p><code>session.close()</code> in <code>finally</code>.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Insert</p>
+        <h2 class="slide-title reveal">persist() saves a new student.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>InsertStudent.java</span></div>
+          <pre>SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+Session session = sessionFactory.openSession();
+Transaction transaction = null;
+try {
+    transaction = session.beginTransaction();
+    Student student = new Student();
+    student.setName("Ram");
+    student.setEmail("ram@example.com");
+    session.persist(student);
+    transaction.commit();
+    System.out.println("Saved student " + student.getId());
+} catch (Exception exception) {
+    if (transaction != null) {
+        transaction.rollback();
+    }
+} finally {
+    session.close();
+}</pre>
+        </div>
+        <p class="foot-note reveal">The lab does not call <code>setId</code>. The next slide lets MySQL assign the id. The printed number is the new primary key.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Generated id</p>
+        <h2 class="slide-title reveal">@GeneratedValue assigns the primary key.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>Student.java</span></div>
+          <pre>@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private int id;</pre>
+        </div>
+        <p class="slide-lead reveal" style="margin-top:1rem">MySQL fills <code>id</code> when the row is inserted. After <code>commit()</code>, <code>student.getId()</code> has that number.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Get by id</p>
+        <h2 class="slide-title reveal">find() loads one student.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>FindStudent.java</span></div>
+          <pre>SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+Session session = sessionFactory.openSession();
+Transaction transaction = null;
+try {
+    transaction = session.beginTransaction();
+    Student student = session.find(Student.class, 1);
+    if (student == null) {
+        System.out.println("No student with id 1");
+    } else {
+        System.out.println(student.getName());
+        System.out.println(student.getEmail());
+    }
+    transaction.commit();
+} catch (Exception exception) {
+    if (transaction != null) {
+        transaction.rollback();
+    }
+} finally {
+    session.close();
+}</pre>
+        </div>
+        <p class="foot-note reveal">A missing id returns <code>null</code>. Use the id printed by <code>InsertStudent</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Update</p>
+        <h2 class="slide-title reveal">Change the object, then commit.</h2>
+        <p class="slide-lead reveal">The student loaded inside the transaction is managed. Hibernate writes the new email. There is no separate update call.</p>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>UpdateStudent.java</span></div>
+          <pre>SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+Session session = sessionFactory.openSession();
+Transaction transaction = null;
+try {
+    transaction = session.beginTransaction();
+    Student student = session.find(Student.class, 1);
+    student.setEmail("ram@school.com");
+    transaction.commit();
+} catch (Exception exception) {
+    if (transaction != null) {
+        transaction.rollback();
+    }
+} finally {
+    session.close();
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Delete</p>
+        <h2 class="slide-title reveal">remove() deletes that student.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>DeleteStudent.java</span></div>
+          <pre>SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+Session session = sessionFactory.openSession();
+Transaction transaction = null;
+try {
+    transaction = session.beginTransaction();
+    Student student = session.find(Student.class, 1);
+    if (student != null) {
+        session.remove(student);
+    }
+    transaction.commit();
+} catch (Exception exception) {
+    if (transaction != null) {
+        transaction.rollback();
+    }
+} finally {
+    session.close();
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Rollback</p>
+        <h2 class="slide-title reveal">A failure before commit leaves the database unchanged.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>catch</span></div>
+          <pre>SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+Session session = sessionFactory.openSession();
+Transaction transaction = null;
+try {
+    transaction = session.beginTransaction();
+    session.persist(student);
+    transaction.commit();
+} catch (Exception exception) {
+    if (transaction != null) {
+        transaction.rollback();
+    }
+} finally {
+    session.close();
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">HQL</p>
+        <h2 class="slide-title reveal">HQL names the class. SQL names the table.</h2>
+        <div class="split-visual">
+          <div class="code-window hb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>SQL</span></div>
+            <pre>SELECT id, name, email
+FROM students;</pre>
+          </div>
+          <div class="code-window hb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>HQL</span></div>
+            <pre>FROM Student</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>Student</code> is the Java class. <code>students</code> is the MySQL table.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">List</p>
+        <h2 class="slide-title reveal">FROM Student returns every student.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>ListStudents.java</span></div>
+          <pre>SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+Session session = sessionFactory.openSession();
+Transaction transaction = null;
+try {
+    transaction = session.beginTransaction();
+    List&lt;Student&gt; students = session
+            .createQuery("FROM Student", Student.class)
+            .getResultList();
+    for (Student student : students) {
+        System.out.println(student);
+    }
+    transaction.commit();
+} catch (Exception exception) {
+    if (transaction != null) {
+        transaction.rollback();
+    }
+} finally {
+    session.close();
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Search</p>
+        <h2 class="slide-title reveal">:name holds the value we are looking for.</h2>
+        <div class="code-window hb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>SearchStudent.java</span></div>
+          <pre>SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+Session session = sessionFactory.openSession();
+Transaction transaction = null;
+try {
+    transaction = session.beginTransaction();
+    List&lt;Student&gt; students = session.createQuery(
+            "FROM Student WHERE name = :name",
+            Student.class)
+            .setParameter("name", "Ram")
+            .getResultList();
+    for (Student student : students) {
+        System.out.println(student);
+    }
+    transaction.commit();
+} catch (Exception exception) {
+    if (transaction != null) {
+        transaction.rollback();
+    }
+} finally {
+    session.close();
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Check MySQL</p>
+        <h2 class="slide-title reveal">Look at students after each program.</h2>
+        <div class="hb-steps" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>InsertStudent</h3>
+            <p>A new row. Note the printed id.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>FindStudent</h3>
+            <p>The name and email for that id.</p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>UpdateStudent</h3>
+            <p>The email column changes.</p>
+          </article>
+          <article data-step>
+            <p class="mini">4</p>
+            <h3>DeleteStudent</h3>
+            <p>That row is gone.</p>
+          </article>
+          <article data-step>
+            <p class="mini">5</p>
+            <h3>ListStudents</h3>
+            <p>Every row, printed from HQL.</p>
+          </article>
+          <article data-step>
+            <p class="mini">6</p>
+            <h3>SearchStudent</h3>
+            <p>Only the rows named Ram.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Database <code>hibernate_demo</code>, table <code>students</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">Open a session. Begin a transaction. Then do one job.</h2>
+        <div class="hb-steps" data-demo="steps">
+          <article data-step>
+            <p class="mini">Insert</p>
+            <h3>persist()</h3>
+            <p>Save a new student.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Get</p>
+            <h3>find()</h3>
+            <p>Load by id, or null.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Update</p>
+            <h3>setEmail()</h3>
+            <p>Then commit.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Delete</p>
+            <h3>remove()</h3>
+            <p>Then commit.</p>
+          </article>
+          <article data-step>
+            <p class="mini">List</p>
+            <h3>FROM Student</h3>
+            <p>Every student object.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Search</p>
+            <h3>:name</h3>
+            <p>Students with one name.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/hibernate-demo.js"></script>
+</body>
+</html>
