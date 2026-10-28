@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.6 Spring Boot: DI, JPA, and MVC · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+</head>
+<body
+  data-lesson="2.6"
+  data-title="Spring Boot: DI, JPA, and MVC"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="IoC and DI|Boot startup|DevTools|JPA|MVC CRUD">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Student Management</p>
+        <h2 class="slide-title reveal">One student app, built in three stages.</h2>
+        <p class="slide-lead reveal">You already know how to create a Spring Boot project. Today Spring wires the objects, then the same idea becomes a web page that saves students in MySQL.</p>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">Stage 1</p>
+            <h3>Objects</h3>
+            <p>Spring creates the repository and passes it into the service.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Stage 2</p>
+            <h3>Boot</h3>
+            <p>Folders, startup, annotations, properties, and DevTools.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Stage 3</p>
+            <h3>Web and database</h3>
+            <p>A page to add, list, edit, and delete students.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Dependency injection</p>
+        <h2 class="slide-title reveal">The service receives the repository.</h2>
+        <div class="def-box reveal">Dependency injection means providing an object that a class needs, instead of making that class create the object itself.</div>
+        <div class="split-visual" style="margin-top:0.85rem">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Creates it</span></div>
+            <pre>public class StudentService {
+    private StudentRepository repository =
+            new StudentRepository();
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Receives it</span></div>
+            <pre>public class StudentService {
+    private final StudentRepository repository;
+
+    public StudentService(StudentRepository repository) {
+        this.repository = repository;
+    }
+}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Three words</p>
+        <h2 class="slide-title reveal">Dependency, injection, and the reason it helps.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">Dependency</p>
+            <h3>The object a class needs</h3>
+            <p><code>StudentService</code> needs a <code>StudentRepository</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Injection</p>
+            <h3>Providing that object</h3>
+            <p>Spring passes the repository into the service.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Benefit</p>
+            <h3>Easier to change</h3>
+            <p>The service can be tested and swapped without rewriting it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">IoC</p>
+        <h2 class="slide-title reveal">Spring creates the objects and hands them over.</h2>
+        <div class="def-box reveal">Instead of creating every object yourself, you ask Spring to manage the objects and provide the ones your class needs.</div>
+        <div class="sp-parts" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Principle</p>
+            <h3>IoC</h3>
+            <p>Inversion of Control. Spring takes responsibility for creating and connecting objects.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Place</p>
+            <h3>IoC container</h3>
+            <p>The Spring-managed environment that creates and keeps those objects.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Object</p>
+            <h3>Bean</h3>
+            <p>An object managed by Spring.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Door</p>
+            <h3>ApplicationContext</h3>
+            <p>A container you can ask for a bean and other application services.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">DI is the technique of supplying dependencies. IoC is the broader principle. <code>ApplicationContext</code> is how you reach the beans.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">A bean</p>
+        <h2 class="slide-title reveal">Mark the class, then ask the container for it.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>GreetingService</span></div>
+            <pre>@Component
+public class GreetingService {
+    public void greet() {
+        System.out.println("Hello Students!");
+    }
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>DemoApplication</span></div>
+            <pre>ApplicationContext context =
+        SpringApplication.run(
+                DemoApplication.class, args);
+
+GreetingService service =
+        context.getBean(GreetingService.class);
+
+service.greet();</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>@Component</code> makes the class eligible for component scanning. <code>getBean</code> returns the instance Spring created.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Constructor injection</p>
+        <h2 class="slide-title reveal">A required repository comes through the constructor.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>StudentService</span></div>
+            <pre>@Service
+public class StudentService {
+    private final StudentRepository repository;
+
+    public StudentService(
+            StudentRepository repository) {
+        this.repository = repository;
+    }
+}</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step>
+              <h3>final</h3>
+              <p>The repository is set once, when the service is created.</p>
+            </article>
+            <article data-step>
+              <h3>One constructor</h3>
+              <p>Spring calls it and passes the repository. <code>@Autowired</code> can stay off.</p>
+            </article>
+            <article data-step>
+              <h3>Best default</h3>
+              <p>Use this for a dependency the service always needs.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">@RequiredArgsConstructor</p>
+        <h2 class="slide-title reveal">Lombok can write that constructor.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Written by hand</span></div>
+            <pre>@Service
+public class StudentService {
+    private final StudentRepository repository;
+
+    public StudentService(
+            StudentRepository repository) {
+        this.repository = repository;
+    }
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>ReportService</span></div>
+            <pre>@Service
+@RequiredArgsConstructor
+public class ReportService {
+    private final StudentRepository repository;
+
+    public int count() {
+        return repository.findAll().size();
+    }
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>@RequiredArgsConstructor</code> generates a constructor for every <code>final</code> field. Spring still calls that constructor. The project needs Lombok.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">First lab</p>
+        <h2 class="slide-title reveal">Four classes, wired by Spring.</h2>
+        <p class="slide-lead reveal">The console project <code>di-demo</code> keeps students in a list. Run it and watch Spring supply the repository.</p>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Data</p>
+            <h3>Student</h3>
+            <p>Name and email. An ordinary Java object.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Store</p>
+            <h3>StudentRepository</h3>
+            <p>Saves into a list. Later this becomes the database.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Rules</p>
+            <h3>StudentService</h3>
+            <p>Receives the repository through its constructor.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Start</p>
+            <h3>DemoApplication</h3>
+            <p>Starts Spring, greets the class, and registers Ram.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Stage 2 · Folders</p>
+        <h2 class="slide-title reveal">Where each file lives.</h2>
+        <div class="sb-tree" data-demo="steps">
+          <div class="sb-tree-root" data-step>student-management/</div>
+          <div class="sb-tree-cols">
+            <article data-step>
+              <h3>src/main/java</h3>
+              <ul>
+                <li>StudentManagementApplication.java</li>
+                <li>controller/ — HTTP requests</li>
+                <li>service/ — business rules</li>
+                <li>repository/ — database</li>
+                <li>entity/ — table rows</li>
+              </ul>
+            </article>
+            <article data-step>
+              <h3>src/main/resources</h3>
+              <ul>
+                <li>application.properties</li>
+                <li>templates/ — HTML pages</li>
+                <li>static/css/ — CSS files</li>
+              </ul>
+            </article>
+            <article data-step>
+              <h3>pom.xml</h3>
+              <p>Maven dependencies and the build.</p>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Keep the main class in the root package, with the other packages underneath it, so component scanning finds them.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Startup</p>
+        <h2 class="slide-title reveal">What happens when the application starts.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>StudentManagementApplication</span></div>
+          <pre>@SpringBootApplication
+public class StudentManagementApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(
+                StudentManagementApplication.class, args);
+    }
+}</pre>
+        </div>
+        <ol class="sp-flow" data-demo="flow" style="margin-top:0.75rem">
+          <li data-hop><strong>1</strong><div><h3>main</h3><p>Java starts the program.</p></div></li>
+          <li data-hop><strong>2</strong><div><h3>SpringApplication.run</h3><p>Bootstraps Spring Boot.</p></div></li>
+          <li data-hop><strong>3</strong><div><h3>Beans</h3><p>Spring creates the context and wires the components.</p></div></li>
+          <li data-hop><strong>4</strong><div><h3>Server</h3><p>The embedded web server starts and accepts HTTP requests.</p></div></li>
+        </ol>
+        <p class="foot-note reveal">This is a simplified order. Bean creation and configuration can happen in several phases.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">@SpringBootApplication</p>
+        <h2 class="slide-title reveal">One annotation starts the usual setup.</h2>
+        <p class="slide-lead reveal">You normally write this one annotation. It combines the three below.</p>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">Configuration</p>
+            <h3>@SpringBootConfiguration</h3>
+            <p>Marks the class as a source of Spring configuration.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Defaults</p>
+            <h3>@EnableAutoConfiguration</h3>
+            <p>Configures pieces from the dependencies and the properties file.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Search</p>
+            <h3>@ComponentScan</h3>
+            <p>Finds components in this package and the packages under it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Annotations</p>
+        <h2 class="slide-title reveal">Names you will see again in the project.</h2>
+        <div class="sb-annos" data-demo="steps">
+          <article data-step><h3>@Component</h3><p>A Spring-managed class.</p></article>
+          <article data-step><h3>@Service</h3><p>Business logic.</p></article>
+          <article data-step><h3>@Repository</h3><p>A repository component.</p></article>
+          <article data-step><h3>@Autowired</h3><p>Asks for dependency injection.</p></article>
+          <article data-step><h3>@Controller</h3><p>Handles the web and returns a view name.</p></article>
+          <article data-step><h3>@RestController</h3><p>Handles the web and returns data.</p></article>
+          <article data-step><h3>@RequestMapping</h3><p>Maps a URL path to a handler.</p></article>
+          <article data-step><h3>@PathVariable</h3><p>Reads a value from the URL.</p></article>
+          <article data-step><h3>@ModelAttribute</h3><p>Binds form fields to an object.</p></article>
+          <article data-step><h3>@Entity</h3><p>A class saved as a database table.</p></article>
+          <article data-step><h3>@Id</h3><p>The primary key.</p></article>
+          <article data-step><h3>@GeneratedValue</h3><p>The database assigns the id.</p></article>
+        </div>
+        <p class="foot-note reveal">A single constructor does not need <code>@Autowired</code>. An HTML input uses the <code>required</code> attribute when the field must be filled.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">application.properties</p>
+        <h2 class="slide-title reveal">Change the port and the database without changing Java.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>src/main/resources/application.properties</span></div>
+          <pre>spring.application.name=student-management
+server.port=8081
+
+spring.datasource.url=jdbc:mysql://localhost:3306/student_db
+spring.datasource.username=root
+spring.datasource.password=password
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.thymeleaf.cache=false</pre>
+        </div>
+        <p class="foot-note reveal">Open <code>http://localhost:8081</code>. Create the database <code>student_db</code> first. Username <code>root</code> and password <code>password</code> match the earlier lessons. <code>ddl-auto=update</code> is convenient in class. A production project should use migrations and should not commit real passwords.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">pom.xml</p>
+        <h2 class="slide-title reveal">A dependency is a library the project needs.</h2>
+        <p class="slide-lead reveal">A Java class is code you write. A dependency is an external library Maven downloads. Spring Initializr can add these. Boot’s parent POM picks compatible versions.</p>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Web</p>
+            <h3>Spring Web</h3>
+            <p>HTTP requests and MVC.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Pages</p>
+            <h3>Thymeleaf</h3>
+            <p>Server-rendered HTML.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Data</p>
+            <h3>Spring Data JPA</h3>
+            <p>Database operations.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Driver</p>
+            <h3>MySQL</h3>
+            <p>Connects to MySQL.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">The project also includes Validation, for later form checks, and Lombok, for <code>@RequiredArgsConstructor</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">DevTools</p>
+        <h2 class="slide-title reveal">DevTools restarts the app while you edit.</h2>
+        <div class="split-visual">
+          <div class="sp-jobs" data-demo="steps" style="grid-template-columns:1fr">
+            <article data-step>
+              <p class="mini">Java</p>
+              <h3>Restart on save</h3>
+              <p>Change a class, and Boot restarts the running application.</p>
+            </article>
+            <article data-step>
+              <p class="mini">HTML</p>
+              <h3>Refresh the browser</h3>
+              <p><code>spring.thymeleaf.cache=false</code> shows template edits on refresh during class.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Production</p>
+              <h3>Left out of the package</h3>
+              <p>DevTools is optional and is omitted when the application is packaged.</p>
+            </article>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+            <pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+    &lt;optional&gt;true&lt;/optional&gt;
+&lt;/dependency&gt;</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Stage 3 · MVC</p>
+        <h2 class="slide-title reveal">The page, the data, and the coordinator.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">Model</p>
+            <h3>The data</h3>
+            <p>A student, or the list of students, shared with the page.</p>
+          </article>
+          <article data-step>
+            <p class="mini">View</p>
+            <h3>The HTML</h3>
+            <p>The form and the table the student sees.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Controller</p>
+            <h3>The coordinator</h3>
+            <p>Receives the request and chooses the page.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Under the controller, the service applies the rules and the repository talks to MySQL.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Request flow</p>
+        <h2 class="slide-title reveal">A request for /students walks through the layers.</h2>
+        <div class="sb-path" data-demo="path">
+          <div class="sb-rail"><div class="sb-rail-fill"></div></div>
+          <article data-hop>
+            <p class="mini">1</p>
+            <h3>Browser</h3>
+            <p>Opens /students</p>
+          </article>
+          <article data-hop>
+            <p class="mini">2</p>
+            <h3>Controller</h3>
+            <p>Receives the request</p>
+          </article>
+          <article data-hop>
+            <p class="mini">3</p>
+            <h3>Service</h3>
+            <p>Calls the repository</p>
+          </article>
+          <article data-hop>
+            <p class="mini">4</p>
+            <h3>Repository</h3>
+            <p>Asks for the rows</p>
+          </article>
+          <article data-hop>
+            <p class="mini">5</p>
+            <h3>MySQL</h3>
+            <p>student_db</p>
+          </article>
+          <article data-hop>
+            <p class="mini">6</p>
+            <h3>Thymeleaf</h3>
+            <p>Renders the page</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">The controller puts the records on the model and returns the view name <code>students</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">CRUD</p>
+        <h2 class="slide-title reveal">Four operations, four addresses.</h2>
+        <table class="info-table sb-crud reveal">
+          <thead>
+            <tr><th>Operation</th><th>Meaning</th><th>Address</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Create</td><td>Add a student</td><td><code>POST /students</code></td></tr>
+            <tr><td>Read</td><td>Display students</td><td><code>GET /students</code></td></tr>
+            <tr><td>Update</td><td>Edit a student</td><td><code>POST /students/{id}/update</code></td></tr>
+            <tr><td>Delete</td><td>Remove a student</td><td><code>POST /students/{id}/delete</code></td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">A browser form sends POST, so this MVC app uses POST for create, update, and delete. PUT and DELETE come later, when the app returns data instead of a page.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Entity</p>
+        <h2 class="slide-title reveal">A Student object becomes a table row.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>entity/Student.java</span></div>
+            <pre>@Entity
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String email;
+
+    public Student() { }
+}</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step>
+              <h3>@Entity</h3>
+              <p>Hibernate maps this class to a table.</p>
+            </article>
+            <article data-step>
+              <h3>@Id</h3>
+              <p>The primary key of the row.</p>
+            </article>
+            <article data-step>
+              <h3>@GeneratedValue</h3>
+              <p>MySQL assigns the id when the student is saved.</p>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal">The lab file also has the getters and setters. The empty constructor is there for JPA.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Repository</p>
+        <h2 class="slide-title reveal">Spring Data writes the database methods.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>StudentRepository</span></div>
+            <pre>public interface StudentRepository
+        extends JpaRepository&lt;Student, Long&gt; {
+}</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step><h3>save</h3><p>Insert or update a student.</p></article>
+            <article data-step><h3>findAll</h3><p>Every student.</p></article>
+            <article data-step><h3>findById</h3><p>One student.</p></article>
+            <article data-step><h3>deleteById</h3><p>Remove a student.</p></article>
+          </div>
+        </div>
+        <p class="foot-note reveal">You do not write those methods. <code>JpaRepository</code> provides them. Spring Data creates the implementation.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Service</p>
+        <h2 class="slide-title reveal">The service is the same idea as Stage 1.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>StudentService</span></div>
+          <pre>@Service
+public class StudentService {
+    private final StudentRepository repository;
+
+    public StudentService(StudentRepository repository) {
+        this.repository = repository;
+    }
+
+    public List&lt;Student&gt; getAllStudents() {
+        return repository.findAll();
+    }
+
+    public Student saveStudent(Student student) {
+        return repository.save(student);
+    }
+
+    public void deleteStudent(Long id) {
+        repository.deleteById(id);
+    }
+}</pre>
+        </div>
+        <p class="foot-note reveal"><code>@Service</code> makes this a bean. The constructor receives the repository. <code>getStudent</code> uses <code>findById</code> and throws a simple exception when the id is missing.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Controller</p>
+        <h2 class="slide-title reveal">List the students, then save a new one.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>StudentController</span></div>
+            <pre>@Controller
+@RequestMapping("/students")
+public class StudentController {
+    private final StudentService service;
+
+    public StudentController(StudentService service) {
+        this.service = service;
+    }
+
+    @GetMapping
+    public String listStudents(Model model) {
+        model.addAttribute("students", service.getAllStudents());
+        return "students";
+    }
+
+    @PostMapping
+    public String saveStudent(@ModelAttribute Student student) {
+        service.saveStudent(student);
+        return "redirect:/students";
+    }
+}</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step><h3>@Controller</h3><p>Returns a view name, such as <code>students</code>.</p></article>
+            <article data-step><h3>@GetMapping</h3><p>Handles the browser opening the list.</p></article>
+            <article data-step><h3>Model</h3><p>Carries the list to the HTML page.</p></article>
+            <article data-step><h3>@ModelAttribute</h3><p>Fills a <code>Student</code> from the form.</p></article>
+            <article data-step><h3>redirect</h3><p>Sends the browser back to the list after a save.</p></article>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>GET /students/new</code> puts an empty student on the form. That method is in the lab file with the rest of the controller.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Edit and delete</p>
+        <h2 class="slide-title reveal">The id comes from the URL.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>StudentController</span></div>
+            <pre>@GetMapping("/edit/{id}")
+public String editStudent(@PathVariable Long id, Model model) {
+    model.addAttribute("student", service.getStudent(id));
+    return "student-form";
+}
+
+@PostMapping("/{id}/update")
+public String updateStudent(@PathVariable Long id,
+        @ModelAttribute Student student) {
+    student.setId(id);
+    service.saveStudent(student);
+    return "redirect:/students";
+}
+
+@PostMapping("/{id}/delete")
+public String deleteStudent(@PathVariable Long id) {
+    service.deleteStudent(id);
+    return "redirect:/students";
+}</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step><h3>@PathVariable</h3><p>Reads <code>5</code> from <code>/students/edit/5</code>.</p></article>
+            <article data-step><h3>setId</h3><p>The URL chooses the id, so the form cannot switch it.</p></article>
+            <article data-step><h3>POST delete</h3><p>The delete button submits a form. The browser does not send DELETE.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Two controllers</p>
+        <h2 class="slide-title reveal">A controller can return a page or data.</h2>
+        <div class="sp-pair" data-demo="steps">
+          <article data-step>
+            <p class="mini">This project</p>
+            <h3>@Controller</h3>
+            <p>Returns a view name. Thymeleaf renders <code>students.html</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Later</p>
+            <h3>@RestController</h3>
+            <p>Writes the response body, often JSON, straight back to the client.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal"><code>@Service</code> is the business class. <code>@Repository</code> marks the repository, and Spring Data builds it. <code>@Component</code> is the general marker. <code>@Autowired</code> is unnecessary on the controller’s only constructor.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">students.html</p>
+        <h2 class="slide-title reveal">The list page loops over students.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>templates/students.html</span></div>
+            <pre>&lt;tr th:each="student : ${students}"&gt;
+    &lt;td th:text="${student.name}"&gt;&lt;/td&gt;
+    &lt;td th:text="${student.email}"&gt;&lt;/td&gt;
+    &lt;td&gt;
+        &lt;a th:href="@{/students/edit/{id}(id=${student.id})}"&gt;
+            Edit
+        &lt;/a&gt;
+        &lt;form th:action="@{/students/{id}/delete(id=${student.id})}"
+              method="post"&gt;
+            &lt;button type="submit"&gt;Delete&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/td&gt;
+&lt;/tr&gt;</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step><h3>th:each</h3><p>Loops through the students on the model.</p></article>
+            <article data-step><h3>th:text</h3><p>Prints a value into the cell.</p></article>
+            <article data-step><h3>th:href</h3><p>Builds the edit link, including the id.</p></article>
+            <article data-step><h3>th:action</h3><p>Sets the delete form’s address.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">student-form.html</p>
+        <h2 class="slide-title reveal">One form adds a student and edits a student.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>templates/student-form.html</span></div>
+            <pre>&lt;form th:action="${student.id == null}
+        ? @{/students}
+        : @{/students/{id}/update(id=${student.id})}"
+      th:object="${student}" method="post"&gt;
+
+    &lt;label&gt;Name&lt;/label&gt;
+    &lt;input type="text" th:field="*{name}" required&gt;
+
+    &lt;label&gt;Email&lt;/label&gt;
+    &lt;input type="email" th:field="*{email}" required&gt;
+
+    &lt;button type="submit"&gt;Save Student&lt;/button&gt;
+&lt;/form&gt;</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step><h3>th:object</h3><p>Connects the form to the <code>student</code> on the model.</p></article>
+            <article data-step><h3>th:field</h3><p>Binds an input to <code>name</code> or <code>email</code>.</p></article>
+            <article data-step><h3>th:action</h3><p>A new student posts to <code>/students</code>. An existing student posts to the update address.</p></article>
+            <article data-step><h3>required</h3><p>The browser asks for a value before it submits.</p></article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Thymeleaf is why the project needs that dependency in addition to Spring Web.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">CSS</p>
+        <h2 class="slide-title reveal">A little CSS makes the page readable.</h2>
+        <div class="split-visual">
+          <div class="sb-mock reveal">
+            <div class="sb-mock-card">
+              <h3>Student Management</h3>
+              <span class="sb-mock-btn">Add Student</span>
+              <table>
+                <thead>
+                  <tr><th>ID</th><th>Name</th><th>Email</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>Ram</td><td>ram@example.com</td><td>Edit</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>static/css/style.css</span></div>
+            <pre>body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+}
+button, .button {
+    background: #333;
+    color: white;
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">The lab file also spaces the table, the labels, and the inputs. The goal is the MVC path, with a page that is easy to read.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">Follow one new student through the app.</h2>
+        <ol class="sp-flow" data-demo="flow">
+          <li data-hop><strong>1</strong><div><h3>Form</h3><p>The browser posts the name and email to <code>/students</code>.</p></div></li>
+          <li data-hop><strong>2</strong><div><h3>Controller</h3><p><code>@ModelAttribute</code> builds a <code>Student</code> and calls the service.</p></div></li>
+          <li data-hop><strong>3</strong><div><h3>Service</h3><p>The service already holds the repository from its constructor.</p></div></li>
+          <li data-hop><strong>4</strong><div><h3>Repository</h3><p><code>save</code> inserts the row. MySQL assigns the id.</p></div></li>
+          <li data-hop><strong>5</strong><div><h3>Redirect</h3><p>The browser opens <code>/students</code> again and Thymeleaf shows the new row.</p></div></li>
+        </ol>
+        <p class="foot-note reveal">Run <code>student-management</code>, open <code>http://localhost:8081/students</code>, then add, refresh, edit, and delete.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+  <script src="../js/spring-boot-demo.js"></script>
+</body>
+</html>
