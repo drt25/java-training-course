@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.14 Spring REST Services · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/spring-rest.css">
+</head>
+<body
+  data-lesson="2.14"
+  data-title="Spring REST Services"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="REST|JSON|CRUD|Postman|Swagger">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Same student app</p>
+        <h2 class="slide-title reveal">The page stays. The API returns the data.</h2>
+        <div class="sp-pair" data-demo="steps">
+          <article data-step>
+            <p class="mini">Lesson 2.6</p>
+            <h3>Spring MVC</h3>
+            <p>The controller returns a view name. Thymeleaf builds the HTML page.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Today</p>
+            <h3>REST API</h3>
+            <p>The controller returns the student as JSON. A phone, a page, or another program can read it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">API</p>
+        <h2 class="slide-title reveal">An API is how two programs talk.</h2>
+        <div class="def-box reveal">An API, an Application Programming Interface, lets one program ask another program for something and get an answer back.</div>
+        <ol class="sp-flow" data-demo="flow" style="margin-top:0.85rem">
+          <li data-hop><strong>1</strong><div><h3>Phone</h3><p>Asks for the students.</p></div></li>
+          <li data-hop><strong>2</strong><div><h3>Spring Boot</h3><p>Receives the request.</p></div></li>
+          <li data-hop><strong>3</strong><div><h3>MySQL</h3><p>Holds the rows in <code>student_db</code>.</p></div></li>
+          <li data-hop><strong>4</strong><div><h3>Answer</h3><p>The app sends the students back.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">REST</p>
+        <h2 class="slide-title reveal">The URL names the student. The method names the action.</h2>
+        <div class="def-box reveal">REST means Representational State Transfer. A REST API uses ordinary web addresses and HTTP methods to work with resources such as a student.</div>
+        <div class="sp-parts" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Address</p>
+            <h3>URL</h3>
+            <p><code>/api/students</code> is the collection. <code>/api/students/1</code> is one student.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Action</p>
+            <h3>HTTP method</h3>
+            <p>GET reads. POST adds. PUT updates. DELETE removes.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Data</p>
+            <h3>JSON</h3>
+            <p>The request and the response carry the student as text.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Result</p>
+            <h3>Status code</h3>
+            <p><code>200</code>, <code>201</code>, <code>204</code>, or <code>404</code> says what happened.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Each request stands on its own. The server does not remember a previous click in order to understand this one.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Endpoints</p>
+        <h2 class="slide-title reveal">Five addresses for one student resource.</h2>
+        <table class="info-table sb-crud reveal">
+          <thead>
+            <tr><th>Action</th><th>Address</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Read all</td><td><code>GET /api/students</code></td><td>Every student</td></tr>
+            <tr><td>Read one</td><td><code>GET /api/students/1</code></td><td>The student with id 1</td></tr>
+            <tr><td>Create</td><td><code>POST /api/students</code></td><td>Add a student</td></tr>
+            <tr><td>Update</td><td><code>PUT /api/students/1</code></td><td>Change student 1</td></tr>
+            <tr><td>Delete</td><td><code>DELETE /api/students/1</code></td><td>Remove student 1</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">The URL identifies the resource. The HTTP method describes the operation. A browser form could only POST. Postman can send PUT and DELETE.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">JSON</p>
+        <h2 class="slide-title reveal">JSON is the student, written as text.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Response</span></div>
+            <pre>{
+  "id": 1,
+  "name": "Ram Sharma",
+  "email": "ram@example.com"
+}</pre>
+          </div>
+          <div class="sp-jobs" data-demo="steps" style="grid-template-columns:1fr">
+            <article data-step>
+              <p class="mini">Page</p>
+              <h3>HTML</h3>
+              <p>Describes how the information is displayed.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Message</p>
+              <h3>JSON</h3>
+              <p>Carries the information. A phone or another backend can read it.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Program</p>
+              <h3>Java class</h3>
+              <p><code>Student</code> holds the same fields inside the application.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Jackson</p>
+        <h2 class="slide-title reveal">Spring turns JSON into a Student, and back again.</h2>
+        <div class="sb-path sr-four" data-demo="path">
+          <div class="sb-rail"><div class="sb-rail-fill"></div></div>
+          <article data-hop>
+            <p class="mini">1</p>
+            <h3>Postman</h3>
+            <p>Sends JSON</p>
+          </article>
+          <article data-hop>
+            <p class="mini">2</p>
+            <h3>Jackson</h3>
+            <p>Builds a Student</p>
+          </article>
+          <article data-hop>
+            <p class="mini">3</p>
+            <h3>Service</h3>
+            <p>Saves the student</p>
+          </article>
+          <article data-hop>
+            <p class="mini">4</p>
+            <h3>JSON</h3>
+            <p>Goes back to Postman</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">You do not parse the JSON text yourself for an ordinary create, read, update, or delete.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Two controllers</p>
+        <h2 class="slide-title reveal">One returns a page name. One returns the words.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>@Controller</span></div>
+            <pre>@Controller
+public class PageController {
+
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "welcome";
+    }
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>@RestController</span></div>
+            <pre>@RestController
+public class WelcomeController {
+
+    @GetMapping("/api/welcome")
+    public String welcome() {
+        return "Welcome to Spring Boot REST API";
+    }
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">The first looks for <code>welcome.html</code>. The second writes the sentence into the HTTP response. <code>@RestController</code> is <code>@Controller</code> plus <code>@ResponseBody</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">@RequestBody</p>
+        <h2 class="slide-title reveal">The JSON body becomes a Student argument.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Postman body</span></div>
+            <pre>{
+  "name": "Sita",
+  "email": "sita@example.com"
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Controller</span></div>
+            <pre>@PostMapping
+public Student createStudent(
+        @RequestBody Student student) {
+    return student;
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Spring fills <code>name</code> and <code>email</code> from the JSON, then passes that object into the method.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">@ResponseBody</p>
+        <h2 class="slide-title reveal">The returned Student is written as JSON.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>With @Controller</span></div>
+          <pre>@Controller
+public class StudentApiController {
+
+    @ResponseBody
+    @GetMapping("/api/student")
+    public Student getStudent() {
+        Student student = new Student();
+        student.setName("Sita");
+        student.setEmail("sita@example.com");
+        return student;
+    }
+}</pre>
+        </div>
+        <p class="foot-note reveal"><code>@ResponseBody</code> tells Spring to write the return value into the response. With <code>@RestController</code>, every handler method already does that.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Mappings</p>
+        <h2 class="slide-title reveal">Four annotations, four HTTP methods.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Read</p>
+            <h3>@GetMapping</h3>
+            <p><code>GET /api/students</code> and <code>GET /api/students/{id}</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Create</p>
+            <h3>@PostMapping</h3>
+            <p><code>POST /api/students</code> with a JSON body.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Update</p>
+            <h3>@PutMapping</h3>
+            <p><code>PUT /api/students/{id}</code> replaces the name and email.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Delete</p>
+            <h3>@DeleteMapping</h3>
+            <p><code>DELETE /api/students/{id}</code> removes that student.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal"><code>@RequestMapping("/api/students")</code> is the shared prefix. <code>@PathVariable</code> reads the id from the URL.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Methods</p>
+        <h2 class="slide-title reveal">Repeating a read, update, or delete does not add a second student.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Read</p>
+            <h3>GET</h3>
+            <p>Returns the student. Calling it again returns the same student.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Create</p>
+            <h3>POST</h3>
+            <p>Adds a student. Calling it again can add another one.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Replace</p>
+            <h3>PUT</h3>
+            <p>Sets the name and email of a known id.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Remove</p>
+            <h3>DELETE</h3>
+            <p>Removes that id. A second call still refers to the same student.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal"><code>PATCH</code> is a partial update. This project uses PUT for the whole name and email.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Status codes</p>
+        <h2 class="slide-title reveal">Five codes cover this classroom API.</h2>
+        <div class="sp-advantages" data-demo="steps">
+          <article data-step>
+            <p class="mini">200</p>
+            <h3>OK</h3>
+            <p>The read or update succeeded.</p>
+          </article>
+          <article data-step>
+            <p class="mini">201</p>
+            <h3>Created</h3>
+            <p>POST saved a new student.</p>
+          </article>
+          <article data-step>
+            <p class="mini">204</p>
+            <h3>No Content</h3>
+            <p>DELETE succeeded and sends no body.</p>
+          </article>
+          <article data-step>
+            <p class="mini">400</p>
+            <h3>Bad Request</h3>
+            <p>The JSON or the input is invalid.</p>
+          </article>
+          <article data-step>
+            <p class="mini">404</p>
+            <h3>Not Found</h3>
+            <p>That student id is missing.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal"><code>401</code> means sign-in is required. <code>403</code> means the caller may not do this. <code>409</code> means the request conflicts with current data. <code>500</code> means an unexpected server failure.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">ResponseEntity</p>
+        <h2 class="slide-title reveal">The method chooses the status and the body.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">200</p>
+            <h3>ok</h3>
+            <p><code>ResponseEntity.ok(student)</code> sends the student.</p>
+          </article>
+          <article data-step>
+            <p class="mini">201</p>
+            <h3>created</h3>
+            <p><code>status(HttpStatus.CREATED).body(saved)</code> sends the new student.</p>
+          </article>
+          <article data-step>
+            <p class="mini">204</p>
+            <h3>no content</h3>
+            <p><code>noContent().build()</code> sends a success with an empty body.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Returning a <code>Student</code> directly is enough for a first example. <code>ResponseEntity</code> also sets the HTTP status.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Same table</p>
+        <h2 class="slide-title reveal">The entity and the repository stay familiar.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Student</span></div>
+            <pre>@Entity
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String email;
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>StudentRepository</span></div>
+            <pre>public interface StudentRepository
+        extends JpaRepository&lt;Student, Long&gt; {
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Same database <code>student_db</code> as the MVC app. <code>save</code>, <code>findAll</code>, <code>findById</code>, and <code>delete</code> still come from <code>JpaRepository</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Service</p>
+        <h2 class="slide-title reveal">Create clears the id. Update copies the fields.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>createStudent</span></div>
+            <pre>public Student createStudent(Student student) {
+    student.setId(null);
+    return repository.save(student);
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>updateStudent</span></div>
+            <pre>Student existing = getStudent(id);
+existing.setName(updatedStudent.getName());
+existing.setEmail(updatedStudent.getEmail());
+return repository.save(existing);</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">The constructor still receives the repository. <code>getStudent</code> throws <code>StudentNotFoundException</code> when the id is missing. Delete loads the student first, then deletes that object.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Read</p>
+        <h2 class="slide-title reveal">GET returns the list, or one student.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>StudentRestController</span></div>
+          <pre>@RestController
+@RequestMapping("/api/students")
+public class StudentRestController {
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Student&gt;&gt; getAllStudents() {
+        return ResponseEntity.ok(service.getAllStudents());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity&lt;Student&gt; getStudent(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(service.getStudent(id));
+    }
+}</pre>
+        </div>
+        <p class="foot-note reveal">The real <code>getStudent</code> in the lab also catches a missing id. The next slide shows that catch.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Create, update, delete</p>
+        <h2 class="slide-title reveal">POST sends 201. DELETE sends 204.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>StudentRestController</span></div>
+          <pre>@PostMapping
+public ResponseEntity&lt;Student&gt; createStudent(
+        @RequestBody Student student) {
+    Student saved = service.createStudent(student);
+    return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+}
+
+@PutMapping("/{id}")
+public ResponseEntity&lt;Student&gt; updateStudent(
+        @PathVariable Long id,
+        @RequestBody Student student) {
+    return ResponseEntity.ok(service.updateStudent(id, student));
+}
+
+@DeleteMapping("/{id}")
+public ResponseEntity&lt;Void&gt; deleteStudent(@PathVariable Long id) {
+    service.deleteStudent(id);
+    return ResponseEntity.noContent().build();
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">404</p>
+        <h2 class="slide-title reveal">A missing id returns 404 from the method.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>StudentNotFoundException</span></div>
+            <pre>public class StudentNotFoundException
+        extends RuntimeException {
+    public StudentNotFoundException(Long id) {
+        super("Student not found with ID: " + id);
+    }
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>getStudent</span></div>
+            <pre>try {
+    return ResponseEntity.ok(service.getStudent(id));
+} catch (StudentNotFoundException ex) {
+    return ResponseEntity.notFound().build();
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Update and delete use the same catch. <code>GET /api/students/999</code> then answers <code>404</code> with an empty body. A shared error handler can wait for a later lesson.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">One request</p>
+        <h2 class="slide-title reveal">Follow a new student from Postman to MySQL.</h2>
+        <div class="sb-path" data-demo="path">
+          <div class="sb-rail"><div class="sb-rail-fill"></div></div>
+          <article data-hop>
+            <p class="mini">1</p>
+            <h3>Postman</h3>
+            <p>POST /api/students</p>
+          </article>
+          <article data-hop>
+            <p class="mini">2</p>
+            <h3>Controller</h3>
+            <p>@RequestBody</p>
+          </article>
+          <article data-hop>
+            <p class="mini">3</p>
+            <h3>Service</h3>
+            <p>Clears the id</p>
+          </article>
+          <article data-hop>
+            <p class="mini">4</p>
+            <h3>Repository</h3>
+            <p>save</p>
+          </article>
+          <article data-hop>
+            <p class="mini">5</p>
+            <h3>MySQL</h3>
+            <p>Assigns the id</p>
+          </article>
+          <article data-hop>
+            <p class="mini">6</p>
+            <h3>201</h3>
+            <p>JSON comes back</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Postman</p>
+        <h2 class="slide-title reveal">Postman sends the request without a web page.</h2>
+        <div class="split-visual">
+          <div class="sb-notes" data-demo="steps">
+            <article data-step>
+              <h3>Method</h3>
+              <p>GET, POST, PUT, or DELETE.</p>
+            </article>
+            <article data-step>
+              <h3>URL</h3>
+              <p><code>http://localhost:8081/api/students</code></p>
+            </article>
+            <article data-step>
+              <h3>Body</h3>
+              <p>For POST and PUT: Body, raw, JSON.</p>
+            </article>
+            <article data-step>
+              <h3>Header</h3>
+              <p><code>Content-Type: application/json</code></p>
+            </article>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Raw JSON</span></div>
+            <pre>{
+  "name": "Ram Sharma",
+  "email": "ram@example.com"
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Start <code>student-api</code> first. Then check the status, the body, and the headers, not only that some text came back. <code>GET /api/welcome</code> is a first call before the student list.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">What you should see</p>
+        <h2 class="slide-title reveal">Each request has a status and a body.</h2>
+        <table class="info-table sb-crud reveal">
+          <thead>
+            <tr><th>Request</th><th>Status</th><th>Body</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>GET /api/students</code></td><td>200</td><td>A JSON array</td></tr>
+            <tr><td><code>GET /api/students/1</code></td><td>200</td><td>One student</td></tr>
+            <tr><td><code>POST /api/students</code></td><td>201</td><td>The created student</td></tr>
+            <tr><td><code>PUT /api/students/1</code></td><td>200</td><td>The updated student</td></tr>
+            <tr><td><code>DELETE /api/students/1</code></td><td>204</td><td>Empty</td></tr>
+            <tr><td><code>GET /api/students/999</code></td><td>404</td><td>Empty</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Swagger</p>
+        <h2 class="slide-title reveal">The API can describe itself.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">Spec</p>
+            <h3>OpenAPI</h3>
+            <p>A standard description of the addresses, methods, and JSON.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Page</p>
+            <h3>Swagger UI</h3>
+            <p>A page that shows the API and can try a request.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Library</p>
+            <h3>springdoc</h3>
+            <p>Builds that description from the Spring controller.</p>
+          </article>
+        </div>
+        <div class="code-window sp-code sb-code reveal" style="margin-top:0.75rem">
+          <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+          <pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springdoc&lt;/groupId&gt;
+    &lt;artifactId&gt;springdoc-openapi-starter-webmvc-ui&lt;/artifactId&gt;
+    &lt;version&gt;2.8.17&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+        </div>
+        <p class="foot-note reveal">Open <code>http://localhost:8081/swagger-ui/index.html</code>. The JSON description is at <code>http://localhost:8081/v3/api-docs</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">@Operation</p>
+        <h2 class="slide-title reveal">One annotation adds a sentence to the docs.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>getAllStudents</span></div>
+          <pre>@Operation(
+    summary = "Get all students",
+    description = "Returns all students stored in the database"
+)
+@GetMapping
+public ResponseEntity&lt;List&lt;Student&gt;&gt; getAllStudents() {
+    return ResponseEntity.ok(service.getAllStudents());
+}</pre>
+        </div>
+        <p class="foot-note reveal">The import is <code>io.swagger.v3.oas.annotations.Operation</code>. In Swagger UI, use Try it out on the student endpoints.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Your turn</p>
+        <h2 class="slide-title reveal">Build the same API for a course.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Entity</p>
+            <h3>Course</h3>
+            <p><code>id</code>, <code>title</code>, <code>duration</code>, and <code>fee</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Layers</p>
+            <h3>Repository and service</h3>
+            <p><code>JpaRepository</code> and constructor injection.</p>
+          </article>
+          <article data-step>
+            <p class="mini">API</p>
+            <h3>Four methods</h3>
+            <p>GET, POST, PUT, and DELETE with <code>ResponseEntity</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Check</p>
+            <h3>404, Postman, Swagger</h3>
+            <p>A missing course returns 404. Try every call, then open Swagger UI.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+  <script src="../js/spring-rest-demo.js"></script>
+</body>
+</html>
