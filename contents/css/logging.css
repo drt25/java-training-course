@@ -1,0 +1,82 @@
+.log-board {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.log-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.log-filters button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--blue-800);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.78rem;
+}
+
+.log-filters button.is-on {
+  background: #004aad;
+  border-color: #004aad;
+  color: #fff;
+}
+
+.log-lines {
+  margin: 0;
+  padding: 0.75rem 0.95rem;
+  list-style: none;
+  background: #10203d;
+  color: #d7e7ff;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.log-lines li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.22rem 0;
+}
+
+.log-lines .lvl {
+  width: 4.6rem;
+  flex: none;
+  font-weight: 800;
+}
+
+.log-lines .lvl-trace { color: #9cc4ff; }
+.log-lines .lvl-debug { color: #7dd3fc; }
+.log-lines .lvl-info { color: #86efac; }
+.log-lines .lvl-warn { color: #f5a623; }
+.log-lines .lvl-error { color: #fca5a5; }
+
+.log-lines li.is-off .lvl,
+.log-lines li.is-off .msg {
+  opacity: 0.28;
+}
+
+.log-lines li.is-off::after {
+  content: "hidden";
+  margin-left: auto;
+  color: #f5a623;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.log-caption {
+  margin: 0;
+  color: var(--blue-800);
+  font-weight: 700;
+}

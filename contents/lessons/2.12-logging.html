@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.12 Logging in Spring Boot · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/spring-rest.css">
+  <link rel="stylesheet" href="../css/logging.css">
+</head>
+<body
+  data-lesson="2.12"
+  data-title="Logging in Spring Boot"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="Why logging|Levels|Logger|Configuration|Formatting">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">When it fails</p>
+        <h2 class="slide-title reveal">If the application crashes, how do you know what happened?</h2>
+        <div class="def-box reveal">Logging records what the application was doing. The record is still there after the window closes.</div>
+        <div class="sp-jobs" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">The screen</p>
+            <h3>Console</h3>
+            <p>A printed line disappears when the window closes.</p>
+          </article>
+          <article data-step>
+            <p class="mini">The record</p>
+            <h3>Log file</h3>
+            <p>A logging framework can keep the same message in a file.</p>
+          </article>
+          <article data-step>
+            <p class="mini">The clue</p>
+            <h3>What happened</h3>
+            <p>The record shows the error and the steps that led to it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">Two lessons. About two hours.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Part</th><th>Topic</th><th>Time</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Logging, levels, and Logger</td><td>30 min</td></tr>
+            <tr><td>2</td><td>Configuration and formatting</td><td>20 min</td></tr>
+            <tr><td>3</td><td>Lombok introduction and dependency</td><td>15 min</td></tr>
+            <tr><td>4</td><td>Lombok annotations and examples</td><td>30 min</td></tr>
+            <tr><td>5</td><td>Both tools on the student API</td><td>25 min</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">Parts 1 and 2 are this lesson. Parts 3 and 4 are Lombok. Part 5 uses the student API from the REST lesson.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Logging</p>
+        <h2 class="slide-title reveal">Logging records what the application is doing.</h2>
+        <div class="def-box reveal">Logging means recording activities, events, warnings, and errors.</div>
+        <ol class="sp-flow" data-demo="flow" style="margin-top:0.75rem">
+          <li data-hop><strong>1</strong><div><h3>Started</h3><p>Application started successfully.</p></div></li>
+          <li data-hop><strong>2</strong><div><h3>Created</h3><p>Student created successfully.</p></div></li>
+          <li data-hop><strong>3</strong><div><h3>Database</h3><p>Database connection failed.</p></div></li>
+          <li data-hop><strong>4</strong><div><h3>Bad id</h3><p>Invalid student ID received.</p></div></li>
+          <li data-hop><strong>5</strong><div><h3>Unexpected</h3><p>An unexpected error occurred.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Two ways to print</p>
+        <h2 class="slide-title reveal">A logging framework keeps structure. println writes a line.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>System.out.println()</th><th>Logging framework</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Prints messages to the console.</td><td>Records structured application messages.</td></tr>
+            <tr><td>No standard severity levels.</td><td>Supports different logging levels.</td></tr>
+            <tr><td>Basic debugging.</td><td>Useful for debugging and monitoring.</td></tr>
+            <tr><td>Limited configuration.</td><td>Supports configuration and formatting.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Which logger</p>
+        <h2 class="slide-title reveal">Your code calls SLF4J. Logback writes the line.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">Facade</p>
+            <h3>SLF4J</h3>
+            <p>The <code>Logger</code> your classes call. Spring Boot uses this API.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Default</p>
+            <h3>Logback</h3>
+            <p>The implementation that writes the messages in a typical Spring Boot web app.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Alternative</p>
+            <h3>Log4j2</h3>
+            <p>Another implementation. It has its own dependency and its own configuration file.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">This lesson stays with SLF4J and Logback. A Log4j2 project keeps its configuration separate from Logback.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Levels</p>
+        <h2 class="slide-title reveal">A level says how serious the message is.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Level</th><th>Meaning</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>TRACE</td><td>Very detailed information</td><td>Detailed method execution</td></tr>
+            <tr><td>DEBUG</td><td>Useful during development</td><td>Checking variable values</td></tr>
+            <tr><td>INFO</td><td>Normal application activities</td><td>Application started</td></tr>
+            <tr><td>WARN</td><td>Something needs attention</td><td>Email is not verified</td></tr>
+            <tr><td>ERROR</td><td>Something went wrong</td><td>Database connection failed</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">What you see</p>
+        <h2 class="slide-title reveal">INFO hides DEBUG and TRACE.</h2>
+        <div class="log-board" data-demo="levels">
+          <div class="log-filters" role="group" aria-label="Logging level">
+            <button type="button" data-level="TRACE">TRACE</button>
+            <button type="button" data-level="DEBUG">DEBUG</button>
+            <button type="button" data-level="INFO">INFO</button>
+            <button type="button" data-level="WARN">WARN</button>
+            <button type="button" data-level="ERROR">ERROR</button>
+          </div>
+          <ul class="log-lines">
+            <li data-rank="0"><span class="lvl lvl-trace">TRACE</span><span class="msg">Detailed method execution</span></li>
+            <li data-rank="1"><span class="lvl lvl-debug">DEBUG</span><span class="msg">Validating student details</span></li>
+            <li data-rank="2"><span class="lvl lvl-info">INFO</span><span class="msg">Creating student</span></li>
+            <li data-rank="3"><span class="lvl lvl-warn">WARN</span><span class="msg">Student email is not verified</span></li>
+            <li data-rank="4"><span class="lvl lvl-error">ERROR</span><span class="msg">Database connection failed</span></li>
+          </ul>
+          <p class="log-caption"></p>
+        </div>
+        <p class="foot-note reveal">Click a level. The application still records the quieter messages. This setting decides which ones appear.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Logger</p>
+        <h2 class="slide-title reveal">One logger, four kinds of message.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>StudentService</span></div>
+          <pre>import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+@Service
+public class StudentService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(StudentService.class);
+
+    public void createStudent() {
+        logger.info("Creating student");
+        logger.debug("Validating student details");
+        logger.warn("Student email is not verified");
+        logger.error("Unable to save student");
+    }
+}</pre>
+        </div>
+        <p class="foot-note reveal">This method calls every level so the names are visible. In the student API, <code>error</code> is for a failed save.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The calls</p>
+        <h2 class="slide-title reveal">LoggerFactory builds the logger. The level methods write.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Object</p>
+            <h3>Logger</h3>
+            <p>Generates the log messages for this class.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Factory</p>
+            <h3>getLogger</h3>
+            <p><code>LoggerFactory.getLogger</code> creates that logger.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Normal</p>
+            <h3>info</h3>
+            <p><code>logger.info</code> records an informational message.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Failure</p>
+            <h3>error</h3>
+            <p><code>logger.error</code> records an error message.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal"><code>debug</code> is for development detail. <code>warn</code> is for something that needs attention. <code>{}</code> drops a value into the message: <code>logger.info("Student created: {}", name)</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">application.properties</p>
+        <h2 class="slide-title reveal">Spring Boot reads the logging settings from properties.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>application.properties</span></div>
+          <pre># Set logging level
+logging.level.root=INFO
+
+# Enable debug logs for our application
+logging.level.com.example.studentmanagement=DEBUG
+
+# Save logs into a file
+logging.file.name=logs/application.log</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Three settings</p>
+        <h2 class="slide-title reveal">Root sets the default. The package can be louder.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Property</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>logging.level.root</code></td><td>Sets the default logging level.</td></tr>
+            <tr><td><code>logging.level.package-name</code></td><td>Sets the level for one package.</td></tr>
+            <tr><td><code>logging.file.name</code></td><td>Saves logs into a file.</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">With root at INFO, DEBUG and TRACE from libraries stay off the screen. The package line turns DEBUG on for <code>com.example.studentmanagement</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The line</p>
+        <h2 class="slide-title reveal">A log line has four parts.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>Console</span></div>
+          <pre>2026-10-30 10:30:00 INFO StudentService : Creating student</pre>
+        </div>
+        <div class="sp-parts" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>Time</h3>
+            <p><code>2026-10-30 10:30:00</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>Level</h3>
+            <p><code>INFO</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>Logger</h3>
+            <p><code>StudentService</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">4</p>
+            <h3>Message</h3>
+            <p><code>Creating student</code></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Format</p>
+        <h2 class="slide-title reveal">The console pattern decides how that line looks.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>application.properties</span></div>
+          <pre>logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pre>
+        </div>
+        <div class="sp-parts" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">%d</p>
+            <h3>Date</h3>
+            <p>The date and time.</p>
+          </article>
+          <article data-step>
+            <p class="mini">%-5level</p>
+            <h3>Level</h3>
+            <p>The level, padded to five letters.</p>
+          </article>
+          <article data-step>
+            <p class="mini">%logger</p>
+            <h3>Name</h3>
+            <p>The logger name, shortened to 36 characters.</p>
+          </article>
+          <article data-step>
+            <p class="mini">%msg</p>
+            <h3>Message</h3>
+            <p>The text you passed to the logger. <code>%n</code> starts the next line.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Your turn</p>
+        <h2 class="slide-title reveal">Add three messages to the student API.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">INFO</p>
+            <h3>Created</h3>
+            <p>After a student is saved: <code>Student created: {}</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">WARN</p>
+            <h3>Missing</h3>
+            <p>When the id is not in the database: <code>Student not found: {}</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">ERROR</p>
+            <h3>Save failed</h3>
+            <p>When <code>save</code> throws. Log it, then throw the same exception again.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Work in <code>coding/2.12/student-api</code>. It is a copy of the REST project and listens on port 8082. The next lesson shortens the <code>Student</code> class with Lombok.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+  <script src="../js/logging-demo.js"></script>
+</body>
+</html>

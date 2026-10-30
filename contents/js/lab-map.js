@@ -337,4 +337,62 @@ window.LABS = [
       "src/main/java/com/example/studentmanagement/controller/StudentRestController.java": "http://localhost:8081/api/students",
     },
   },
+  {
+    id: "2.12",
+    title: "Logging in Spring Boot",
+    folder: "2.12/student-api",
+    slides: "lessons/2.12-logging.html",
+    files: [
+      "src/main/resources/application.properties",
+      "src/main/java/com/example/studentmanagement/service/StudentService.java",
+      "src/main/java/com/example/studentmanagement/StudentApiApplication.java",
+    ],
+    commands: {
+      "src/main/resources/application.properties": "cd coding/2.12/student-api && mvn -q compile",
+      "src/main/java/com/example/studentmanagement/service/StudentService.java": "cd coding/2.12/student-api && mvn -q compile",
+      "src/main/java/com/example/studentmanagement/StudentApiApplication.java": "cd coding/2.12/student-api && mvn -q spring-boot:run",
+    },
+    urls: {
+      "src/main/java/com/example/studentmanagement/StudentApiApplication.java": "http://localhost:8082/api/students",
+    },
+  },
+  {
+    id: "2.13",
+    title: "Lombok API",
+    folder: "2.12/student-api",
+    slides: "lessons/2.13-lombok.html",
+    files: [
+      "pom.xml",
+      "src/main/java/com/example/studentmanagement/entity/Student.java",
+    ],
+    commands: {
+      "pom.xml": "cd coding/2.12/student-api && mvn -q compile",
+      "src/main/java/com/example/studentmanagement/entity/Student.java": "cd coding/2.12/student-api && mvn -q compile",
+    },
+  },
+  {
+    id: "2.16",
+    title: "Spring Boot Email",
+    folder: "2.16/email-demo",
+    slides: "lessons/2.16-email.html",
+    files: [
+      "pom.xml",
+      "src/main/resources/application.properties",
+      "src/main/java/com/example/demo/EmailDemoApplication.java",
+      "src/main/java/com/example/demo/EmailRequest.java",
+      "src/main/java/com/example/demo/service/EmailService.java",
+      "src/main/java/com/example/demo/controller/EmailController.java",
+    ],
+    commands: {
+      "pom.xml": "cd coding/2.16/email-demo && mvn -q compile",
+      "src/main/resources/application.properties": "cd coding/2.16/email-demo && mvn -q compile",
+      "src/main/java/com/example/demo/EmailDemoApplication.java": "cd coding/2.16/email-demo && mvn -q spring-boot:run",
+      "src/main/java/com/example/demo/EmailRequest.java": "cd coding/2.16/email-demo && mvn -q compile",
+      "src/main/java/com/example/demo/service/EmailService.java": "cd coding/2.16/email-demo && mvn -q compile",
+      "src/main/java/com/example/demo/controller/EmailController.java": "cd coding/2.16/email-demo && mvn -q compile",
+    },
+    urls: {
+      "src/main/java/com/example/demo/controller/EmailController.java": "http://localhost:8083/api/email/send",
+    },
+  },
 ];

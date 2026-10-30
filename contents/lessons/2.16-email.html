@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.16 Spring Boot Email · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/spring-rest.css">
+</head>
+<body
+  data-lesson="2.16"
+  data-title="Spring Boot Email"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="SMTP|JavaMailSender|Gmail setup|Plain-text welcome">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">A message on its own</p>
+        <h2 class="slide-title reveal">How does an application email a new student?</h2>
+        <div class="def-box reveal">Spring Boot can connect to an email server and send the message from code.</div>
+        <div class="sp-jobs" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Account</p>
+            <h3>Registration</h3>
+            <p>A confirmation after the student signs up.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Access</p>
+            <h3>Password reset</h3>
+            <p>A link when someone forgets a password.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Work</p>
+            <h3>Job notice</h3>
+            <p>A note that an application arrived.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">The same idea covers a payment receipt and an account verification message.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Today</p>
+        <h2 class="slide-title reveal">Plain-text email. About one hour and forty minutes.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Part</th><th>Topic</th><th>Time</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Email fundamentals and SMTP</td><td>15 min</td></tr>
+            <tr><td>2</td><td>Gmail account and App Password</td><td>20 min</td></tr>
+            <tr><td>3</td><td>Dependency and properties</td><td>15 min</td></tr>
+            <tr><td>4</td><td>Sending a plain-text email</td><td>30 min</td></tr>
+            <tr><td>5</td><td>Postman and the welcome email</td><td>20 min</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">Security comes in a later lesson. Today the application only sends a text message.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Words</p>
+        <h2 class="slide-title reveal">Six words cover a first email.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Term</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>SMTP</td><td>The protocol used to send emails.</td></tr>
+            <tr><td>SMTP server</td><td>The server that sends the email.</td></tr>
+            <tr><td><code>JavaMailSender</code></td><td>The Spring interface your code calls.</td></tr>
+            <tr><td>Recipient</td><td>The person who receives the email.</td></tr>
+            <tr><td>Subject</td><td>The title of the email.</td></tr>
+            <tr><td>Body</td><td>The message itself.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The path</p>
+        <h2 class="slide-title reveal">Your app asks Gmail to deliver the message.</h2>
+        <ol class="sp-flow" data-demo="flow">
+          <li data-hop><strong>1</strong><div><h3>Spring Boot</h3><p>The student API decides to send a welcome note.</p></div></li>
+          <li data-hop><strong>2</strong><div><h3>JavaMailSender</h3><p>Spring hands the message to the mail library.</p></div></li>
+          <li data-hop><strong>3</strong><div><h3>smtp.gmail.com</h3><p>Gmail's SMTP server accepts the message.</p></div></li>
+          <li data-hop><strong>4</strong><div><h3>Inbox</h3><p>The recipient opens the email.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Classroom account</p>
+        <h2 class="slide-title reveal">Use a Gmail account made for this demo.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>Open Google</h3>
+            <p>Sign in at <code>accounts.google.com</code>, or create an account there.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>Keep it separate</h3>
+            <p>A class account stays apart from a personal inbox.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Example</p>
+            <h3>Address</h3>
+            <p><code>springboot.demo@gmail.com</code> is only an example.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">2-Step Verification</p>
+        <h2 class="slide-title reveal">Gmail asks for a second check before an App Password exists.</h2>
+        <ol class="sp-flow" data-demo="flow">
+          <li data-hop><strong>1</strong><div><h3>Security</h3><p>Open <code>myaccount.google.com/security</code>.</p></div></li>
+          <li data-hop><strong>2</strong><div><h3>Find the setting</h3><p>Look for 2-Step Verification.</p></div></li>
+          <li data-hop><strong>3</strong><div><h3>Turn it on</h3><p>Follow Google's own checks for that account.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">App Password</p>
+        <h2 class="slide-title reveal">The app signs in with a 16-character password.</h2>
+        <ol class="sp-flow" data-demo="flow">
+          <li data-hop><strong>1</strong><div><h3>Open the page</h3><p><code>myaccount.google.com/apppasswords</code></p></div></li>
+          <li data-hop><strong>2</strong><div><h3>Name it</h3><p>Use a name such as <code>Spring Boot Demo</code>.</p></div></li>
+          <li data-hop><strong>3</strong><div><h3>Copy it</h3><p>Google shows the password once. Keep that copy for the terminal.</p></div></li>
+        </ol>
+        <p class="foot-note reveal">An App Password is separate from the normal Gmail password. Leave it out of Git and out of the class chat. If Google hides App Passwords for that account, use another SMTP host the account is allowed to use. Help: <a href="https://support.google.com/accounts/answer/185833">Google App Passwords</a>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">pom.xml</p>
+        <h2 class="slide-title reveal">One starter gives Spring the mail library.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+          <pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-mail&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+        </div>
+        <p class="foot-note reveal">Spring Boot then creates a <code>JavaMailSender</code> when the mail settings are present. Mail guide: <a href="https://docs.spring.io/spring-boot/reference/io/email.html">Spring Boot email</a>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">application.properties</p>
+        <h2 class="slide-title reveal">Point Spring at Gmail. Keep the password outside the file.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>application.properties</span></div>
+          <pre>spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+
+spring.mail.username=${MAIL_USERNAME}
+spring.mail.password=${MAIL_PASSWORD}
+
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">What each line does</p>
+        <h2 class="slide-title reveal">Port 587 talks to Gmail with a login and TLS.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Property</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>spring.mail.host</code></td><td>Gmail's SMTP server, <code>smtp.gmail.com</code>.</td></tr>
+            <tr><td><code>spring.mail.port</code></td><td>SMTP port <code>587</code>.</td></tr>
+            <tr><td><code>spring.mail.username</code></td><td>The Gmail address.</td></tr>
+            <tr><td><code>spring.mail.password</code></td><td>The App Password.</td></tr>
+            <tr><td><code>mail.smtp.auth</code></td><td>Turns on SMTP login.</td></tr>
+            <tr><td><code>starttls.enable</code></td><td>Turns on TLS encryption.</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">Before <code>mvn spring-boot:run</code>, export <code>MAIL_USERNAME</code> and <code>MAIL_PASSWORD</code> in that terminal. A real password never goes in the committed properties file.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">SimpleMailMessage</p>
+        <h2 class="slide-title reveal">A text email needs a recipient, a subject, and a body.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>EmailService</span></div>
+          <pre>SimpleMailMessage message = new SimpleMailMessage();
+
+message.setTo("recipient@gmail.com");
+message.setSubject("Spring Boot Email Demo");
+message.setText(
+        "Hello! This email was sent using Spring Boot."
+);
+
+mailSender.send(message);</pre>
+        </div>
+        <p class="foot-note reveal"><code>JavaMailSender</code> arrives through the constructor, the same way a repository does. Spring builds it from the mail properties.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Four calls</p>
+        <h2 class="slide-title reveal">Set the fields, then send.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Who</p>
+            <h3>setTo</h3>
+            <p>The recipient's email address.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Title</p>
+            <h3>setSubject</h3>
+            <p>The subject line.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Words</p>
+            <h3>setText</h3>
+            <p>The plain-text message.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Go</p>
+            <h3>send</h3>
+            <p><code>mailSender.send</code> hands it to Gmail.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Try it</p>
+        <h2 class="slide-title reveal">A POST starts the send.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>EmailController</span></div>
+          <pre>@RestController
+@RequestMapping("/api/email")
+public class EmailController {
+
+    private final EmailService emailService;
+
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @PostMapping("/send")
+    public String sendEmail(@RequestBody EmailRequest request) {
+        emailService.sendWelcome(request.getName(), request.getEmail());
+        return "Email sent successfully!";
+    }
+}</pre>
+        </div>
+        <p class="foot-note reveal">That sentence comes back when <code>send</code> finishes. A failure throws, so Postman shows an error instead of the sentence.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Postman</p>
+        <h2 class="slide-title reveal">Send the request, then check the inbox.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Method</p>
+            <h3>POST</h3>
+            <p><code>http://localhost:8083/api/email/send</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">Body</p>
+            <h3>raw JSON</h3>
+            <p><code>Content-Type: application/json</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">Response</p>
+            <h3>One sentence</h3>
+            <p><code>Email sent successfully!</code></p>
+          </article>
+          <article data-step>
+            <p class="mini">Proof</p>
+            <h3>Inbox</h3>
+            <p>Open the recipient mailbox and read the message.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Start <code>email-demo</code> first. The app listens on port 8083. More detail: <a href="https://docs.spring.io/spring-framework/reference/integration/email.html">Spring email support</a>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Your turn</p>
+        <h2 class="slide-title reveal">Welcome the student by name.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Request</span></div>
+            <pre>{
+  "name": "Ram Sharma",
+  "email": "ram@example.com"
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Inbox</span></div>
+            <pre>Subject: Welcome to Student Management System
+
+Hello Ram Sharma,
+
+Your registration was successful.
+
+Thank you for registering!</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">The lab is <code>coding/2.16/email-demo</code>. <code>sendWelcome</code> puts the name into the body and the address into <code>setTo</code>.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+</body>
+</html>

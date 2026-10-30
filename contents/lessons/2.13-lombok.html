@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.13 Lombok API · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/logging.css">
+</head>
+<body
+  data-lesson="2.13"
+  data-title="Lombok API"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="Boilerplate|Annotations|Builder|Student entity">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Less code</p>
+        <h2 class="slide-title reveal">Lombok writes the methods you repeat on every class.</h2>
+        <div class="def-box reveal">Project Lombok is a Java library that reduces boilerplate. Boilerplate is the repetitive code developers write again and again.</div>
+        <div class="sp-jobs" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Fields</p>
+            <h3>Getters and setters</h3>
+            <p><code>getName</code> and <code>setName</code> for every field.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Objects</p>
+            <h3>Constructors</h3>
+            <p>An empty constructor and one that takes every field.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Identity</p>
+            <h3>toString, equals</h3>
+            <p><code>toString</code>, <code>equals</code>, and <code>hashCode</code>.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Lombok generates those methods during compilation. You keep the fields and the annotations.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Same class</p>
+        <h2 class="slide-title reveal">The short class still has the methods.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Written by hand</span></div>
+            <pre>public class Student {
+    private Long id;
+    private String name;
+    private String email;
+
+    public Student() { }
+
+    public Student(Long id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    public String getName() { return name; }
+    public void setName(String name) {
+        this.name = name;
+    }
+    // id and email need the same pair
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>With Lombok</span></div>
+            <pre>import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Student {
+    private Long id;
+    private String name;
+    private String email;
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">The compiler sees getters, setters, both constructors, <code>toString</code>, <code>equals</code>, and <code>hashCode</code> on the right-hand class as well.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Annotations</p>
+        <h2 class="slide-title reveal">Eight annotations cover a beginner project.</h2>
+        <div class="sb-annos" data-demo="steps">
+          <article data-step><h3>@Getter</h3><p>Generates getter methods.</p></article>
+          <article data-step><h3>@Setter</h3><p>Generates setter methods.</p></article>
+          <article data-step><h3>@ToString</h3><p>Generates <code>toString()</code>.</p></article>
+          <article data-step><h3>@NoArgsConstructor</h3><p>A constructor with no parameters.</p></article>
+          <article data-step><h3>@AllArgsConstructor</h3><p>A constructor with every field.</p></article>
+          <article data-step><h3>@RequiredArgsConstructor</h3><p>A constructor for required fields.</p></article>
+          <article data-step><h3>@Data</h3><p>Getters, setters, <code>toString</code>, <code>equals</code>, and <code>hashCode</code>.</p></article>
+          <article data-step><h3>@Builder</h3><p>A builder for creating the object.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Getters and setters</p>
+        <h2 class="slide-title reveal">Two annotations replace four methods.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Student</span></div>
+            <pre>@Getter
+@Setter
+public class Student {
+    private String name;
+    private String email;
+}</pre>
+          </div>
+          <div class="sb-notes" data-demo="steps">
+            <article data-step>
+              <h3>getName()</h3>
+              <p>Returns the name.</p>
+            </article>
+            <article data-step>
+              <h3>setName()</h3>
+              <p>Stores a new name.</p>
+            </article>
+            <article data-step>
+              <h3>getEmail()</h3>
+              <p>Returns the email.</p>
+            </article>
+            <article data-step>
+              <h3>setEmail()</h3>
+              <p>Stores a new email.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Constructors</p>
+        <h2 class="slide-title reveal">One annotation for each constructor you used to write.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Student</span></div>
+            <pre>@NoArgsConstructor
+@AllArgsConstructor
+public class Student {
+    private Long id;
+    private String name;
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Calls</span></div>
+            <pre>Student student1 = new Student();
+
+Student student2 =
+        new Student(1L, "Ram");</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>@RequiredArgsConstructor</code> builds a constructor for <code>final</code> fields, such as a repository in a service. This project still writes that service constructor by hand.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Builder</p>
+        <h2 class="slide-title reveal">Name the fields. Skip the parameter order.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Student</span></div>
+            <pre>@Builder
+public class Student {
+    private Long id;
+    private String name;
+    private String email;
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Create</span></div>
+            <pre>Student student = Student.builder()
+        .id(1L)
+        .name("Ram")
+        .email("ram@example.com")
+        .build();</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Each call names the field it sets. The reader can see that <code>Ram</code> is the name.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">pom.xml</p>
+        <h2 class="slide-title reveal">Spring Boot already knows the Lombok version.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+          <pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+    &lt;optional&gt;true&lt;/optional&gt;
+&lt;/dependency&gt;</pre>
+        </div>
+        <p class="foot-note reveal">Leave the version off. The Spring Boot parent supplies it. Lombok runs while the code compiles. In the IDE, turn on annotation processing, and install the Lombok plugin where that IDE asks for one.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Student entity</p>
+        <h2 class="slide-title reveal">The REST entity keeps its fields. Lombok writes the methods.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>Student.java</span></div>
+          <pre>package com.example.studentmanagement.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+    private String email;
+}</pre>
+        </div>
+        <p class="foot-note reveal">Replace the handwritten getters, setters, and empty constructor in <code>coding/2.12/student-api</code>. JPA still needs the no-argument constructor. Jackson and the service still call the getters and setters.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Entities</p>
+        <h2 class="slide-title reveal">This Student class uses getters, setters, and constructors.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">@Data</p>
+            <h3>Extra methods</h3>
+            <p><code>@Data</code> also generates <code>equals</code>, <code>hashCode</code>, and <code>toString</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Relationships</p>
+            <h3>Lazy fields</h3>
+            <p>Those methods can pull in related rows or walk a lazy field during a log or a comparison.</p>
+          </article>
+          <article data-step>
+            <p class="mini">This class</p>
+            <h3>Four annotations</h3>
+            <p><code>@Getter</code>, <code>@Setter</code>, <code>@NoArgsConstructor</code>, and <code>@AllArgsConstructor</code> match this entity.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Use <code>@Data</code> when you want the full set, as on a simple class with no entity relationships. Keep it off entities that load other entities.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+  <script src="../js/logging-demo.js"></script>
+</body>
+</html>
