@@ -21,8 +21,7 @@
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   }
 
-  function startPath(slide) {
-    const root = slide.querySelector("[data-demo='path']");
+  function startPath(root) {
     if (!root) return;
     const nodes = Array.from(root.querySelectorAll("[data-hop]"));
     const fill = root.querySelector(".sb-rail-fill");
@@ -55,7 +54,7 @@
     lastSlide = slide;
     clearTimers();
     simActive = true;
-    startPath(slide);
+    slide.querySelectorAll("[data-demo='path']").forEach(startPath);
   }
 
   window.addEventListener("lesson-slide-show", onShow);

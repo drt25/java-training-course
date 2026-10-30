@@ -44,6 +44,11 @@
   font-size: 0.88rem;
 }
 
+.sp-jobs article p + p,
+.sp-pair article p + p {
+  margin-top: 0.32rem;
+}
+
 .sp-parts article.is-on,
 .sp-jobs article.is-on,
 .sp-pair article.is-on,

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.11 A simple Swing window · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/swing.css">
+</head>
+<body
+  data-lesson="1.11"
+  data-title="A simple Swing window"
+  data-module="Lesson 1 · Core Java"
+  data-topics="JFrame|Listener|Run">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">A click</p>
+        <h2 class="slide-title reveal">A GUI stays open and waits for a click.</h2>
+        <div class="def-box reveal">Swing is Java’s desktop toolkit. A <code>JFrame</code> is the window.</div>
+        <div class="sp-pair" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Console</p>
+            <h3>Print and stop</h3>
+            <p><code>System.out.println</code> writes a line, then the program ends.</p>
+          </article>
+          <article data-step>
+            <p class="mini">GUI</p>
+            <h3>Stay and react</h3>
+            <p>The window stays open. A click runs a piece of code.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The picture</p>
+        <h2 class="slide-title reveal">Before the click, and after.</h2>
+        <div class="sw-pair">
+          <div>
+            <p class="mini">Before</p>
+            <div class="sw-window">
+              <div class="sw-title"><i></i><i></i><i></i> Greeting</div>
+              <div class="sw-body">
+                <span class="sw-field"></span>
+                <span class="sw-btn">Greet</span>
+                <span class="sw-label">Type a name.</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p class="mini">After</p>
+            <div class="sw-window">
+              <div class="sw-title"><i></i><i></i><i></i> Greeting</div>
+              <div class="sw-body">
+                <span class="sw-field">Ram</span>
+                <span class="sw-btn">Greet</span>
+                <span class="sw-label">Hello, Ram</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="foot-note reveal">The text field, the button, and the label sit in one row. That is the panel’s usual order.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The pieces</p>
+        <h2 class="slide-title reveal">Five names build this window.</h2>
+        <div class="sp-advantages" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>JFrame</h3>
+            <p>The window.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>Panel</h3>
+            <p>Holds the pieces.</p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>Text field</h3>
+            <p>The typed name.</p>
+          </article>
+          <article data-step>
+            <p class="mini">4</p>
+            <h3>Button</h3>
+            <p>The Greet click.</p>
+          </article>
+          <article data-step>
+            <p class="mini">5</p>
+            <h3>Listener</h3>
+            <p>Code that runs on the click.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal"><code>setVisible(true)</code> shows the window. <code>SwingUtilities.invokeLater</code> opens it on Swing’s own thread.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Start</p>
+        <h2 class="slide-title reveal">Open the class, then run main.</h2>
+        <div class="split-visual">
+          <div class="steps">
+            <div class="setup-step"><span class="step-n">1</span> Open <code>coding/1.11/GreetingWindow.java</code>.</div>
+            <div class="setup-step"><span class="step-n">2</span> In IntelliJ, run <code>main</code>.</div>
+            <div class="setup-step"><span class="step-n">3</span> Close the window to stop the program.</div>
+          </div>
+          <div class="code-window reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Terminal</span></div>
+            <pre>cd coding/1.11
+javac GreetingWindow.java
+java GreetingWindow</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">The file name must match the class name. Run <code>java GreetingWindow</code> from the folder that holds the <code>.class</code> file.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The click</p>
+        <h2 class="slide-title reveal">The listener runs when Greet is clicked.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>GreetingWindow.java</span></div>
+          <pre>JTextField name = new JTextField(12);
+JButton greet = new JButton("Greet");
+JLabel hello = new JLabel("Type a name.");
+
+greet.addActionListener(event ->
+        hello.setText("Hello, " + name.getText()));</pre>
+        </div>
+        <p class="foot-note reveal">Type Ram and click Greet. The label becomes <code>Hello, Ram</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Your turn</p>
+        <h2 class="slide-title reveal">Run the window, then add Clear.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>Run</h3>
+            <p>Open the greeting window and type a name.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>Clear</h3>
+            <p>Add a second button named Clear.</p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>Reset</h3>
+            <p>The label returns to <code>Type a name.</code> and the field is empty.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Use the same listener pattern as Greet. Lists, tables, fonts, and layouts can wait. The next lesson is JDBC.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+</body>
+</html>

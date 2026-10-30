@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.18 Spring Boot Deployment · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/spring-rest.css">
+</head>
+<body
+  data-lesson="2.18"
+  data-title="Spring Boot Deployment"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="JAR|Linux server|MySQL|Public URL">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Online</p>
+        <h2 class="slide-title reveal">Deployment puts the finished API on a computer that stays on.</h2>
+        <div class="def-box reveal">Local is the classroom. Production is the server other people can reach.</div>
+        <div class="sp-pair" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Local</p>
+            <h3>Your laptop</h3>
+            <p>The student API runs while the machine is on and you are in class.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Production</p>
+            <h3>A server</h3>
+            <p>The same application keeps running so a public address can answer.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The path</p>
+        <h2 class="slide-title reveal">Eight steps take the API from the laptop to a public address.</h2>
+        <div>
+          <p class="mini">Prepare</p>
+          <div class="sb-path sr-four" data-demo="path">
+            <div class="sb-rail"><div class="sb-rail-fill"></div></div>
+            <article data-hop>
+              <p class="mini">1</p>
+              <h3>Develop</h3>
+              <p>Write the student API locally.</p>
+            </article>
+            <article data-hop>
+              <p class="mini">2</p>
+              <h3>JAR</h3>
+              <p>Build with Maven.</p>
+            </article>
+            <article data-hop>
+              <p class="mini">3</p>
+              <h3>Server</h3>
+              <p>Rent a Linux machine and log in.</p>
+            </article>
+            <article data-hop>
+              <p class="mini">4</p>
+              <h3>Install</h3>
+              <p>Java 21 and MySQL.</p>
+            </article>
+          </div>
+        </div>
+        <div style="margin-top:0.75rem">
+          <p class="mini">Go live</p>
+          <div class="sb-path sr-four" data-demo="path">
+            <div class="sb-rail"><div class="sb-rail-fill"></div></div>
+            <article data-hop>
+              <p class="mini">5</p>
+              <h3>Upload</h3>
+              <p>Copy the JAR to the server.</p>
+            </article>
+            <article data-hop>
+              <p class="mini">6</p>
+              <h3>Password</h3>
+              <p>Set the database password.</p>
+            </article>
+            <article data-hop>
+              <p class="mini">7</p>
+              <h3>Run</h3>
+              <p>Start the JAR.</p>
+            </article>
+            <article data-hop>
+              <p class="mini">8</p>
+              <h3>Open</h3>
+              <p>The public IP and port.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The machine</p>
+        <h2 class="slide-title reveal">A server is a computer that stays on for other computers.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Word</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Physical server</td><td>A real machine in a room.</td></tr>
+            <tr><td>VPS</td><td>A virtual server you rent.</td></tr>
+            <tr><td>Cloud hosting</td><td>Renting that server from a provider.</td></tr>
+            <tr><td>Ubuntu</td><td>The Linux operating system used here.</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">DigitalOcean, Hetzner, and AWS are examples of places that rent a server. Any provider that gives you Ubuntu and a public IP is enough.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Login</p>
+        <h2 class="slide-title reveal">A public IP is the address. SSH is the login.</h2>
+        <div class="sp-pair" data-demo="steps">
+          <article data-step>
+            <p class="mini">Address</p>
+            <h3>Public IP</h3>
+            <p>The server’s address on the internet, such as <code>203.0.113.10</code>.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Login</p>
+            <h3>SSH</h3>
+            <p>A secure way to open a terminal on that computer.</p>
+          </article>
+        </div>
+        <div class="code-window sp-code sb-code reveal" style="margin-top:0.85rem">
+          <div class="code-bar"><i></i><i></i><i></i><span>Your laptop</span></div>
+          <pre>ssh ubuntu@SERVER_IP</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">What to install</p>
+        <h2 class="slide-title reveal">Five pieces run the student API.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Piece</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ubuntu</td><td>The operating system.</td></tr>
+            <tr><td>Java 21</td><td>Runs the Spring Boot JAR.</td></tr>
+            <tr><td>MySQL</td><td>Stores the students.</td></tr>
+            <tr><td>JAR</td><td>The packaged student API.</td></tr>
+            <tr><td>Firewall</td><td>Decides which ports can be reached.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Prepare</p>
+        <h2 class="slide-title reveal">Update Ubuntu, then install Java, MySQL, and a database user.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Packages</span></div>
+            <pre>sudo apt update
+sudo apt install -y openjdk-21-jre-headless mysql-server</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>MySQL</span></div>
+            <pre>CREATE DATABASE student_db;
+CREATE USER 'student_user'@'localhost'
+  IDENTIFIED BY 'choose-a-password';
+GRANT ALL ON student_db.*
+  TO 'student_user'@'localhost';</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">Run these after <code>ssh ubuntu@SERVER_IP</code>. Leave port 3306 closed to the internet. MySQL answers only on that server.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The file</p>
+        <h2 class="slide-title reveal">A JAR is the packaged application.</h2>
+        <div class="def-box reveal">One file holds the student API and the libraries it needs.</div>
+        <div class="code-window sp-code sb-code reveal" style="margin-top:0.85rem">
+          <div class="code-bar"><i></i><i></i><i></i><span>coding/2.14/student-api</span></div>
+          <pre>mvn clean package</pre>
+        </div>
+        <p class="foot-note reveal">Maven writes <code>target/student-api-1.0.jar</code>. Build with <code>mvn</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Ship and run</p>
+        <h2 class="slide-title reveal">Copy the JAR, then start it with Java.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Upload</span></div>
+            <pre>scp target/student-api-1.0.jar \
+  ubuntu@SERVER_IP:/home/ubuntu/</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Run</span></div>
+            <pre>java -jar student-api-1.0.jar
+
+DB_PASSWORD=choose-a-password \
+  nohup java -jar student-api-1.0.jar \
+  > app.log 2>&1 &</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">The console is the log. A plain <code>java -jar</code> stops when the SSH session closes. The <code>nohup</code> line keeps it running and writes the log to <code>app.log</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Same server</p>
+        <h2 class="slide-title reveal">Spring Boot talks to MySQL on localhost.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>application.properties</span></div>
+          <pre>spring.datasource.url=jdbc:mysql://localhost:3306/student_db
+spring.datasource.username=student_user
+spring.datasource.password=${DB_PASSWORD}
+server.port=8080</pre>
+        </div>
+        <p class="foot-note reveal">The classroom project keeps <code>root</code>, <code>password</code>, and port 8081. On the server, the password comes from the <code>DB_PASSWORD</code> environment variable. Leave port 3306 closed to the internet.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The public address</p>
+        <h2 class="slide-title reveal">An IP finds the server. A port finds the API.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Word</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>IP address</td><td>Identifies the server.</td></tr>
+            <tr><td>Port</td><td>Identifies the program. The API uses 8080.</td></tr>
+            <tr><td>Firewall</td><td>Allows or blocks a port. The API needs port 8080 open.</td></tr>
+            <tr><td>HTTP</td><td>The protocol the browser and Postman use.</td></tr>
+            <tr><td>HTTPS</td><td>HTTP with a TLS certificate.</td></tr>
+            <tr><td>Domain</td><td>A readable name, such as <code>api.example.com</code>.</td></tr>
+            <tr><td>DNS</td><td>Points that name at the public IP.</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal"><code>http://SERVER_PUBLIC_IP:8080/api/students</code><br><code>https://api.example.com/api/students</code><br><code>sudo ufw allow 8080</code><br>If you enable the firewall, allow SSH as well. A TLS certificate turns the address into HTTPS.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The whole path</p>
+        <h2 class="slide-title reveal">Users reach Spring Boot. Spring Boot reaches MySQL.</h2>
+        <div class="sb-path sr-four" data-demo="path">
+          <div class="sb-rail"><div class="sb-rail-fill"></div></div>
+          <article data-hop>
+            <p class="mini">1</p>
+            <h3>Browser</h3>
+            <p>A person calls the API.</p>
+          </article>
+          <article data-hop>
+            <p class="mini">2</p>
+            <h3>Public IP</h3>
+            <p>Port 8080 on the server.</p>
+          </article>
+          <article data-hop>
+            <p class="mini">3</p>
+            <h3>Spring Boot</h3>
+            <p>The JAR answers.</p>
+          </article>
+          <article data-hop>
+            <p class="mini">4</p>
+            <h3>MySQL</h3>
+            <p><code>localhost:3306</code></p>
+          </article>
+        </div>
+        <p class="foot-note reveal">A domain is a readable name for that IP. DNS points the name at the server.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">Three facts cover a first deployment.</h2>
+        <div class="sp-jobs" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>The JAR</h3>
+            <p>It runs on the Linux server.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>MySQL</h3>
+            <p>The API talks to it on localhost.</p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>Users</h3>
+            <p>They call the public IP or a domain.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Optional</p>
+        <h2 class="slide-title reveal">Railway is an easier way to practise on your own.</h2>
+        <div class="def-box reveal">After this lesson, you can deploy the same application without preparing a Linux server by hand.</div>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Step</th><th>What you do</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Create a Railway account.</td></tr>
+            <tr><td>2</td><td>Deploy the Spring Boot application from GitHub.</td></tr>
+            <tr><td>3</td><td>Add a database.</td></tr>
+            <tr><td>4</td><td>Set the environment variables.</td></tr>
+            <tr><td>5</td><td>Open the generated public URL.</td></tr>
+            <tr><td>6</td><td>Test the API with Postman.</td></tr>
+          </tbody>
+        </table>
+        <p class="foot-note reveal">Optional practice, after the lesson. <a href="https://railway.com/">railway.com</a> · <a href="https://docs.railway.com/">docs.railway.com</a></p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+  <script src="../js/spring-boot-demo.js"></script>
+</body>
+</html>

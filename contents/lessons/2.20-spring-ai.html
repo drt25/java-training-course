@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.20 Spring Boot with AI · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/spring-ai.css">
+</head>
+<body
+  data-lesson="2.20"
+  data-title="Spring Boot with AI"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="OpenAI|Prompt|API key|Grammar API">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">A model in the loop</p>
+        <h2 class="slide-title reveal">The application can ask a model to read ordinary language.</h2>
+        <div class="def-box reveal">AI integration means Spring Boot sends a sentence to an AI model and returns the model’s answer.</div>
+        <div class="sp-pair" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">So far</p>
+            <h3>Our conditions</h3>
+            <p>Methods follow the rules we wrote, such as saving a student or checking a password.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Today</p>
+            <h3>A model</h3>
+            <p>The model reads a sentence and returns a corrected one.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The trip</p>
+        <h2 class="slide-title reveal">Spring Boot carries the sentence. OpenAI writes the correction.</h2>
+        <div class="sb-path ai-five" data-demo="path">
+          <div class="sb-rail"><div class="sb-rail-fill"></div></div>
+          <article data-hop>
+            <p class="mini">1</p>
+            <h3>Sentence</h3>
+            <p>The words the student types.</p>
+          </article>
+          <article data-hop>
+            <p class="mini">2</p>
+            <h3>POST</h3>
+            <p><code>/api/grammar/correct</code></p>
+          </article>
+          <article data-hop>
+            <p class="mini">3</p>
+            <h3>Spring Boot</h3>
+            <p>Receives the sentence.</p>
+          </article>
+          <article data-hop>
+            <p class="mini">4</p>
+            <h3>OpenAI</h3>
+            <p>Writes the correction.</p>
+          </article>
+          <article data-hop>
+            <p class="mini">5</p>
+            <h3>Reply</h3>
+            <p>The corrected sentence.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Spring Boot delivers the sentence and brings the answer back. OpenAI writes the correction.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The provider</p>
+        <h2 class="slide-title reveal">OpenAI is the model this lesson calls.</h2>
+        <div class="sp-advantages" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>Grammar</h3>
+            <p>Fix a sentence.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>Summary</h3>
+            <p>Shorten a paragraph.</p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>Questions</h3>
+            <p>Answer in words.</p>
+          </article>
+          <article data-step>
+            <p class="mini">4</p>
+            <h3>Writing</h3>
+            <p>Draft new text.</p>
+          </article>
+          <article data-step>
+            <p class="mini">5</p>
+            <h3>Translation</h3>
+            <p>Change the language.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Today is grammar only. Create an API account at <a href="https://platform.openai.com/">platform.openai.com</a>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">One sentence</p>
+        <h2 class="slide-title reveal">The API returns the corrected sentence.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Input</span></div>
+            <pre>I has a meeting yesterday and I am not attend.</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Output</span></div>
+            <pre>I had a meeting yesterday, but I did not attend.</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Maven</p>
+        <h2 class="slide-title reveal">Spring AI 1.1.8 matches this Spring Boot project.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+          <pre>&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.ai&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-ai-bom&lt;/artifactId&gt;
+            &lt;version&gt;1.1.8&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.ai&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-ai-starter-model-openai&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+        </div>
+        <p class="foot-note reveal">The parent stays Spring Boot 3.5.16. The starter has no version of its own. The BOM supplies 1.1.8. More detail: <a href="https://docs.spring.io/spring-ai/reference/1.1/getting-started.html">Spring AI 1.1 getting started</a>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The key</p>
+        <h2 class="slide-title reveal">The API key stays in an environment variable.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>application.properties</span></div>
+          <pre>server.port=8084
+spring.ai.openai.api-key=${OPENAI_API_KEY}</pre>
+        </div>
+        <p class="foot-note reveal">Set <code>OPENAI_API_KEY</code> in the environment before you run the app. An OpenAI API account and its billing are separate from a ChatGPT subscription.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The prompt</p>
+        <h2 class="slide-title reveal">The system line is the instruction. The user line is the sentence.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>GrammarService.java</span></div>
+          <pre>public GrammarService(ChatClient.Builder builder) {
+    this.chatClient = builder.build();
+}
+
+public String correctGrammar(String sentence) {
+    return chatClient.prompt()
+            .system("Correct the grammar of the given sentence. "
+                    + "Return only the corrected sentence.")
+            .user(sentence)
+            .call()
+            .content();
+}</pre>
+        </div>
+        <p class="foot-note reveal">A prompt is the text sent to the model. <code>system</code> tells it the job. <code>user</code> is the sentence to correct.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The endpoint</p>
+        <h2 class="slide-title reveal">POST the sentence. Return the model’s text.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>GrammarController.java</span></div>
+          <pre>@RestController
+@RequestMapping("/api/grammar")
+public class GrammarController {
+
+    @PostMapping("/correct")
+    public String correct(@RequestBody String sentence) {
+        return grammarService.correctGrammar(sentence);
+    }
+}</pre>
+        </div>
+        <p class="foot-note reveal"><code>content()</code> is the corrected sentence the service already received from OpenAI.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Words</p>
+        <h2 class="slide-title reveal">Six words cover this call.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Word</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>AI model</td><td>The program that reads the input and writes a response.</td></tr>
+            <tr><td>Prompt</td><td>The instruction and the sentence sent to the model.</td></tr>
+            <tr><td>OpenAI API</td><td>The web address Spring Boot calls to reach the model.</td></tr>
+            <tr><td>API key</td><td>The secret that proves this application may call that address.</td></tr>
+            <tr><td>Token</td><td>A small piece of text. The API bills those pieces.</td></tr>
+            <tr><td>Spring AI</td><td>The Spring library that builds the <code>ChatClient</code> for you.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Postman</p>
+        <h2 class="slide-title reveal">Send one quoted sentence.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Body</span></div>
+            <pre>"I has a meeting yesterday and I am not attend."</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Response</span></div>
+            <pre>I had a meeting yesterday, but I did not attend.</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal">POST <code>http://localhost:8084/api/grammar/correct</code> with raw JSON. The quotes are required because the controller reads one JSON string. The lab is <code>coding/2.20/grammar-demo</code>.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+  <script src="../js/spring-boot-demo.js"></script>
+</body>
+</html>

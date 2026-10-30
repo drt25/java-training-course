@@ -1,0 +1,21 @@
+.sb-path.ai-five {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.sb-path.ai-five article {
+  padding: 0.5rem 0.35rem;
+}
+
+.sb-path.ai-five h3 {
+  font-size: 0.86rem;
+}
+
+.sb-path.ai-five p {
+  font-size: 0.7rem;
+}
+
+@media (max-width: 980px) {
+  .sb-path.ai-five {
+    grid-template-columns: 1fr;
+  }
+}

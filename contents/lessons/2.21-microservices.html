@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.21 Microservices · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+</head>
+<body
+  data-lesson="2.21"
+  data-title="Microservices"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="Monolith|Microservices|When to split|Benefits">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">One application</p>
+        <h2 class="slide-title reveal">The student API is a monolith.</h2>
+        <div class="def-box reveal">A monolith is one application, one database, and one deploy.</div>
+        <div class="sp-jobs" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Code</p>
+            <h3>One JAR</h3>
+            <p>Students, validation, and the API live in the same project.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Data</p>
+            <h3>One database</h3>
+            <p>MySQL holds the students for that application.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Release</p>
+            <h3>One deploy</h3>
+            <p>A change ships the whole student API together.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">That shape is the right one for this course.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">A wallet you know</p>
+        <h2 class="slide-title reveal">One wallet app, or a service for each job.</h2>
+        <div class="split-visual" data-demo="steps">
+          <div class="sp-jobs" style="grid-template-columns:1fr">
+            <article data-step>
+              <p class="mini">Monolith</p>
+              <h3>Wallet</h3>
+              <p>Show the balance.</p>
+              <p>Pay a shop.</p>
+              <p>Load money from a bank.</p>
+            </article>
+          </div>
+          <div class="sp-jobs" style="grid-template-columns:1fr">
+            <article data-step>
+              <p class="mini">Service</p>
+              <h3>Balance</h3>
+              <p>Shows the money already in the wallet.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Service</p>
+              <h3>Pay</h3>
+              <p>Pays a shop, and asks Balance over HTTP.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Service</p>
+              <h3>Load</h3>
+              <p>Loads money from a bank.</p>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal">eSewa is a wallet you already use. This is a picture of the idea. Load can be down while Pay still spends money already in the wallet.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">One job</p>
+        <h2 class="slide-title reveal">A microservice does one job.</h2>
+        <div class="def-box reveal">A microservice is a small application. Other applications call it over HTTP.</div>
+        <div class="sp-jobs" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">Size</p>
+            <h3>Small</h3>
+            <p>Each service owns one part of the work.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Call</p>
+            <h3>HTTP</h3>
+            <p>One service asks another with a request, the same way Postman calls an API.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Ship</p>
+            <h3>Alone</h3>
+            <p>A change to email can ship without rebuilding the student API.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">The same shape</p>
+        <h2 class="slide-title reveal">The student API can hold those jobs in one JAR.</h2>
+        <div class="split-visual" data-demo="steps">
+          <div class="sp-jobs" style="grid-template-columns:1fr">
+            <article data-step>
+              <p class="mini">Monolith</p>
+              <h3>Student API</h3>
+              <p>Students.</p>
+              <p>Email.</p>
+              <p>Login.</p>
+              <p>One JAR and one MySQL database.</p>
+            </article>
+          </div>
+          <div class="sp-jobs" style="grid-template-columns:1fr">
+            <article data-step>
+              <p class="mini">Service</p>
+              <h3>Students</h3>
+              <p>Keeps the student records.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Service</p>
+              <h3>Email</h3>
+              <p>Sends the welcome message.</p>
+            </article>
+            <article data-step>
+              <p class="mini">Service</p>
+              <h3>Login</h3>
+              <p>Checks the email and password.</p>
+            </article>
+          </div>
+        </div>
+        <p class="foot-note reveal">Students calling Email is Pay calling Balance.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">When</p>
+        <h2 class="slide-title reveal">Split when one application is too big to change safely.</h2>
+        <div class="sp-pair" data-demo="steps">
+          <article data-step>
+            <p class="mini">Split</p>
+            <h3>Separate jobs</h3>
+            <p>One feature cannot change without risking the whole application, or separate teams own separate jobs.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Stay</p>
+            <h3>One application</h3>
+            <p>Stay with one application while learning, and for a small API such as the student API.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why</p>
+        <h2 class="slide-title reveal">Three benefits, and one extra cost.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">Release</p>
+            <h3>Deploy one part</h3>
+            <p>Ship Load without shipping Pay.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Failure</p>
+            <h3>Others stay up</h3>
+            <p>Load can be down while Pay still works.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Team</p>
+            <h3>One owner</h3>
+            <p>One team can own Pay.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Limit</p>
+            <h3>More to run</h3>
+            <p>A failed payment has more services to check.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Side by side</p>
+        <h2 class="slide-title reveal">The same five questions, two answers.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th></th><th>Monolith</th><th>Microservices</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Codebase</td><td>One project</td><td>One project per job</td></tr>
+            <tr><td>Database</td><td>One database</td><td>Often one database per service</td></tr>
+            <tr><td>Deploy</td><td>Ship the whole application</td><td>Ship one service</td></tr>
+            <tr><td>Failure</td><td>A broken part can stop the application</td><td>The other services can stay up</td></tr>
+            <tr><td>This class</td><td>The student API</td><td>Split only when one application is too big</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Remember</p>
+        <h2 class="slide-title reveal">The course built a monolith.</h2>
+        <div class="def-box reveal">Split it only when one application is too big to change safely.</div>
+        <p class="foot-note reveal">The next lesson takes that one JAR onto a Linux server.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+</body>
+</html>

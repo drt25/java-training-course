@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.19 Introduction to JUnit · Broadway Infosys Java</title>
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/slides.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/lesson.css">
+  <link rel="stylesheet" href="../css/control-flow.css">
+  <link rel="stylesheet" href="../css/spring.css">
+  <link rel="stylesheet" href="../css/spring-boot.css">
+  <link rel="stylesheet" href="../css/junit.css">
+</head>
+<body
+  data-lesson="2.19"
+  data-title="Introduction to JUnit"
+  data-module="Lesson 2 · Advanced Java"
+  data-topics="Why test|@Test|assertEquals|Calculator">
+  <main id="lesson-slides">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">A check that runs itself</p>
+        <h2 class="slide-title reveal">JUnit tests a method before a user ever calls it.</h2>
+        <div class="def-box reveal">JUnit is a Java framework that runs your checks and reports which ones pass or fail.</div>
+        <div class="sp-pair" data-demo="steps" style="margin-top:0.85rem">
+          <article data-step>
+            <p class="mini">By hand</p>
+            <h3>Start the app</h3>
+            <p>Call <code>add(10, 20)</code> yourself and look at the answer.</p>
+          </article>
+          <article data-step>
+            <p class="mini">JUnit</p>
+            <h3>Write a test</h3>
+            <p>The test calls <code>add(10, 20)</code> and checks that the answer is 30.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Why</p>
+        <h2 class="slide-title reveal">Four student methods. Checking them by hand does not scale.</h2>
+        <div data-demo="jobs">
+          <div class="sp-parts ju-jobs">
+            <article data-job>
+              <p class="mini">1</p>
+              <h3>Add</h3>
+              <p>Save a new student.</p>
+            </article>
+            <article data-job>
+              <p class="mini">2</p>
+              <h3>Grade</h3>
+              <p>Calculate a grade.</p>
+            </article>
+            <article data-job>
+              <p class="mini">3</p>
+              <h3>Find</h3>
+              <p>Find a student by id.</p>
+            </article>
+            <article data-job>
+              <p class="mini">4</p>
+              <h3>Delete</h3>
+              <p>Remove a student.</p>
+            </article>
+          </div>
+          <p class="ju-caption" data-jobs-caption></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">What you gain</p>
+        <h2 class="slide-title reveal">Five reasons to let the tests run.</h2>
+        <div class="sp-advantages" data-demo="steps">
+          <article data-step>
+            <p class="mini">Early</p>
+            <h3>Find bugs</h3>
+            <p>Catch them while you still have the code open.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Time</p>
+            <h3>Run itself</h3>
+            <p>One command repeats every check.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Check</p>
+            <h3>Expected</h3>
+            <p>Each method has an answer you can name.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Safe</p>
+            <h3>Old code</h3>
+            <p>A change that breaks an old method fails a test.</p>
+          </article>
+          <article data-step>
+            <p class="mini">Sure</p>
+            <h3>Confidence</h3>
+            <p>Edit the application when the tests stay green.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Pass or fail</p>
+        <h2 class="slide-title reveal">The test compares the expected number with the actual number.</h2>
+        <div data-demo="score">
+          <p class="ju-call" data-score-call>add(10, 20)</p>
+          <div class="ju-score">
+            <article>
+              <p class="mini">Expected</p>
+              <h3 data-score-expected>30</h3>
+            </article>
+            <article>
+              <p class="mini">Actual</p>
+              <h3 data-score-actual>30</h3>
+            </article>
+            <article data-score-verdict>
+              <p class="mini">Verdict</p>
+              <h3 data-score-verdict-text>Pass</h3>
+            </article>
+          </div>
+          <p class="ju-caption" data-score-caption></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The code</p>
+        <h2 class="slide-title reveal">Two methods. Two tests.</h2>
+        <div class="split-visual">
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>Calculator.java</span></div>
+            <pre>public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int subtract(int a, int b) {
+        return a - b;
+    }
+}</pre>
+          </div>
+          <div class="code-window sp-code sb-code reveal">
+            <div class="code-bar"><i></i><i></i><i></i><span>CalculatorTest.java</span></div>
+            <pre>@Test
+void testAddition() {
+    Calculator calculator = new Calculator();
+    int result = calculator.add(10, 20);
+    assertEquals(30, result);
+}
+
+@Test
+void testSubtraction() {
+    Calculator calculator = new Calculator();
+    int result = calculator.subtract(20, 10);
+    assertEquals(10, result);
+}</pre>
+          </div>
+        </div>
+        <p class="foot-note reveal"><code>assertEquals(30, result)</code> puts the expected number first and the actual number second.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">The pieces</p>
+        <h2 class="slide-title reveal">Four lines do the whole check.</h2>
+        <table class="info-table reveal">
+          <thead>
+            <tr><th>Code</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>@Test</code></td><td>Marks the method as a test.</td></tr>
+            <tr><td><code>new Calculator()</code></td><td>Creates the object the test will call.</td></tr>
+            <tr><td><code>calculator.add(10, 20)</code></td><td>Runs the method under test.</td></tr>
+            <tr><td><code>assertEquals(30, result)</code></td><td>Passes when <code>result</code> is 30. Fails when it is any other number.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Two folders</p>
+        <h2 class="slide-title reveal">The class lives in main. The test lives in test.</h2>
+        <div class="sp-pair" data-demo="steps">
+          <article data-step>
+            <p class="mini">src/main/java</p>
+            <h3>Calculator.java</h3>
+            <p>The methods the application uses.</p>
+          </article>
+          <article data-step>
+            <p class="mini">src/test/java</p>
+            <h3>CalculatorTest.java</h3>
+            <p>The checks. They are not part of the running application.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">Keep the same package in both folders, <code>com.example.calculator</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Spring Boot</p>
+        <h2 class="slide-title reveal">A Spring Boot project already has a place for these tests.</h2>
+        <div class="code-window sp-code sb-code reveal">
+          <div class="code-bar"><i></i><i></i><i></i><span>pom.xml</span></div>
+          <pre>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</pre>
+        </div>
+        <p class="foot-note reveal">That starter includes JUnit. Run the tests from the IDE, or with <code>mvn test</code>. Today's lab is ordinary Java plus JUnit, so you can see the test before Spring joins in.</p>
+      </div>
+    </section>
+
+    <section class="slide sb-compact">
+      <div class="slide-inner">
+        <p class="kicker reveal">Around the test</p>
+        <h2 class="slide-title reveal">Some code runs once. Some code runs every time.</h2>
+        <div data-demo="around">
+          <div class="sp-advantages ju-life">
+            <article data-life="all-before">
+              <p class="mini">Once</p>
+              <h3>@BeforeAll</h3>
+              <p>Before any test.</p>
+            </article>
+            <article data-life="before">
+              <p class="mini">Each</p>
+              <h3>@BeforeEach</h3>
+              <p>Before this test.</p>
+            </article>
+            <article data-life="test">
+              <p class="mini">Test</p>
+              <h3>@Test</h3>
+              <p data-life-name>testAddition</p>
+            </article>
+            <article data-life="after">
+              <p class="mini">Each</p>
+              <h3>@AfterEach</h3>
+              <p>After this test.</p>
+            </article>
+            <article data-life="all-after">
+              <p class="mini">Once</p>
+              <h3>@AfterAll</h3>
+              <p>After every test.</p>
+            </article>
+          </div>
+          <p class="ju-caption" data-life-caption></p>
+        </div>
+        <p class="foot-note reveal">This lesson writes <code>@Test</code> and <code>assertEquals</code>. <code>@BeforeEach</code> is the next annotation to remember.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="kicker reveal">Your turn</p>
+        <h2 class="slide-title reveal">Four operations. Four tests.</h2>
+        <div class="sp-parts" data-demo="steps">
+          <article data-step>
+            <p class="mini">1</p>
+            <h3>add</h3>
+            <p><code>10 + 20</code> is 30.</p>
+          </article>
+          <article data-step>
+            <p class="mini">2</p>
+            <h3>subtract</h3>
+            <p><code>20 - 10</code> is 10.</p>
+          </article>
+          <article data-step>
+            <p class="mini">3</p>
+            <h3>multiply</h3>
+            <p><code>6 * 7</code> is 42.</p>
+          </article>
+          <article data-step>
+            <p class="mini">4</p>
+            <h3>divide</h3>
+            <p><code>20 / 5</code> is 4.</p>
+          </article>
+        </div>
+        <p class="foot-note reveal">The lab is <code>coding/2.19/calculator</code>. <code>divide</code> uses integer division, so <code>5 / 2</code> is 2. Run <code>mvn test</code>.</p>
+      </div>
+    </section>
+
+  </main>
+  <script src="../js/course-map.js"></script>
+  <script src="../shared/brand.js"></script>
+  <script src="../js/engine.js"></script>
+  <script src="../js/spring-demo.js"></script>
+  <script src="../js/junit-demo.js"></script>
+</body>
+</html>
